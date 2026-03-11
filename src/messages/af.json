@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "home": "Tuis",
+    "about": "Oor Ons",
+    "services": "Dienste",
+    "packages": "Pakkette",
+    "portfolio": "Portefeulje",
+    "contact": "Kontak",
+    "getQuote": "Kry 'n Kwotasie"
+  },
+  "hero": {
+    "badge": "Sagteware Ontwikkeling \u2022 Ontwerp \u2022 Innovasie",
+    "title1": "Skep Digitale",
+    "title2": "Uitnemendheid",
+    "description": "Ons help handelsmerke en besighede om lewendig te word in die digitale w\u00eareld. Vinnige diens. Elegante ontwerp. Kreatiewe oplossings.",
+    "viewPackages": "Sien Pakkette",
+    "seeWork": "Sien Ons Werk"
+  },
+  "highlights": {
+    "fast": "Vinnige Aflewering",
+    "fastDesc": "Vinnige omkeertyd sonder om kwaliteit in te boet.",
+    "creative": "Kreatiewe Ontwerp",
+    "creativeDesc": "Unieke, opvallende ontwerpe wat jou handelsmerk laat uitstaan.",
+    "support": "Toegewyde Ondersteuning",
+    "supportDesc": "Deurlopende ondersteuning en kommunikasie deur jou projek."
+  },
+  "services": {
+    "sectionLabel": "Wat Ons Doen",
+    "sectionTitle": "Ons",
+    "sectionTitleHighlight": "Dienste",
+    "web": "Webwerf Ontwikkeling",
+    "webDesc": "Pasgemaakte webwerwe gebou met moderne raamwerke, geoptimaliseer vir spoed, SEO en pragtige ontwerp.",
+    "ecommerce": "E-Handel Winkels",
+    "ecommerceDesc": "Aanlynwinkels en digitale katalogusse wat jou produkte pragtig vertoon en verkope dryf.",
+    "apps": "Toepassings & Sagteware",
+    "appsDesc": "Pasgemaakte mobiele toepassings en sagteware-oplossings wat by jou besigheidsbehoeftes pas.",
+    "training": "Projekbestuur Opleiding",
+    "trainingDesc": "Bemagtig jou span met die vaardighede en metodologie\u00eb om projekte betyds en binne begroting te lewer.",
+    "ai": "KI Opleiding",
+    "aiDesc": "Leer hoe om kunsmatige intelligensie te benut om werksvloeie te outomatiseer en produktiwiteit te verhoog.",
+    "learnMore": "Lees Meer"
+  },
+  "testimonials": {
+    "label": "Wat Kli\u00ebnte S\u00ea",
+    "title": "Kli\u00ebnt",
+    "titleHighlight": "Getuienisse"
+  },
+  "cta": {
+    "title": "Gereed om Iets te Bou",
+    "titleHighlight": "Wonderliks",
+    "description": "Kom ons bring jou visie tot lewe. Kontak ons en kom ons bespreek hoe ons jou handelsmerk kan laat skitter in die digitale w\u00eareld.",
+    "startProject": "Begin Jou Projek",
+    "viewPricing": "Sien Pryse"
+  },
+  "contact": {
+    "label": "Kontak",
+    "title": "Kom Ons",
+    "titleHighlight": "Praat",
+    "description": "Het jy 'n projek in gedagte? Benodig jy 'n kwotasie? Of wil jy net groet? Ons sal graag van jou wil hoor.",
+    "fullName": "Volle Naam",
+    "email": "E-posadres",
+    "phone": "Telefoonnommer",
+    "service": "Diens Belangstelling",
+    "budget": "Geskatte Begroting",
+    "message": "Vertel Ons van Jou Projek",
+    "send": "Stuur Boodskap",
+    "sending": "Stuur tans...",
+    "success": "Boodskap suksesvol gestuur! Ons sal binne 24 uur kontak maak.",
+    "responseTime": "Reaksietyd",
+    "within24": "Binne 24 uur",
+    "location": "Ligging",
+    "southAfrica": "Suid-Afrika",
+    "remoteAvailable": "Beskikbaar vir afstandsprojekte w\u00eareldwyd"
+  },
+  "footer": {
+    "tagline": "Skep digitale uitnemendheid met kreatiewe, vinnige en elegante oplossings. Help handelsmerke om uit te staan in die digitale w\u00eareld.",
+    "navigate": "Navigeer",
+    "services": "Dienste",
+    "legal": "Regskundig",
+    "rights": "Alle regte voorbehou.",
+    "crafted": "Ontwerp & ontwikkel met presisie"
+  },
+  "splash": {
+    "welcome": "Welkom by",
+    "slideToEnter": "Gly om in te gaan",
+    "letsGo": "Kom Ons Gaan"
+  },
+  "cookie": {
+    "title": "Koekie Kennisgewing",
+    "description": "Ons gebruik koekies om jou blaai-ervaring te verbeter en jou voorkeure te onthou.",
+    "readMore": "Koekiebeleid",
+    "accept": "Aanvaar",
+    "decline": "Weier"
+  }
+}

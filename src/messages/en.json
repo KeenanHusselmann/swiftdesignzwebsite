@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "services": "Services",
+    "packages": "Packages",
+    "portfolio": "Portfolio",
+    "contact": "Contact",
+    "getQuote": "Get a Quote"
+  },
+  "hero": {
+    "badge": "Software Development \u2022 Design \u2022 Innovation",
+    "title1": "Crafting Digital",
+    "title2": "Excellence",
+    "description": "We help brands and businesses come alive in the digital world. Fast services. Elegant design. Creative solutions.",
+    "viewPackages": "View Packages",
+    "seeWork": "See Our Work"
+  },
+  "highlights": {
+    "fast": "Fast Delivery",
+    "fastDesc": "Quick turnaround without compromising on quality.",
+    "creative": "Creative Design",
+    "creativeDesc": "Unique, eye-catching designs that make your brand stand out.",
+    "support": "Dedicated Support",
+    "supportDesc": "Ongoing support and communication throughout your project."
+  },
+  "services": {
+    "sectionLabel": "What We Do",
+    "sectionTitle": "Our",
+    "sectionTitleHighlight": "Services",
+    "web": "Web Development",
+    "webDesc": "Custom websites built with modern frameworks, optimised for speed, SEO, and stunning design.",
+    "ecommerce": "E-Commerce Stores",
+    "ecommerceDesc": "Online stores and digital catalogues that showcase your products beautifully and drive sales.",
+    "apps": "Apps & Software",
+    "appsDesc": "Custom mobile applications and software solutions tailored to your business needs.",
+    "training": "Project Management Training",
+    "trainingDesc": "Equip your team with the skills and methodologies to deliver projects on time and on budget.",
+    "ai": "AI Training",
+    "aiDesc": "Learn how to leverage artificial intelligence to automate workflows and boost productivity.",
+    "learnMore": "Learn More"
+  },
+  "testimonials": {
+    "label": "What Clients Say",
+    "title": "Client",
+    "titleHighlight": "Testimonials"
+  },
+  "cta": {
+    "title": "Ready to Build Something",
+    "titleHighlight": "Amazing",
+    "description": "Let's bring your vision to life. Get in touch and let's discuss how we can make your brand shine in the digital world.",
+    "startProject": "Start Your Project",
+    "viewPricing": "View Pricing"
+  },
+  "contact": {
+    "label": "Contact",
+    "title": "Let's",
+    "titleHighlight": "Talk",
+    "description": "Have a project in mind? Need a quote? Or just want to say hello? We'd love to hear from you.",
+    "fullName": "Full Name",
+    "email": "Email Address",
+    "phone": "Phone Number",
+    "service": "Service Interested In",
+    "budget": "Estimated Budget",
+    "message": "Tell Us About Your Project",
+    "send": "Send Message",
+    "sending": "Sending...",
+    "success": "Message sent successfully! We'll be in touch within 24 hours.",
+    "responseTime": "Response Time",
+    "within24": "Within 24 hours",
+    "location": "Location",
+    "southAfrica": "South Africa",
+    "remoteAvailable": "Available for remote projects worldwide"
+  },
+  "footer": {
+    "tagline": "Crafting digital excellence with creative, fast, and elegant solutions. Helping brands stand out in the digital world.",
+    "navigate": "Navigate",
+    "services": "Services",
+    "legal": "Legal",
+    "rights": "All rights reserved.",
+    "crafted": "Designed & developed with precision"
+  },
+  "splash": {
+    "welcome": "Welcome to",
+    "slideToEnter": "Slide to enter",
+    "letsGo": "Let's Go"
+  },
+  "cookie": {
+    "title": "Cookie Notice",
+    "description": "We use cookies to enhance your browsing experience and remember your preferences.",
+    "readMore": "Cookie Policy",
+    "accept": "Accept",
+    "decline": "Decline"
+  }
+}
