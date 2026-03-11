@@ -84,11 +84,12 @@ export default function AboutPage() {
               About Swift Designz
             </span>
             <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6">
-              The Story Behind{" "}
+              The Story Behind{" "}<br></br>
+              
               <span className="text-gradient">The Code</span>
             </h1>
             <p className="text-lg text-gray-400 leading-relaxed">
-              Swift Designz is a South African freelance software development studio
+              Swift Designz is a freelance software development studio
               dedicated to helping people get their brand, product, and service out
               there in a creative and aesthetic way.
             </p>
@@ -99,7 +100,7 @@ export default function AboutPage() {
       {/* Mission */}
       <section className="section">
         <div className="container">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -119,10 +120,10 @@ export default function AboutPage() {
                 your identity and speaks to your audience.
               </p>
               <p className="text-gray-400 leading-relaxed">
-                With a degree in Software Development, over two years of experience building
+                With over two years of experience building
                 websites and e-commerce stores, and growing expertise in apps and software,
                 Swift Designz delivers fast, elegant, and creative digital solutions
-                that make businesses stand out.
+                that make YOUR business stand out.
               </p>
             </motion.div>
 
@@ -131,7 +132,7 @@ export default function AboutPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="glass p-8 relative overflow-hidden"
+              className="glass p-6 md:p-8 relative overflow-hidden"
             >
               <div className="scan-line absolute inset-0 pointer-events-none" />
               <div className="grid grid-cols-2 gap-6">
@@ -148,7 +149,7 @@ export default function AboutPage() {
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-4xl font-bold text-gradient mb-2">50+</div>
+                  <div className="text-4xl font-bold text-gradient mb-2">15+</div>
                   <div className="text-xs text-gray-500 uppercase tracking-wider">
                     Projects Delivered
                   </div>
@@ -191,9 +192,9 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="glass glass-hover p-8 relative"
+                className="glass glass-hover p-5 md:p-8 relative"
               >
-                <div className="flex items-start gap-5">
+                <div className="flex items-start gap-4 md:gap-5">
                   <div
                     className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                     style={{ background: "rgba(48, 176, 176, 0.1)" }}
@@ -247,7 +248,7 @@ export default function AboutPage() {
             className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto"
           >
             {values.map((value, i) => (
-              <motion.div key={i} variants={itemVariants} className="glass glass-hover p-8">
+              <motion.div key={i} variants={itemVariants} className="glass glass-hover p-6 md:p-8">
                 <div
                   className="w-12 h-12 rounded-xl flex items-center justify-center mb-5"
                   style={{ background: "rgba(48, 176, 176, 0.08)" }}
@@ -269,7 +270,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="glass-strong p-12 md:p-16 text-center rounded-3xl"
+            className="glass-strong p-8 md:p-12 lg:p-16 text-center rounded-3xl"
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Let&apos;s Work <span className="text-gradient">Together</span>

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import {
   Code2,
   ShoppingBag,
@@ -87,12 +87,57 @@ const itemVariants = {
 
 export default function HomePage() {
   const heroRef = useRef<HTMLDivElement>(null);
+  const [revealStep, setRevealStep] = useState(0);
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
   });
   const heroY = useTransform(scrollYProgress, [0, 1], [0, 150]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
+  const line1 = "Crafting";
+  const line2 = "Digital";
+  const totalLetters = line1.length + line2.length;
+
+  const excellenceFonts = [
+    "var(--font-playfair), serif",
+    "var(--font-dancing), cursive",
+    "var(--font-cinzel), serif",
+    "var(--font-cormorant), serif",
+    "var(--font-bebas), sans-serif",
+    "var(--font-lobster), cursive",
+    "var(--font-great-vibes), cursive",
+    "var(--font-abril), serif",
+    "var(--font-orbitron), sans-serif",
+    "var(--font-raleway), sans-serif",
+  ];
+
+  const [fontIndex, setFontIndex] = useState(0);
+  const [excellenceRevealed, setExcellenceRevealed] = useState(false);
+
+  useEffect(() => {
+    let i = 0;
+    const interval = setInterval(() => {
+      i++;
+      setRevealStep(i);
+      if (i >= totalLetters + 2) clearInterval(interval);
+    }, 70);
+    return () => clearInterval(interval);
+  }, [totalLetters]);
+
+  useEffect(() => {
+    if (revealStep > totalLetters) {
+      setExcellenceRevealed(true);
+    }
+  }, [revealStep, totalLetters]);
+
+  useEffect(() => {
+    if (!excellenceRevealed) return;
+    const interval = setInterval(() => {
+      setFontIndex((prev) => (prev + 1) % excellenceFonts.length);
+    }, 2000);
+    return () => clearInterval(interval);
+  }, [excellenceRevealed, excellenceFonts.length]);
 
   return (
     <>
@@ -119,6 +164,25 @@ export default function HomePage() {
         </div>
 
         <motion.div style={{ y: heroY, opacity: heroOpacity }} className="container text-center relative z-10">
+          {/* Rotating favicon */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="mb-6 flex justify-center"
+          >
+            <motion.img
+              src="/favicon.png"
+              alt="Swift Designz"
+              className="w-[9.5rem] h-[9.5rem] md:w-48 md:h-48"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+              style={{
+                filter: "drop-shadow(0 0 12px rgba(48, 176, 176, 0.4)) drop-shadow(0 0 24px rgba(48, 176, 176, 0.2))",
+              }}
+            />
+          </motion.div>
+
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -137,16 +201,77 @@ export default function HomePage() {
             </span>
           </motion.div>
 
-          <motion.h1
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight"
-          >
-            Crafting Digital
+          <div className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+            {/* Line 1: "Crafting" — Tetris blocks building up */}
+            <span className="inline-block">
+              {line1.split("").map((char, i) => {
+                const isVisible = revealStep > i;
+                return (
+                  <motion.span
+                    key={`l1-${i}`}
+                    initial={{ opacity: 0, y: 60, clipPath: "inset(100% 0 0 0)" }}
+                    animate={
+                      isVisible
+                        ? { opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)" }
+                        : { opacity: 0, y: 60, clipPath: "inset(100% 0 0 0)" }
+                    }
+                    transition={{
+                      duration: 0.45,
+                      ease: [0.0, 0.0, 0.2, 1],
+                      clipPath: { duration: 0.45, ease: [0.0, 0.0, 0.2, 1] },
+                    }}
+                    className="inline-block origin-bottom"
+                    style={{ minWidth: char === " " ? "0.3em" : undefined }}
+                  >
+                    {char}
+                  </motion.span>
+                );
+              })}
+            </span>
+            {" "}
+            {/* Line 2: "Digital" — Tetris blocks building up */}
+            <span className="inline-block">
+              {line2.split("").map((char, i) => {
+                const globalIndex = line1.length + i;
+                const isVisible = revealStep > globalIndex;
+                return (
+                  <motion.span
+                    key={`l2-${i}`}
+                    initial={{ opacity: 0, y: 60, clipPath: "inset(100% 0 0 0)" }}
+                    animate={
+                      isVisible
+                        ? { opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)" }
+                        : { opacity: 0, y: 60, clipPath: "inset(100% 0 0 0)" }
+                    }
+                    transition={{
+                      duration: 0.45,
+                      ease: [0.0, 0.0, 0.2, 1],
+                      clipPath: { duration: 0.45, ease: [0.0, 0.0, 0.2, 1] },
+                    }}
+                    className="inline-block origin-bottom"
+                    style={{ minWidth: char === " " ? "0.3em" : undefined }}
+                  >
+                    {char}
+                  </motion.span>
+                );
+              })}
+            </span>
             <br />
-            <span className="text-gradient">Excellence</span>
-          </motion.h1>
+            {/* "Excellence" — appears after the letters, in sophisticated font */}
+            <motion.span
+              initial={{ opacity: 0, y: 30, scale: 0.9 }}
+              animate={
+                revealStep > totalLetters
+                  ? { opacity: 1, y: 0, scale: 1 }
+                  : { opacity: 0, y: 30, scale: 0.9 }
+              }
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              className="text-gradient inline-block"
+              style={{ fontFamily: excellenceFonts[fontIndex] }}
+            >
+              Excellence
+            </motion.span>
+          </div>
 
           <motion.p
             initial={{ opacity: 0, y: 30 }}
@@ -173,28 +298,6 @@ export default function HomePage() {
               <ArrowRight size={18} />
             </Link>
           </motion.div>
-
-          {/* Scroll indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.5 }}
-            className="absolute bottom-10 left-1/2 -translate-x-1/2"
-          >
-            <motion.div
-              animate={{ y: [0, 10, 0] }}
-              transition={{ duration: 2, repeat: Infinity }}
-              className="w-6 h-10 rounded-full flex justify-center pt-2"
-              style={{ border: "1px solid rgba(48,176,176,0.3)" }}
-            >
-              <motion.div
-                className="w-1 h-2 rounded-full"
-                style={{ background: "var(--swift-teal)" }}
-                animate={{ opacity: [1, 0, 1], y: [0, 8, 0] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-            </motion.div>
-          </motion.div>
         </motion.div>
       </section>
 
@@ -206,13 +309,13 @@ export default function HomePage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6"
           >
             {highlights.map((item, i) => (
               <motion.div
                 key={i}
                 variants={itemVariants}
-                className="glass glass-hover p-8 text-center"
+                className="glass glass-hover p-6 md:p-8 text-center"
               >
                 <div
                   className="w-14 h-14 rounded-xl flex items-center justify-center mx-auto mb-5"
@@ -236,7 +339,7 @@ export default function HomePage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center mb-10 md:mb-16"
           >
             <span className="text-xs tracking-[4px] uppercase text-[var(--swift-teal)]">
               What We Do
@@ -252,12 +355,12 @@ export default function HomePage() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"
           >
             {services.map((service, i) => (
               <motion.div key={i} variants={itemVariants}>
                 <Link href={service.href}>
-                  <div className="glass glass-hover p-8 h-full group cursor-pointer">
+                  <div className="glass glass-hover p-6 md:p-8 h-full group cursor-pointer">
                     <div
                       className="w-12 h-12 rounded-lg flex items-center justify-center mb-5 transition-all duration-300 group-hover:scale-110"
                       style={{ background: "rgba(48, 176, 176, 0.08)" }}
@@ -287,7 +390,7 @@ export default function HomePage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            className="text-center mb-10 md:mb-16"
           >
             <span className="text-xs tracking-[4px] uppercase text-[var(--swift-teal)]">
               What Clients Say
@@ -332,7 +435,7 @@ export default function HomePage() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="glass-strong p-12 md:p-16 text-center rounded-3xl relative overflow-hidden"
+            className="glass-strong p-8 md:p-12 lg:p-16 text-center rounded-3xl relative overflow-hidden"
           >
             {/* Decorative border glow */}
             <div

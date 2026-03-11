@@ -40,7 +40,7 @@ export default function Footer() {
   return (
     <footer className="relative border-t border-[rgba(48,176,176,0.1)]">
       <div className="container py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
             <motion.img

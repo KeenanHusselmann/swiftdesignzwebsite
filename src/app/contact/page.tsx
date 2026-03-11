@@ -141,7 +141,7 @@ export default function ContactPage() {
             >
               <form
                 onSubmit={handleSubmit}
-                className="glass-strong p-8 md:p-10 rounded-2xl space-y-6"
+                className="glass-strong p-6 md:p-8 lg:p-10 rounded-2xl space-y-6"
                 style={{ border: "1px solid rgba(48, 176, 176, 0.1)" }}
               >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

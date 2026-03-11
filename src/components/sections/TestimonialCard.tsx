@@ -17,7 +17,7 @@ export default function TestimonialCard({ quote, name, role, delay = 0 }: Testim
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6, delay }}
-      className="glass glass-hover p-8 relative"
+      className="glass glass-hover p-5 md:p-8 relative"
     >
       <Quote
         size={32}

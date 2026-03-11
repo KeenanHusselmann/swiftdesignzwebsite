@@ -23,31 +23,32 @@ const packages: Record<Category, Array<{
   websites: [
     {
       name: "Starter",
-      price: "R2,500",
+      price: "R2,800",
       description: "Perfect for personal brands and small businesses getting started online.",
       features: [
-        "Up to 3 pages",
+        "Up to 5 pages",
         "Responsive design",
         "Basic SEO setup",
         "Contact form",
         "Mobile friendly",
         "2 design revisions",
-        "1 month support",
+        "1 month FREE support",
       ],
     },
     {
       name: "Professional",
-      price: "R5,000",
+      price: "R5,500",
       description: "For businesses that want a strong, custom online presence.",
       features: [
-        "Up to 7 pages",
+        "Up to 10 pages",
         "Fully custom design",
         "Advanced SEO optimisation",
         "Contact form with email integration",
         "Social media integration",
         "Performance optimisation",
+        "4 Automations",
         "5 design revisions",
-        "3 months support",
+        "2 months FREE support",
         "Analytics setup",
       ],
       highlighted: true,
@@ -66,6 +67,7 @@ const packages: Record<Category, Array<{
         "CMS integration",
         "Unlimited revisions",
         "6 months support",
+        "Online Payment integrations",
         "Priority communication",
       ],
     },
@@ -73,7 +75,7 @@ const packages: Record<Category, Array<{
   ecommerce: [
     {
       name: "Starter",
-      price: "R4,000",
+      price: "R4,500",
       description: "A beautiful online catalogue to showcase your products and services.",
       features: [
         "Up to 20 products",
@@ -91,12 +93,13 @@ const packages: Record<Category, Array<{
       price: "R7,500",
       description: "A feature-rich store for growing businesses ready to scale.",
       features: [
-        "Up to 100 products",
+        "Up to 80 products",
         "Custom storefront design",
         "Advanced product filters & search",
         "Inventory management",
         "Customer enquiry system",
         "WhatsApp integration",
+        "Payment Gateway Integration",
         "SEO optimisation",
         "5 design revisions",
         "3 months support",
@@ -117,6 +120,7 @@ const packages: Record<Category, Array<{
         "Email marketing integration",
         "Advanced SEO & analytics",
         "CMS for product management",
+        "Payment gateway integration",
         "Unlimited revisions",
         "6 months support",
         "Priority communication",
@@ -140,11 +144,11 @@ const packages: Record<Category, Array<{
     },
     {
       name: "Standard",
-      price: "R12,000",
+      price: "R15,000",
       description: "A fully-featured application built for real-world usage.",
       features: [
         "Full feature set",
-        "2 platforms",
+        "2 platforms (iOS & Android)",
         "Custom UI/UX design",
         "Cloud integration",
         "API development",
@@ -219,7 +223,7 @@ export default function PackagesPage() {
                 <button
                   key={cat.id}
                   onClick={() => setActiveCategory(cat.id)}
-                  className={`flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-all duration-300 ${
+                  className={`flex items-center gap-1.5 sm:gap-2 px-3 py-2 sm:px-5 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-300 ${
                     activeCategory === cat.id
                       ? "text-white"
                       : "text-gray-500 hover:text-gray-300"
@@ -258,7 +262,7 @@ export default function PackagesPage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className={`relative rounded-2xl p-8 flex flex-col ${
+                className={`relative rounded-2xl p-6 md:p-8 flex flex-col ${
                   pkg.highlighted ? "glass-strong" : "glass"
                 }`}
                 style={
@@ -320,7 +324,7 @@ export default function PackagesPage() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-center text-xs text-gray-600 mt-10 max-w-xl mx-auto"
+            className="text-center text-xs text-gray-100 mt-10 max-w-xl mx-auto"
           >
             All prices are starting points and may vary based on project complexity.
             Contact us for a detailed, obligation-free quote tailored to your specific

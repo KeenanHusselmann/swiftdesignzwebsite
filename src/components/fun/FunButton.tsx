@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles } from "lucide-react";
 
 const jokes = [
   "Why do programmers prefer dark mode? Because light attracts bugs.",
@@ -50,6 +49,15 @@ type PopupContent = {
 
 export default function FunButton() {
   const [popup, setPopup] = useState<PopupContent | null>(null);
+  const [isWinking, setIsWinking] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsWinking(true);
+      setTimeout(() => setIsWinking(false), 300);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
 
   const triggerFun = useCallback(() => {
     const roll = Math.random();
@@ -81,20 +89,42 @@ export default function FunButton() {
       {/* Fun trigger button */}
       <motion.button
         onClick={triggerFun}
-        className="fixed bottom-6 left-6 z-[150] p-3 rounded-full cursor-pointer"
+        className="fixed bottom-6 left-4 sm:left-6 z-[150] p-3.5 rounded-full cursor-pointer"
         style={{
-          background: "rgba(48, 176, 176, 0.1)",
-          border: "1px solid rgba(48, 176, 176, 0.2)",
+          background: "rgba(48, 176, 176, 0.15)",
+          border: "1px solid rgba(48, 176, 176, 0.3)",
           backdropFilter: "blur(10px)",
         }}
-        whileHover={{
-          scale: 1.1,
-          boxShadow: "0 0 20px rgba(48, 176, 176, 0.3)",
+        animate={{
+          boxShadow: [
+            "0 0 8px rgba(48, 176, 176, 0.2), 0 0 16px rgba(48, 176, 176, 0.1)",
+            "0 0 16px rgba(48, 176, 176, 0.4), 0 0 32px rgba(48, 176, 176, 0.2)",
+            "0 0 8px rgba(48, 176, 176, 0.2), 0 0 16px rgba(48, 176, 176, 0.1)",
+          ],
         }}
-        whileTap={{ scale: 0.95 }}
+        transition={{
+          boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+        }}
+        whileHover={{
+          scale: 1.15,
+          boxShadow: "0 0 24px rgba(48, 176, 176, 0.5), 0 0 48px rgba(48, 176, 176, 0.25)",
+        }}
+        whileTap={{ scale: 0.9 }}
         title="Click for something fun!"
       >
-        <Sparkles size={20} color="var(--swift-teal)" />
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <circle cx="12" cy="12" r="10" fill="rgba(48, 176, 176, 0.9)" />
+          {/* Left eye - winks */}
+          {isWinking ? (
+            <path d="M7 10 Q8.5 11.5 10 10" stroke="#101010" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+          ) : (
+            <circle cx="8.5" cy="10" r="1.5" fill="#101010" />
+          )}
+          {/* Right eye */}
+          <circle cx="15.5" cy="10" r="1.5" fill="#101010" />
+          {/* Smile */}
+          <path d="M8 14.5 Q12 18 16 14.5" stroke="#101010" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+        </svg>
       </motion.button>
 
       {/* Popup */}
@@ -105,7 +135,7 @@ export default function FunButton() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
             transition={{ type: "spring", damping: 20 }}
-            className="fixed bottom-20 left-6 z-[151] max-w-sm"
+            className="fixed bottom-20 left-4 sm:left-6 z-[151] max-w-[calc(100vw-2rem)] sm:max-w-sm"
           >
             <div
               className="glass-strong p-5 rounded-2xl relative"

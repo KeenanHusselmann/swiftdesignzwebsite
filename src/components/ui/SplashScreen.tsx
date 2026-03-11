@@ -9,9 +9,10 @@ export default function SplashScreen() {
   const [unlocked, setUnlocked] = useState(false);
   const [mounted, setMounted] = useState(false);
   const constraintsRef = useRef<HTMLDivElement>(null);
+  const [windowWidth, setWindowWidth] = useState(0);
   const x = useMotionValue(0);
-  const sliderWidth = 280;
-  const thumbWidth = 64;
+  const sliderWidth = windowWidth < 400 ? 220 : 280;
+  const thumbWidth = windowWidth < 400 ? 52 : 64;
   const maxDrag = sliderWidth - thumbWidth;
 
   const backgroundOpacity = useTransform(x, [0, maxDrag], [0, 1]);
@@ -19,6 +20,7 @@ export default function SplashScreen() {
 
   useEffect(() => {
     setMounted(true);
+    setWindowWidth(window.innerWidth);
     const seen = Cookies.get("swift-splash-seen");
     if (!seen) {
       setShow(true);

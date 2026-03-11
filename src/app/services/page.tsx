@@ -155,7 +155,7 @@ export default function ServicesPage() {
         <section key={service.id} id={service.id} className="section">
           <div className="container">
             <div
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${
+              className={`grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 items-center ${
                 i % 2 === 1 ? "lg:flex-row-reverse" : ""
               }`}
             >
@@ -238,7 +238,7 @@ export default function ServicesPage() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="glass-strong p-12 md:p-16 text-center rounded-3xl"
+            className="glass-strong p-8 md:p-12 lg:p-16 text-center rounded-3xl"
           >
             <h2 className="text-3xl md:text-4xl font-bold mb-4">
               Need a <span className="text-gradient">Custom Solution</span>?

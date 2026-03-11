@@ -20,7 +20,7 @@ interface Project {
 // Template projects - replace with actual projects
 const projects: Project[] = [
   {
-    title: "Grace & Light Ministries",
+    title: "TB Free Foundation Website",
     category: "websites",
     description:
       "A stunning, clean-flowing website with an inviting user experience. Custom design with carefully chosen typography and a calm, professional aesthetic.",
@@ -28,51 +28,59 @@ const projects: Project[] = [
     tags: ["Custom Design", "Responsive", "SEO"],
   },
   {
-    title: "Artisan Coffee Co.",
+    title: "Highly Medicated Website",
     category: "ecommerce",
     description:
-      "A beautiful product catalogue showcasing artisan coffee blends with rich imagery and intuitive navigation. Built for engagement and conversions.",
+      "A beautiful product catalogue showcasing medicinal products with rich imagery and intuitive navigation. Built for engagement and conversions.",
+    image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=400&fit=crop",
+    tags: ["E-Commerce", "Product Catalogue", "Custom Design"],
+  },
+   {
+    title: "Ruby's Faith Jewellery Store",
+    category: "ecommerce",
+    description:
+      "An elegant online store for a jewellery brand, featuring a visually rich product catalogue, seamless shopping experience, and a design that reflects the brand's unique style.",
     image: "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600&h=400&fit=crop",
     tags: ["E-Commerce", "Product Catalogue", "Custom Design"],
   },
   {
-    title: "FitTrack Mobile App",
+    title: "E-Budgetting App",
     category: "apps",
     description:
-      "A cross-platform fitness tracking application with real-time data syncing, custom workout plans, and an intuitive dashboard.",
+      "A sleek, user-friendly budgeting app that helps users track expenses, set financial goals, and visualize spending habits with elegant charts and a calming interface.",
     image: "https://images.unsplash.com/photo-1526506118085-471d8e7e3966?w=600&h=400&fit=crop",
-    tags: ["Mobile App", "React Native", "Cloud"],
+    tags: ["Mobile App", " Native", "Cloud"],
   },
   {
-    title: "Bloom & Grow Studio",
+    title: "CK's Creations - Laser Engraving Studio",
     category: "websites",
     description:
-      "A creative portfolio website for a floral studio, featuring animated transitions, elegant gallery layouts, and online booking integration.",
+      " A visually captivating website for a laser engraving studio, featuring a sleek design that highlights their portfolio of intricate engravings and custom creations.",
     image: "https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=600&h=400&fit=crop",
     tags: ["Portfolio", "Animation", "Booking"],
   },
   {
-    title: "Urban Threads Fashion",
+    title: "Fryse - Freeze Dried Products",
     category: "ecommerce",
     description:
-      "A modern fashion catalogue with advanced filtering, size guides, and a clean minimalist design that puts the products front and centre.",
+      "An elegant online store for a freeze-dried food company, showcasing their range of products with rich visuals, easy navigation, and a seamless shopping experience.  ",
     image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=600&h=400&fit=crop",
     tags: ["Fashion", "E-Commerce", "Filter System"],
   },
   {
-    title: "TaskFlow Manager",
+    title: "HireMeBuddy - Job Search App",
     category: "apps",
     description:
-      "A project management application designed for small teams, featuring kanban boards, time tracking, and team collaboration tools.",
+      "A job search application designed to connect job seekers with potential employers, featuring advanced search filters, resume management, and real-time notifications.",
     image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop",
-    tags: ["SaaS", "Dashboard", "Collaboration"],
+    tags: ["Job Search", "Mobile App", "SaaS"],
   },
 ];
 
 const testimonials = [
   {
     quote:
-      "The banner, overall look and feel, font and clean flowing state of the site is STUNNING. User Experience pleasant, calm and inviting. I love it. The way I see it you've done a lot of research than what was probably provided. I am very proud of what you've produced. Very nice.",
+      "The banner, overall look and feel, font and clean flowing state of the site is STUNNING. User Experience pleasant, calm and inviting. I love it.",
     name: "Satisfied Client",
     role: "Business Owner",
   },
@@ -80,7 +88,7 @@ const testimonials = [
     quote:
       "From my experience working with many developers across various projects, you should be proud of yourself. You take ownership, and your work ethic truly stands out, something I cannot say about many developers I have worked with. Your work clearly reflects your passion, dedication, and skill.",
     name: "Industry Professional",
-    role: "Project Manager",
+    role: "Project Manager - Ambrose Isaacs",
   },
 ];
 
@@ -181,7 +189,7 @@ export default function PortfolioPage() {
                 className="glass glass-hover overflow-hidden group cursor-pointer"
               >
                 {/* Image */}
-                <div className="relative overflow-hidden h-52">
+                <div className="relative overflow-hidden h-40 md:h-52">
                   <img
                     src={project.image}
                     alt={project.title}
