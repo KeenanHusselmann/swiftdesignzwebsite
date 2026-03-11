@@ -138,8 +138,8 @@ export default function FunButton() {
             className="fixed bottom-20 left-4 sm:left-6 z-[151] max-w-[calc(100vw-2rem)] sm:max-w-sm"
           >
             <div
-              className="glass-strong p-5 rounded-2xl relative"
-              style={{ border: "1px solid rgba(48, 176, 176, 0.2)" }}
+              className="p-5 rounded-2xl relative"
+              style={{ background: "#1a1a1a", border: "1px solid rgba(48, 176, 176, 0.3)" }}
             >
               {/* Mascot avatar for mascot type */}
               {popup.type === "mascot" && (
