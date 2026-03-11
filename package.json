@@ -20,6 +20,7 @@
     "resend": "^6.9.3"
   },
   "devDependencies": {
+    "@netlify/plugin-nextjs": "^5.15.9",
     "@tailwindcss/postcss": "^4",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
