@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, startTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import LanguageSwitcher from "@/components/ui/LanguageSwitcher";
@@ -30,7 +31,7 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    setMobileOpen(false);
+    startTransition(() => setMobileOpen(false));
   }, [pathname]);
 
   return (
@@ -51,13 +52,24 @@ export default function Navbar() {
         <div className="container flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="relative z-10">
-            <motion.img
-              src="/images/logo.png"
-              alt="Swift Designz"
-              className="h-20 md:h-24 w-auto"
+            <motion.div
               whileHover={{ scale: 1.05 }}
               transition={{ type: "spring", stiffness: 300 }}
-            />
+              className="flex items-center gap-2"
+            >
+              <Image src="/images/favicon.png" alt="" width={32} height={32} className="w-8 h-8" />
+              <span
+                className="font-bold text-lg tracking-tight"
+                style={{
+                  background: "linear-gradient(135deg, #fff 30%, var(--swift-teal) 100%)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                Swift <span style={{ WebkitTextFillColor: "var(--swift-teal)", color: "var(--swift-teal)" }}>Designz</span>
+              </span>
+            </motion.div>
           </Link>
 
           {/* Desktop Nav */}
@@ -78,7 +90,7 @@ export default function Navbar() {
                       layoutId="nav-indicator"
                       className="absolute bottom-0 left-2 right-2 h-[2px]"
                       style={{
-                        background: "linear-gradient(90deg, var(--swift-teal), transparent)",
+                        background: "linear-gradient(90deg, var(--swift-teal), rgba(217,119,6,0.6))",
                       }}
                       transition={{ type: "spring", stiffness: 300, damping: 30 }}
                     />
@@ -86,10 +98,13 @@ export default function Navbar() {
                 </motion.span>
               </Link>
             ))}
-            <LanguageSwitcher />
-            <Link href="/contact" className="neon-btn ml-4 !py-2 !px-5 text-sm">
+            <Link href="/quote" className="neon-btn ml-4 !py-2 !px-5 text-sm">
               {t("nav.getQuote")}
             </Link>
+            {/* Language Switcher — far right */}
+            <div className="ml-4">
+              <LanguageSwitcher />
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
@@ -154,7 +169,7 @@ export default function Navbar() {
               transition={{ delay: 0.6 }}
             >
               <Link
-                href="/contact"
+                href="/quote"
                 className="neon-btn-filled neon-btn mt-4"
                 onClick={() => setMobileOpen(false)}
               >

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useCallback, startTransition } from "react";
 
 interface Spark {
   id: number;
@@ -21,24 +21,40 @@ interface GlowDot {
   duration: number;
 }
 
-interface AuroraWave {
+interface CloudBundle {
   id: number;
-  yCenter: number;
-  amplitude: number;
-  wavelength: number;
+  y: number;
+  size: number;
   duration: number;
   opacity: number;
   hue: number;
 }
 
+// Continuous aurora: 4 seamless sine cycles across 3840px — loops via translateX(-50%) on a 200%-wide div
+const CONT_AURORA_PATH = (() => {
+  const steps = 64, W = 3840, yC = 100, amp = 42, wl = 960;
+  const up = Array.from({ length: steps + 1 }, (_, i) => {
+    const x = (i / steps) * W;
+    const y = yC + Math.sin((x / wl) * Math.PI * 2) * amp;
+    return `${i === 0 ? "M" : "L"}${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  const down = Array.from({ length: steps + 1 }, (_, i) => {
+    const j = steps - i;
+    const x = (j / steps) * W;
+    const y = yC + Math.sin((x / wl) * Math.PI * 2 + 0.45) * amp + 38;
+    return `L${x.toFixed(1)},${y.toFixed(1)}`;
+  });
+  return [...up, ...down, "Z"].join(" ");
+})();
+
 export default function BackgroundEffects() {
   const [sparks, setSparks] = useState<Spark[]>([]);
   const [glowDots, setGlowDots] = useState<GlowDot[]>([]);
-  const [auroraWaves, setAuroraWaves] = useState<AuroraWave[]>([]);
+  const [cloudBundles, setCloudBundles] = useState<CloudBundle[]>([]);
 
   // Generate scattered glow dots on mount (client-only to avoid hydration mismatch)
   useEffect(() => {
-    setGlowDots(
+    startTransition(() => setGlowDots(
       Array.from({ length: 12 }, () => ({
         x: Math.random() * 100,
         y: Math.random() * 100,
@@ -46,7 +62,7 @@ export default function BackgroundEffects() {
         delay: Math.random() * 5,
         duration: 3 + Math.random() * 4,
       }))
-    );
+    ));
   }, []);
 
   const spawnSpark = useCallback(() => {
@@ -68,18 +84,17 @@ export default function BackgroundEffects() {
     }, (duration + 1.5) * 1000);
   }, []);
 
-  const spawnAurora = useCallback(() => {
+  const spawnCloud = useCallback(() => {
     const id = Math.floor(Date.now() + Math.random() * 10000);
-    const yCenter = 15 + Math.random() * 60;
-    const amplitude = 30 + Math.random() * 50;
-    const wavelength = 250 + Math.random() * 200;
-    const duration = 14 + Math.random() * 10;
-    const opacity = 0.12 + Math.random() * 0.12;
-    const hue = Math.random() > 0.5 ? 180 : 170 + Math.random() * 20;
-    setAuroraWaves((prev) => [...prev.slice(-1), { id, yCenter, amplitude, wavelength, duration, opacity, hue }]);
+    const y = 8 + Math.random() * 65;
+    const size = 80 + Math.random() * 110;
+    const duration = 38 + Math.random() * 28;
+    const opacity = 0.055 + Math.random() * 0.07;
+    const hue = 172 + Math.random() * 16;
+    setCloudBundles((prev) => [...prev.slice(-2), { id, y, size, duration, opacity, hue }]);
     setTimeout(() => {
-      setAuroraWaves((prev) => prev.filter((w) => w.id !== id));
-    }, (duration + 3) * 1000);
+      setCloudBundles((prev) => prev.filter((c) => c.id !== id));
+    }, (duration + 4) * 1000);
   }, []);
 
   useEffect(() => {
@@ -93,36 +108,12 @@ export default function BackgroundEffects() {
 
   useEffect(() => {
     const tick = () => {
-      spawnAurora();
-      auroraTimeout = setTimeout(tick, 10000 + Math.random() * 8000);
+      spawnCloud();
+      cloudTimeout = setTimeout(tick, 14000 + Math.random() * 12000);
     };
-    let auroraTimeout = setTimeout(tick, 800);
-    return () => clearTimeout(auroraTimeout);
-  }, [spawnAurora]);
-
-  // Memoize aurora SVG paths so they don't recalculate on every render
-  const auroraData = useMemo(() => {
-    return auroraWaves.map((wave) => {
-      const kf = `aurora${wave.id}`;
-      const steps = 12;
-      const w = 2000;
-      const points: string[] = [];
-      for (let i = 0; i <= steps; i++) {
-        const x = (i / steps) * w;
-        const y = 150 + Math.sin((i / steps) * Math.PI * (w / wave.wavelength)) * wave.amplitude;
-        points.push(i === 0 ? `M${x},${y}` : `L${x},${y}`);
-      }
-      const pathUp = points.join(" ");
-      const pathDown: string[] = [];
-      for (let i = steps; i >= 0; i--) {
-        const x = (i / steps) * w;
-        const y = 150 + Math.sin((i / steps) * Math.PI * (w / wave.wavelength) + 0.6) * wave.amplitude + 40;
-        pathDown.push(`L${x},${y}`);
-      }
-      const fullPath = pathUp + " " + pathDown.join(" ") + " Z";
-      return { ...wave, kf, fullPath };
-    });
-  }, [auroraWaves]);
+    let cloudTimeout = setTimeout(tick, 1800);
+    return () => clearTimeout(cloudTimeout);
+  }, [spawnCloud]);
 
   return (
     <>
@@ -245,49 +236,75 @@ export default function BackgroundEffects() {
           />
         ))}
 
-        {/* Aurora waves */}
-        {auroraData.map((wave) => (
-          <div key={wave.id}>
-            <style>{`
-              @keyframes ${wave.kf} {
-                0% { transform: translateX(-2000px); opacity: 0; }
-                8% { opacity: 1; }
-                85% { opacity: 1; }
-                100% { transform: translateX(calc(100vw + 200px)); opacity: 0; }
-              }
-            `}</style>
-            <div
-              className="absolute"
-              style={{
-                top: `${wave.yCenter - 10}%`,
-                left: 0,
-                width: 2000,
-                height: 300,
-                animation: `${wave.kf} ${wave.duration}s ease-in-out forwards`,
-              }}
-            >
-              <svg width="2000" height="300" viewBox="0 0 2000 300" fill="none">
-                <defs>
-                  <linearGradient id={`ag${wave.id}`} x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0%" stopColor={`hsla(${wave.hue}, 60%, 50%, 0)`} />
-                    <stop offset="25%" stopColor={`hsla(${wave.hue}, 60%, 50%, ${wave.opacity * 0.6})`} />
-                    <stop offset="50%" stopColor={`hsla(${wave.hue}, 65%, 55%, ${wave.opacity})`} />
-                    <stop offset="75%" stopColor={`hsla(${wave.hue}, 60%, 50%, ${wave.opacity * 0.6})`} />
-                    <stop offset="100%" stopColor={`hsla(${wave.hue}, 60%, 50%, 0)`} />
-                  </linearGradient>
-                  <filter id={`ab${wave.id}`}>
-                    <feGaussianBlur stdDeviation="8" />
-                  </filter>
-                </defs>
-                <path
-                  d={wave.fullPath}
-                  fill={`url(#ag${wave.id})`}
-                  filter={`url(#ab${wave.id})`}
-                />
-              </svg>
-            </div>
+        {/* Continuous aurora wave — one seamless flowing ribbon */}
+        <div className="absolute overflow-hidden pointer-events-none" style={{ top: "16%", left: 0, right: 0, height: 200 }}>
+          <style>{`
+            @keyframes contAuroraFlow {
+              0%   { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+          `}</style>
+          <div style={{ width: "200%", animation: "contAuroraFlow 52s linear infinite" }}>
+            <svg width="100%" height="200" viewBox="0 0 3840 200" preserveAspectRatio="none" fill="none">
+              <defs>
+                <linearGradient id="cag" x1="0" y1="0" x2="3840" y2="0" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%"   stopColor="hsla(176, 55%, 52%, 0)" />
+                  <stop offset="10%"  stopColor="hsla(176, 60%, 52%, 0.07)" />
+                  <stop offset="28%"  stopColor="hsla(180, 65%, 56%, 0.13)" />
+                  <stop offset="50%"  stopColor="hsla(176, 60%, 52%, 0.08)" />
+                  <stop offset="72%"  stopColor="hsla(180, 65%, 56%, 0.13)" />
+                  <stop offset="90%"  stopColor="hsla(176, 60%, 52%, 0.07)" />
+                  <stop offset="100%" stopColor="hsla(176, 55%, 52%, 0)" />
+                </linearGradient>
+                <filter id="cab">
+                  <feGaussianBlur stdDeviation="9" />
+                </filter>
+              </defs>
+              <path d={CONT_AURORA_PATH} fill="url(#cag)" filter="url(#cab)" />
+            </svg>
           </div>
-        ))}
+        </div>
+
+        {/* Drifting cloud bundles */}
+        {cloudBundles.map((cloud) => {
+          const kf = `cloud${cloud.id}`;
+          const s = cloud.size;
+          const col = `hsla(${cloud.hue}, 50%, 62%, ${cloud.opacity})`;
+          const blur = `blur(${Math.round(s * 0.13)}px)`;
+          return (
+            <div key={cloud.id}>
+              <style>{`
+                @keyframes ${kf} {
+                  0%   { transform: translateX(-${Math.ceil(s * 3.5)}px); opacity: 0; }
+                  8%   { opacity: 1; }
+                  88%  { opacity: 1; }
+                  100% { transform: translateX(calc(100vw + ${Math.ceil(s * 3.5)}px)); opacity: 0; }
+                }
+              `}</style>
+              <div
+                className="absolute"
+                style={{
+                  top: `${cloud.y}%`,
+                  left: 0,
+                  width: s * 3.2,
+                  height: s * 1.6,
+                  animation: `${kf} ${cloud.duration}s linear forwards`,
+                }}
+              >
+                {/* Main elongated body */}
+                <div style={{ position: "absolute", width: s * 2.2, height: s * 0.72, left: 0, top: s * 0.56, borderRadius: "50%", background: col, filter: blur }} />
+                {/* Left bump */}
+                <div style={{ position: "absolute", width: s * 0.78, height: s * 0.78, left: s * 0.22, top: s * 0.14, borderRadius: "50%", background: col, filter: blur }} />
+                {/* Center bump (tallest) */}
+                <div style={{ position: "absolute", width: s * 0.9, height: s * 0.9, left: s * 0.72, top: 0, borderRadius: "50%", background: col, filter: blur }} />
+                {/* Right bump */}
+                <div style={{ position: "absolute", width: s * 0.72, height: s * 0.72, left: s * 1.28, top: s * 0.1, borderRadius: "50%", background: col, filter: blur }} />
+                {/* Far-right small bump */}
+                <div style={{ position: "absolute", width: s * 0.52, height: s * 0.52, left: s * 1.68, top: s * 0.24, borderRadius: "50%", background: col, filter: blur }} />
+              </div>
+            </div>
+          );
+        })}
 
         {/* Sparks with trails */}
         {sparks.map((spark) => {

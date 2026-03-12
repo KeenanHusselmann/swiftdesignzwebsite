@@ -1,8 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import { Mail, MapPin, ArrowUpRight } from "lucide-react";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const footerLinks = [
   {
@@ -37,33 +38,57 @@ const footerLinks = [
 ];
 
 export default function Footer() {
+  const { t } = useI18n();
+  const linkKeys: Record<string, string> = {
+    "/": "footer.home",
+    "/about": "footer.about",
+    "/services": "footer.services",
+    "/packages": "footer.packages",
+    "/portfolio": "footer.portfolio",
+    "/contact": "footer.contact",
+    "/services#web": "footer.webDev",
+    "/services#ecommerce": "footer.ecommerce",
+    "/services#apps": "footer.apps",
+    "/services#training": "footer.pmTraining",
+    "/services#ai": "footer.aiTraining",
+    "/privacy": "footer.privacy",
+    "/terms": "footer.terms",
+    "/cookies": "footer.cookies",
+  };
+  const sectionTitleKeys: Record<string, string> = {
+    Navigate: "footer.navigate",
+    Services: "footer.services",
+    Legal: "footer.legal",
+  };
   return (
     <footer className="relative border-t border-[rgba(48,176,176,0.1)]">
       <div className="container py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           {/* Brand */}
           <div className="lg:col-span-2">
-            <motion.img
-              src="/images/logo.png"
-              alt="Swift Designz"
-              className="h-10 w-auto mb-6"
-              whileHover={{ scale: 1.05 }}
-            />
-            <p className="text-sm text-gray-500 max-w-xs mb-6 leading-relaxed">
-              Crafting digital excellence with creative, fast, and elegant solutions.
-              Helping brands stand out in the digital world.
+            <div className="mb-6">
+              <Image
+                src="/images/logo.png"
+                alt="Swift Designz"
+                width={200}
+                height={60}
+                className="w-32 object-contain"
+              />
+            </div>
+            <p className="text-sm" style={{ color: "hsl(180, 78%, 51%)", maxWidth: "20rem", marginBottom: "1.5rem", lineHeight: "1.5" }}>
+              {t("footer.tagline")}
             </p>
             <div className="flex flex-col gap-3">
               <a
                 href="mailto:info@swiftdesignz.co.za"
-                className="flex items-center gap-2 text-sm text-gray-400 hover:text-[var(--swift-teal)] transition-colors"
+                className="flex items-center gap-2 text-sm text-gray-300 hover:text-[var(--swift-teal)] transition-colors"
               >
                 <Mail size={14} />
                 info@swiftdesignz.co.za
               </a>
-              <div className="flex items-center gap-2 text-sm text-gray-500">
+              <div className="flex items-center gap-2 text-sm" style={{ color: "hsl(180, 9%, 91%)" }}>
                 <MapPin size={14} />
-                South Africa
+                {t("footer.location")}
               </div>
             </div>
           </div>
@@ -72,7 +97,7 @@ export default function Footer() {
           {footerLinks.map((section) => (
             <div key={section.title}>
               <h4 className="text-sm font-semibold uppercase tracking-[2px] text-[var(--swift-teal)] mb-5">
-                {section.title}
+                {t(sectionTitleKeys[section.title] ?? section.title)}
               </h4>
               <ul className="flex flex-col gap-3">
                 {section.links.map((link) => (
@@ -81,7 +106,7 @@ export default function Footer() {
                       href={link.href}
                       className="text-sm text-gray-500 hover:text-white transition-colors flex items-center gap-1 group"
                     >
-                      {link.label}
+                      {t(linkKeys[link.href] ?? link.label)}
                       <ArrowUpRight
                         size={12}
                         className="opacity-0 group-hover:opacity-100 transition-opacity"
@@ -96,11 +121,11 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="mt-16 pt-8 border-t border-[rgba(48,176,176,0.05)] flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-gray-600">
-            &copy; {new Date().getFullYear()} Swift Designz. All rights reserved.
+          <p className="text-xs" style={{ color: "#b45309" }}>
+            &copy; {new Date().getFullYear()} Swift Designz. {t("footer.rights")}
           </p>
-          <p className="text-xs text-gray-700">
-            Designed & developed with precision
+          <p className="text-xs" style={{ color: "#b45309" }}>
+            {t("footer.crafted")}
           </p>
         </div>
       </div>

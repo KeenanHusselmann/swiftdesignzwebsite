@@ -2,33 +2,36 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 
 const jokes = [
-  "Why do programmers prefer dark mode? Because light attracts bugs.",
-  "There are only 10 types of people in the world: those who understand binary and those who don't.",
-  "A SQL query walks into a bar, sees two tables, and asks... 'Can I JOIN you?'",
-  "Why did the developer go broke? Because he used up all his cache.",
-  "!false - It's funny because it's true.",
-  "What's a programmer's favourite hangout spot? Foo Bar.",
-  "How many programmers does it take to change a light bulb? None. That's a hardware problem.",
-  "Why do Java developers wear glasses? Because they can't C#.",
-  "What did the router say to the doctor? 'It hurts when IP.'",
-  "Why was the JavaScript developer sad? Because he didn't Node how to Express himself.",
-  "A programmer's wife tells him: 'Go to the store and buy a loaf of bread. If they have eggs, buy a dozen.' He comes home with 12 loaves.",
-  "The best thing about a Boolean is that even if you're wrong, you're only off by a bit.",
+  "Why don't eggs tell jokes? They'd crack each other up.",
+  "I told my suitcase there will be no vacations this year. Now it has emotional baggage.",
+  "Why did the scarecrow win an award? He was outstanding in his field.",
+  "I only know 25 letters of the alphabet. I don't know y.",
+  "Why don't scientists trust atoms? Because they make up everything.",
+  "My math teacher called me average. How mean.",
+  "What do you call cheese that isn't yours? Nacho cheese.",
+  "I used to play piano by ear, but now I use my hands.",
+  "Why did the coffee file a police report? It got mugged.",
+  "What kind of shoes do ninjas wear? Sneakers.",
+  "Why do programmers avoid nature? Too many bugs.",
+  "A programmer's favorite place to relax is the Foo Bar.",
 ];
 
 const funFacts = [
-  "The first computer programmer was Ada Lovelace, way back in the 1840s.",
-  "The first computer virus was created in 1983 and was called the 'Elk Cloner'.",
-  "About 70% of all coding jobs are in fields outside of tech.",
-  "The average person checks their phone 96 times a day. That's once every 10 minutes.",
-  "NASA's Apollo 11 guidance computer had only 74 KB of memory.",
-  "The first website is still online: info.cern.ch",
-  "Python is named after Monty Python, not the snake.",
-  "There are about 700 different programming languages.",
-  "The first domain ever registered was symbolics.com on March 15, 1985.",
-  "Samsung tests phone durability with a robot shaped like a human butt.",
+  "Honey never spoils. Pots of honey found in ancient tombs were still edible.",
+  "Bananas are berries, but strawberries are not.",
+  "Octopuses have three hearts and blue blood.",
+  "A day on Venus is longer than a year on Venus.",
+  "Sharks existed before trees.",
+  "The Eiffel Tower can grow taller in summer due to heat expansion.",
+  "Your nose can remember tens of thousands of different scents.",
+  "Hot water can freeze faster than cold water in some situations. It is called the Mpemba effect.",
+  "Koala fingerprints can look surprisingly similar to human fingerprints.",
+  "The shortest war in history lasted less than an hour.",
+  "The first website is still online at info.cern.ch.",
+  "Wombat poop is cube-shaped, which helps stop it from rolling away.",
 ];
 
 const mascotLines = [
@@ -51,6 +54,22 @@ export default function FunButton() {
   const [popup, setPopup] = useState<PopupContent | null>(null);
   const [isWinking, setIsWinking] = useState(false);
 
+  const pickRandom = useCallback((items: string[], exclude?: string) => {
+    if (items.length === 0) return "";
+    if (items.length === 1) return items[0];
+
+    let selected = items[Math.floor(Math.random() * items.length)];
+    let attempts = 0;
+
+    // Avoid showing the same line twice in a row when possible.
+    while (selected === exclude && attempts < 8) {
+      selected = items[Math.floor(Math.random() * items.length)];
+      attempts += 1;
+    }
+
+    return selected;
+  }, []);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setIsWinking(true);
@@ -61,28 +80,28 @@ export default function FunButton() {
 
   const triggerFun = useCallback(() => {
     const roll = Math.random();
-    let content: PopupContent;
 
-    if (roll < 0.4) {
-      content = {
-        type: "joke",
-        text: jokes[Math.floor(Math.random() * jokes.length)],
-      };
-    } else if (roll < 0.7) {
-      content = {
-        type: "fact",
-        text: funFacts[Math.floor(Math.random() * funFacts.length)],
-      };
-    } else {
-      content = {
+    setPopup((current) => {
+      if (roll < 0.3) {
+        return {
+          type: "joke",
+          text: pickRandom(jokes, current?.text),
+        };
+      }
+
+      if (roll < 0.75) {
+        return {
+          type: "fact",
+          text: pickRandom(funFacts, current?.text),
+        };
+      }
+
+      return {
         type: "mascot",
-        text: mascotLines[Math.floor(Math.random() * mascotLines.length)],
+        text: pickRandom(mascotLines, current?.text),
       };
-    }
-
-    setPopup(content);
-    setTimeout(() => setPopup(null), 5000);
-  }, []);
+    });
+  }, [pickRandom]);
 
   return (
     <>
@@ -92,14 +111,14 @@ export default function FunButton() {
         className="fixed bottom-6 left-4 sm:left-6 z-[150] p-3.5 rounded-full cursor-pointer"
         style={{
           background: "rgba(48, 176, 176, 0.15)",
-          border: "1px solid rgba(48, 176, 176, 0.3)",
+          border: "1px solid rgba(217, 119, 6, 0.3)",
           backdropFilter: "blur(10px)",
         }}
         animate={{
           boxShadow: [
-            "0 0 8px rgba(48, 176, 176, 0.2), 0 0 16px rgba(48, 176, 176, 0.1)",
-            "0 0 16px rgba(48, 176, 176, 0.4), 0 0 32px rgba(48, 176, 176, 0.2)",
-            "0 0 8px rgba(48, 176, 176, 0.2), 0 0 16px rgba(48, 176, 176, 0.1)",
+            "0 0 8px rgba(217, 119, 6, 0.2), 0 0 16px rgba(217, 119, 6, 0.1)",
+            "0 0 16px rgba(217, 119, 6, 0.4), 0 0 32px rgba(217, 119, 6, 0.2)",
+            "0 0 8px rgba(217, 119, 6, 0.2), 0 0 16px rgba(217, 119, 6, 0.1)",
           ],
         }}
         transition={{
@@ -107,23 +126,30 @@ export default function FunButton() {
         }}
         whileHover={{
           scale: 1.15,
-          boxShadow: "0 0 24px rgba(48, 176, 176, 0.5), 0 0 48px rgba(48, 176, 176, 0.25)",
+          boxShadow: "0 0 24px rgba(217, 119, 6, 0.5), 0 0 48px rgba(217, 119, 6, 0.25)",
         }}
         whileTap={{ scale: 0.9 }}
         title="Click for something fun!"
       >
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <circle cx="12" cy="12" r="10" fill="rgba(48, 176, 176, 0.9)" />
+          <defs>
+            <radialGradient id="amberFace" cx="38%" cy="32%" r="65%">
+              <stop offset="0%" stopColor="#fcd34d" />
+              <stop offset="45%" stopColor="#d97706" />
+              <stop offset="100%" stopColor="#92400e" />
+            </radialGradient>
+          </defs>
+          <circle cx="12" cy="12" r="10" fill="url(#amberFace)" />
           {/* Left eye - winks */}
           {isWinking ? (
-            <path d="M7 10 Q8.5 11.5 10 10" stroke="#101010" strokeWidth="1.8" strokeLinecap="round" fill="none" />
+            <path d="M7 10 Q8.5 11.5 10 10" stroke="#1c0a00" strokeWidth="1.8" strokeLinecap="round" fill="none" />
           ) : (
-            <circle cx="8.5" cy="10" r="1.5" fill="#101010" />
+            <circle cx="8.5" cy="10" r="1.5" fill="#1c0a00" />
           )}
           {/* Right eye */}
-          <circle cx="15.5" cy="10" r="1.5" fill="#101010" />
+          <circle cx="15.5" cy="10" r="1.5" fill="#1c0a00" />
           {/* Smile */}
-          <path d="M8 14.5 Q12 18 16 14.5" stroke="#101010" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+          <path d="M8 14.5 Q12 18 16 14.5" stroke="#1c0a00" strokeWidth="1.5" strokeLinecap="round" fill="none" />
         </svg>
       </motion.button>
 
@@ -138,35 +164,24 @@ export default function FunButton() {
             className="fixed bottom-20 left-4 sm:left-6 z-[151] max-w-[calc(100vw-2rem)] sm:max-w-sm"
           >
             <div
-              className="p-5 rounded-2xl relative"
-              style={{ background: "#1a1a1a", border: "1px solid rgba(48, 176, 176, 0.3)" }}
+              className="p-5 rounded-2xl relative overflow-hidden"
+              style={{
+                background: "linear-gradient(135deg, #050d1a 0%, #0d1f35 50%, #050d1a 100%)",
+                border: "1px solid rgba(48, 176, 176, 0.3)",
+                backdropFilter: "blur(12px)",
+              }}
             >
               {/* Mascot avatar for mascot type */}
               {popup.type === "mascot" && (
                 <div className="flex items-center gap-3 mb-3">
-                  <div
-                    className="w-8 h-8 rounded-full flex items-center justify-center"
-                    style={{
-                      background: "linear-gradient(135deg, var(--swift-teal), var(--swift-deep))",
-                    }}
-                  >
-                    {/* Simple mascot face - octopus-inspired */}
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="10" r="8" fill="rgba(255,255,255,0.9)" />
-                      <circle cx="9" cy="9" r="1.5" fill="var(--swift-black)" />
-                      <circle cx="15" cy="9" r="1.5" fill="var(--swift-black)" />
-                      <path
-                        d="M9 13 C10 15 14 15 15 13"
-                        stroke="var(--swift-black)"
-                        strokeWidth="1.5"
-                        strokeLinecap="round"
-                      />
-                      <path d="M4 18 Q2 22 4 22" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" strokeLinecap="round" />
-                      <path d="M8 18 Q7 22 9 22" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" strokeLinecap="round" />
-                      <path d="M16 18 Q17 22 15 22" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" strokeLinecap="round" />
-                      <path d="M20 18 Q22 22 20 22" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" strokeLinecap="round" />
-                    </svg>
-                  </div>
+                  <Image
+                    src="/images/favicon.png"
+                    width={32}
+                    height={32}
+                    className="w-8 h-8 rounded-full"
+                    style={{ filter: "drop-shadow(0 0 6px rgba(48,176,176,0.7))" }}
+                    alt="Swifty"
+                  />
                   <span className="text-xs font-semibold text-[var(--swift-teal)] tracking-wider uppercase">
                     Swifty says
                   </span>

@@ -9,6 +9,9 @@
   --swift-deep: #307070;
   --swift-black: #101010;
 
+  /* Secondary Accent */
+  --swift-amber: #d97706;
+
   /* Neon Glow */
   --neon-teal: #30B0B0;
   --neon-glow: 0 0 10px rgba(48, 176, 176, 0.3), 0 0 20px rgba(48, 176, 176, 0.2), 0 0 40px rgba(48, 176, 176, 0.1);
@@ -126,16 +129,16 @@
     box-shadow: var(--neon-glow);
   }
 
-  /* Neon Button */
+  /* Neon Button — secondary (amber) */
   .neon-btn {
     position: relative;
     display: inline-flex;
     align-items: center;
     gap: 8px;
     padding: 12px 24px;
-    background: transparent;
-    border: 1px solid var(--swift-teal);
-    color: var(--swift-teal);
+    background: linear-gradient(135deg, #0f0800 0%, #1f1200 50%, #0f0800 100%);
+    border: 1px solid rgba(245, 158, 11, 0.32);
+    color: #f59e0b;
     font-weight: 600;
     font-size: 0.875rem;
     letter-spacing: 0.5px;
@@ -144,6 +147,7 @@
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
     text-decoration: none;
+    backdrop-filter: blur(8px);
   }
 
   @media (min-width: 640px) {
@@ -157,15 +161,27 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(48, 176, 176, 0.15), transparent);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), transparent);
     opacity: 0;
     transition: opacity 0.4s;
+    pointer-events: none;
+  }
+
+  /* Shimmer sweep */
+  .neon-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 20%, rgba(253, 211, 77, 0.15) 50%, transparent 80%);
+    transform: translateX(-150%);
+    animation: btnShimmer 3.8s ease-in-out infinite;
+    pointer-events: none;
   }
 
   .neon-btn:hover {
-    box-shadow: var(--neon-glow-strong);
+    box-shadow: 0 0 18px rgba(245, 158, 11, 0.35), 0 0 36px rgba(245, 158, 11, 0.15);
     color: #fff;
-    border-color: var(--swift-teal);
+    border-color: rgba(245, 158, 11, 0.65);
     transform: translateY(-2px);
   }
 
@@ -173,15 +189,22 @@
     opacity: 1;
   }
 
+  /* Neon Button Filled — primary (deep blue, contact-form style) */
   .neon-btn-filled {
-    background: linear-gradient(135deg, var(--swift-teal), var(--swift-deep));
-    border: none;
+    background: linear-gradient(135deg, #050d1a 0%, #0a0f1a 55%, #050d1a 100%);
+    border: 1px solid rgba(48, 176, 176, 0.45);
     color: #fff;
   }
 
   .neon-btn-filled:hover {
     box-shadow: var(--neon-glow-strong);
-    filter: brightness(1.1);
+    border-color: rgba(48, 176, 176, 0.75);
+    filter: brightness(1.15);
+  }
+
+  @keyframes btnShimmer {
+    0%, 42% { transform: translateX(-150%); }
+    62%, 100% { transform: translateX(260%); }
   }
 
   /* Metallic Surface */
@@ -288,7 +311,7 @@
   .section-divider {
     width: 60px;
     height: 2px;
-    background: linear-gradient(90deg, var(--swift-teal), transparent);
+    background: linear-gradient(90deg, var(--swift-teal), var(--swift-amber));
     margin: 16px 0;
   }
 
@@ -345,4 +368,55 @@
   0%, 100% { transform: translate(-15%, -10%); }
   33% { transform: translate(15%, 5%); }
   66% { transform: translate(0%, 15%); }
+}
+
+@keyframes electricFlow {
+  to { stroke-dashoffset: -18; }
+}
+
+/* ── Electric border cards ── */
+@keyframes spinElectric {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes borderPulseTeal {
+  0%, 100% {
+    border-color: rgba(48, 176, 176, 0.25);
+    box-shadow:
+      0 0 6px  rgba(48, 176, 176, 0.15),
+      0 0 18px rgba(48, 176, 176, 0.08);
+  }
+  50% {
+    border-color: rgba(48, 176, 176, 0.75);
+    box-shadow:
+      0 0 10px rgba(48, 176, 176, 0.5),
+      0 0 28px rgba(48, 176, 176, 0.3),
+      0 0 55px rgba(48, 176, 176, 0.12);
+  }
+}
+
+@keyframes borderPulseGold {
+  0%, 100% {
+    border-color: rgba(245, 158, 11, 0.25);
+    box-shadow:
+      0 0 6px  rgba(245, 158, 11, 0.15),
+      0 0 18px rgba(245, 158, 11, 0.08);
+  }
+  50% {
+    border-color: rgba(245, 158, 11, 0.75);
+    box-shadow:
+      0 0 10px rgba(245, 158, 11, 0.5),
+      0 0 28px rgba(245, 158, 11, 0.3),
+      0 0 55px rgba(245, 158, 11, 0.12);
+  }
+}
+
+.pulse-border-teal {
+  border: 1px solid rgba(48, 176, 176, 0.25);
+  animation: borderPulseTeal 2.4s ease-in-out infinite;
+}
+
+.pulse-border-gold {
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  animation: borderPulseGold 2.4s ease-in-out infinite;
 }

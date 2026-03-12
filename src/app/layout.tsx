@@ -19,6 +19,7 @@ import CookieConsent from "@/components/ui/CookieConsent";
 import BackgroundEffects from "@/components/ui/BackgroundEffects";
 import SplashScreen from "@/components/ui/SplashScreen";
 import FunButton from "@/components/fun/FunButton";
+import TetrisButton from "@/components/fun/TetrisButton";
 import { I18nProvider } from "@/i18n/I18nProvider";
 
 const inter = Inter({
@@ -117,6 +118,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} ${dancingScript.variable} ${cinzel.variable} ${cormorantGaramond.variable} ${bebasNeue.variable} ${lobster.variable} ${greatVibes.variable} ${abrilFatface.variable} ${orbitron.variable} ${raleway.variable}`}>
+      <head>
+        {/* Preload logo so the browser fetches it before JS hydration */}
+        <link rel="preload" as="image" href="/images/logo.png" />
+      </head>
       <body className="antialiased">
         <I18nProvider>
           <SplashScreen />
@@ -126,6 +131,7 @@ export default function RootLayout({
           <Footer />
           <CookieConsent />
           <FunButton />
+          <TetrisButton />
         </I18nProvider>
       </body>
     </html>

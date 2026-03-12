@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from "react";
+import { createContext, useContext, useState, useCallback, ReactNode, useEffect, startTransition } from "react";
 import en from "@/messages/en.json";
 import af from "@/messages/af.json";
 import Cookies from "js-cookie";
@@ -28,7 +28,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const saved = Cookies.get("swift-locale") as Locale | undefined;
     if (saved && (saved === "en" || saved === "af")) {
-      setLocaleState(saved);
+      startTransition(() => setLocaleState(saved));
     }
   }, []);
 
