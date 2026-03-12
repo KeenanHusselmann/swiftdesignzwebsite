@@ -26,7 +26,7 @@ function DisneyStarAnimation() {
       className="absolute inset-0 w-full h-full pointer-events-none z-20"
       viewBox="0 0 740 700"
       preserveAspectRatio="xMidYMid meet"
-      style={{ overflow: "visible" }}
+      style={{ overflow: "hidden" }}
     >
       <defs>
         <filter id="sd-starGlow">
@@ -410,13 +410,13 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <Link href="/packages" className="neon-btn-filled neon-btn">
+            <Link href="/packages" className="neon-btn-filled neon-btn w-full sm:w-auto justify-center">
               {t("hero.viewPackages")}
               <ArrowRight size={18} />
             </Link>
-            <Link href="/portfolio" className="neon-btn">
+            <Link href="/portfolio" className="neon-btn w-full sm:w-auto justify-center">
               {t("hero.seeWork")}
               <ArrowRight size={18} />
             </Link>

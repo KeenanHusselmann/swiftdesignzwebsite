@@ -110,9 +110,11 @@ export default function FunButton() {
         onClick={triggerFun}
         className="fixed bottom-6 left-4 sm:left-6 z-[150] p-3.5 rounded-full cursor-pointer"
         style={{
-          background: "rgba(48, 176, 176, 0.15)",
-          border: "1px solid rgba(217, 119, 6, 0.3)",
-          backdropFilter: "blur(10px)",
+          background: "rgba(10, 18, 18, 0.72)",
+          border: "1px solid rgba(217, 119, 6, 0.45)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)",
         }}
         animate={{
           boxShadow: [

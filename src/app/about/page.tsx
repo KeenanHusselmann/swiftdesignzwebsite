@@ -314,7 +314,7 @@ export default function AboutPage() {
               className="glass p-6 md:p-8 relative overflow-hidden"
             >
               <div className="scan-line absolute inset-0 pointer-events-none" />
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-2 gap-4 sm:gap-6">
                 <div className="text-center">
                   <div className="text-4xl font-bold mb-2" style={{ color: "#d97706", textShadow: "0 0 14px rgba(217,119,6,0.6)" }}>3+</div>
                   <div className="text-xs text-gray-500 uppercase tracking-wider">
@@ -436,7 +436,7 @@ export default function AboutPage() {
               >
                 {/* Large watermark number */}
                 <span
-                  className="absolute -top-3 -right-2 text-[7rem] font-black leading-none select-none pointer-events-none"
+                  className="absolute -top-3 -right-2 text-[3.5rem] md:text-[7rem] font-black leading-none select-none pointer-events-none"
                   style={{
                     color: "transparent",
                     WebkitTextStroke: `1.5px ${ac.stroke}`,
