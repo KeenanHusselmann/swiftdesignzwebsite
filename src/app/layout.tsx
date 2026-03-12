@@ -25,66 +25,77 @@ import { I18nProvider } from "@/i18n/I18nProvider";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
 });
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
   variable: "--font-playfair",
   weight: ["400", "500", "600", "700", "800", "900"],
+  display: "swap",
 });
 
 const dancingScript = Dancing_Script({
   subsets: ["latin"],
   variable: "--font-dancing",
   weight: ["400"],
+  display: "optional",
 });
 
 const cinzel = Cinzel({
   subsets: ["latin"],
   variable: "--font-cinzel",
   weight: ["400"],
+  display: "swap",
 });
 
 const cormorantGaramond = Cormorant_Garamond({
   subsets: ["latin"],
   variable: "--font-cormorant",
   weight: ["400"],
+  display: "swap",
 });
 
 const bebasNeue = Bebas_Neue({
   subsets: ["latin"],
   variable: "--font-bebas",
   weight: ["400"],
+  display: "swap",
 });
 
 const lobster = Lobster({
   subsets: ["latin"],
   variable: "--font-lobster",
   weight: ["400"],
+  display: "optional",
 });
 
 const greatVibes = Great_Vibes({
   subsets: ["latin"],
   variable: "--font-great-vibes",
   weight: ["400"],
+  display: "optional",
 });
 
 const abrilFatface = Abril_Fatface({
   subsets: ["latin"],
   variable: "--font-abril",
   weight: ["400"],
+  display: "swap",
 });
 
 const orbitron = Orbitron({
   subsets: ["latin"],
   variable: "--font-orbitron",
   weight: ["400"],
+  display: "swap",
 });
 
 const raleway = Raleway({
   subsets: ["latin"],
   variable: "--font-raleway",
   weight: ["400"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -139,8 +150,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} ${dancingScript.variable} ${cinzel.variable} ${cormorantGaramond.variable} ${bebasNeue.variable} ${lobster.variable} ${greatVibes.variable} ${abrilFatface.variable} ${orbitron.variable} ${raleway.variable}`}>
       <head>
-        {/* Preload logo so the browser fetches it before JS hydration */}
+        {/* Preload critical hero assets */}
         <link rel="preload" as="image" href="/images/logo.png" />
+        <link rel="preload" as="image" href="/images/favicon.png" />
       </head>
       <body className="antialiased">
         <I18nProvider>

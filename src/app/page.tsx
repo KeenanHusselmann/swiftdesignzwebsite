@@ -271,7 +271,7 @@ export default function HomePage() {
       i++;
       setRevealStep(i);
       if (i >= totalLetters + 2) clearInterval(interval);
-    }, 70);
+    }, 30);
     return () => clearInterval(interval);
   }, [totalLetters]);
 
@@ -308,13 +308,19 @@ export default function HomePage() {
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="mb-6 flex justify-center"
           >
-            <motion.img
-              src="/images/favicon.png"
-              alt="Swift Designz"
-              className="w-[9.5rem] h-[9.5rem] md:w-48 md:h-48"
+            <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-            />
+              className="w-[9.5rem] h-[9.5rem] md:w-48 md:h-48 relative"
+            >
+              <Image
+                src="/images/favicon.png"
+                alt="Swift Designz"
+                fill
+                priority
+                className="object-contain"
+              />
+            </motion.div>
           </motion.div>
 
           <motion.div
@@ -389,7 +395,7 @@ export default function HomePage() {
                   ? { opacity: 1, y: 0, scale: 1 }
                   : { opacity: 0, y: 30, scale: 0.9 }
               }
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
               className="text-gradient inline-block font-normal leading-[1.35] pt-3 pb-2 md:pt-4 md:pb-3"
               style={{ fontFamily: excellenceFonts[fontIndex], fontWeight: 400 }}
             >
