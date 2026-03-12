@@ -12,7 +12,7 @@ export default function CookieConsent() {
   useEffect(() => {
     const consent = Cookies.get("swift-cookie-consent");
     if (!consent) {
-      const timer = setTimeout(() => setShow(true), 2000);
+      const timer = setTimeout(() => setShow(true), 4000);
       return () => clearTimeout(timer);
     }
   }, []);

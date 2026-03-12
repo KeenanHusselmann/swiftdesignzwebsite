@@ -387,7 +387,8 @@ export default function HomePage() {
               })}
             </span>
             <br />
-            {/* "Excellence" — appears after the letters, in sophisticated font */}
+            {/* "Excellence" — reserve height immediately to avoid layout shift */}
+            <span className="inline-block min-h-[1.5em] md:min-h-[1.6em]">
             <motion.span
               initial={{ opacity: 0, y: 30, scale: 0.9 }}
               animate={
@@ -401,6 +402,7 @@ export default function HomePage() {
             >
               {t("hero.line3")}
             </motion.span>
+            </span>
           </div>
 
           <motion.p
