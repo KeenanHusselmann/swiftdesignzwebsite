@@ -478,6 +478,8 @@ export default function HomePage() {
                       fill
                       sizes="(min-width: 768px) 33vw, 100vw"
                       quality={85}
+                      placeholder="blur"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEklEQVR42mMQkJD4jw8zjAwFAMjAT8EeYpgGAAAAAElFTkSuQmCC"
                       className="object-cover"
                     />
                   </div>
@@ -663,6 +665,8 @@ export default function HomePage() {
                       fill
                       sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
                       quality={70}
+                      placeholder="blur"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEklEQVR42mMQkJD4jw8zjAwFAMjAT8EeYpgGAAAAAElFTkSuQmCC"
                       className="object-cover opacity-[0.35] group-hover:opacity-[0.5] transition-opacity duration-500"
                     />
                   </div>

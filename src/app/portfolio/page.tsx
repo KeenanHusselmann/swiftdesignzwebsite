@@ -21,6 +21,8 @@ interface Project {
   link?: string;
 }
 
+const BLUR_PLACEHOLDER = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEklEQVR42mMQkJD4jw8zjAwFAMjAT8EeYpgGAAAAAElFTkSuQmCC";
+
 // Template projects - replace with actual projects
 const projects: Project[] = [
   {
@@ -212,6 +214,8 @@ export default function PortfolioPage() {
                     alt={project.title}
                     fill
                     sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    placeholder="blur"
+                    blurDataURL={BLUR_PLACEHOLDER}
                     className={`transition-transform duration-700 ${
                       project.imageFit === "contain"
                         ? "object-contain p-6 bg-[rgba(16,16,16,0.55)] group-hover:scale-105"

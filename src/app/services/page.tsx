@@ -297,6 +297,9 @@ export default function ServicesPage() {
                       alt={t(`servicesPage.s${i+1}Title`)}
                       width={600}
                       height={320}
+                      sizes="(min-width: 1024px) 50vw, 100vw"
+                      placeholder="blur"
+                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEklEQVR42mMQkJD4jw8zjAwFAMjAT8EeYpgGAAAAAElFTkSuQmCC"
                       className="w-full h-64 md:h-80 object-cover rounded-xl"
                     />
                   </div>
