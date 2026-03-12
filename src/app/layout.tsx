@@ -101,13 +101,33 @@ export const metadata: Metadata = {
     "freelance developer",
   ],
   authors: [{ name: "Swift Designz" }],
+  icons: {
+    icon: [{ url: "/images/favicon.png", type: "image/png" }],
+    apple: "/images/favicon.png",
+    shortcut: "/images/favicon.png",
+  },
   openGraph: {
     title: "Swift Designz | Crafting Digital Excellence",
     description:
-      "Professional web development, e-commerce solutions, custom software & apps.",
+      "Professional web development, e-commerce solutions, custom software & apps. Fast, elegant, creative digital services in South Africa.",
     url: "https://swiftdesignz.co.za",
     siteName: "Swift Designz",
     type: "website",
+    images: [
+      {
+        url: "https://swiftdesignz.co.za/images/logo.png",
+        width: 1200,
+        height: 630,
+        alt: "Swift Designz – Crafting Digital Excellence",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Swift Designz | Crafting Digital Excellence",
+    description:
+      "Professional web development, e-commerce solutions, custom software & apps.",
+    images: ["https://swiftdesignz.co.za/images/logo.png"],
   },
 };
 

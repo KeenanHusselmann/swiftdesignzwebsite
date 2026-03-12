@@ -212,7 +212,6 @@ export default function PortfolioPage() {
                     alt={project.title}
                     fill
                     sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
-                    quality={95}
                     className={`transition-transform duration-700 ${
                       project.imageFit === "contain"
                         ? "object-contain p-6 bg-[rgba(16,16,16,0.55)] group-hover:scale-105"
