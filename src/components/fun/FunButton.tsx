@@ -115,13 +115,13 @@ export default function FunButton() {
       {/* Fun trigger button */}
       <motion.button
         onClick={triggerFun}
-        className="fun-btn-pulse fixed bottom-6 left-4 sm:left-6 z-[150] p-3.5 rounded-full cursor-pointer"
+        className="fun-btn-pulse fixed bottom-6 left-4 sm:left-6 z-[150] p-2.5 rounded-full cursor-pointer"
         style={{
           background: "rgba(10, 18, 18, 0.72)",
           border: "1px solid rgba(217, 119, 6, 0.45)",
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",
-          inset: "0 1px 0 rgba(255,255,255,0.06)",
+          boxShadow: "0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)",
         }}
         whileHover={{
           scale: 1.15,
@@ -130,7 +130,7 @@ export default function FunButton() {
         whileTap={{ scale: 0.9 }}
         title="Click for something fun!"
       >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
           <defs>
             <radialGradient id="amberFace" cx="38%" cy="32%" r="65%">
               <stop offset="0%" stopColor="#fcd34d" />
