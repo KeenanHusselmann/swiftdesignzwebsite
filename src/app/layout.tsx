@@ -21,6 +21,7 @@ import BackgroundEffects from "@/components/ui/BackgroundEffects";
 import SplashScreen from "@/components/ui/SplashScreen";
 import FunButton from "@/components/fun/FunButton";
 import TetrisButton from "@/components/fun/TetrisButton";
+import ClickTracker from "@/components/ui/ClickTracker";
 import { I18nProvider } from "@/i18n/I18nProvider";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";
@@ -179,6 +180,7 @@ export default function RootLayout({
           <CookieConsent />
           <FunButton />
           <TetrisButton />
+          <ClickTracker />
         </I18nProvider>
       </body>
     </html>
