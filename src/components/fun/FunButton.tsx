@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 
@@ -53,6 +54,12 @@ type PopupContent = {
 export default function FunButton() {
   const [popup, setPopup] = useState<PopupContent | null>(null);
   const [isWinking, setIsWinking] = useState(false);
+  const pathname = usePathname();
+
+  // Close popup whenever the user navigates to a new page
+  useEffect(() => {
+    setPopup(null);
+  }, [pathname]);
 
   const pickRandom = useCallback((items: string[], exclude?: string) => {
     if (items.length === 0) return "";
@@ -108,23 +115,13 @@ export default function FunButton() {
       {/* Fun trigger button */}
       <motion.button
         onClick={triggerFun}
-        className="fixed bottom-6 left-4 sm:left-6 z-[150] p-3.5 rounded-full cursor-pointer"
+        className="fun-btn-pulse fixed bottom-6 left-4 sm:left-6 z-[150] p-3.5 rounded-full cursor-pointer"
         style={{
           background: "rgba(10, 18, 18, 0.72)",
           border: "1px solid rgba(217, 119, 6, 0.45)",
           backdropFilter: "blur(14px)",
           WebkitBackdropFilter: "blur(14px)",
-          boxShadow: "0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06)",
-        }}
-        animate={{
-          boxShadow: [
-            "0 0 8px rgba(217, 119, 6, 0.2), 0 0 16px rgba(217, 119, 6, 0.1)",
-            "0 0 16px rgba(217, 119, 6, 0.4), 0 0 32px rgba(217, 119, 6, 0.2)",
-            "0 0 8px rgba(217, 119, 6, 0.2), 0 0 16px rgba(217, 119, 6, 0.1)",
-          ],
-        }}
-        transition={{
-          boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+          inset: "0 1px 0 rgba(255,255,255,0.06)",
         }}
         whileHover={{
           scale: 1.15,
@@ -178,10 +175,10 @@ export default function FunButton() {
                 <div className="flex items-center gap-3 mb-3">
                   <Image
                     src="/images/favicon.png"
-                    width={32}
-                    height={32}
-                    className="w-8 h-8 rounded-full"
-                    style={{ filter: "drop-shadow(0 0 6px rgba(48,176,176,0.7))" }}
+                    width={20}
+                    height={20}
+                    className="w-5 h-5 rounded-full"
+                    style={{ filter: "drop-shadow(0 0 5px rgba(48,176,176,0.7))" }}
                     alt="Swifty"
                   />
                   <span className="text-xs font-semibold text-[var(--swift-teal)] tracking-wider uppercase">

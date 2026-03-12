@@ -207,6 +207,14 @@
     62%, 100% { transform: translateX(260%); }
   }
 
+  @keyframes funBtnPulse {
+    0%, 100% { box-shadow: 0 0 8px rgba(217,119,6,0.2), 0 0 16px rgba(217,119,6,0.1), 0 4px 24px rgba(0,0,0,0.4); }
+    50%       { box-shadow: 0 0 18px rgba(217,119,6,0.45), 0 0 36px rgba(217,119,6,0.2), 0 4px 24px rgba(0,0,0,0.4); }
+  }
+  .fun-btn-pulse {
+    animation: funBtnPulse 2s ease-in-out infinite;
+  }
+
   /* Metallic Surface */
   .metallic {
     background: var(--metallic-gradient);
