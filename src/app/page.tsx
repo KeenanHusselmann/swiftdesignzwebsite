@@ -8,6 +8,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { useI18n } from "@/i18n/I18nProvider";
+import { trackEvent } from "@/lib/analytics";
 import TestimonialCard from "@/components/sections/TestimonialCard";
 import StarfieldCanvas from "@/components/ui/StarfieldCanvas";
 
@@ -420,11 +421,11 @@ export default function HomePage() {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <Link href="/packages" className="neon-btn-filled neon-btn w-full sm:w-auto justify-center">
+            <Link href="/packages" onClick={() => trackEvent("view_packages_click", "hero_cta")} className="neon-btn-filled neon-btn w-full sm:w-auto justify-center">
               {t("hero.viewPackages")}
               <ArrowRight size={18} />
             </Link>
-            <Link href="/portfolio" className="neon-btn w-full sm:w-auto justify-center">
+            <Link href="/portfolio" onClick={() => trackEvent("see_work_click", "hero_cta")} className="neon-btn w-full sm:w-auto justify-center">
               {t("hero.seeWork")}
               <ArrowRight size={18} />
             </Link>
@@ -867,11 +868,11 @@ export default function HomePage() {
                 {t("home.ctaDesc")}
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Link href="/contact" className="neon-btn-filled neon-btn">
+                <Link href="/contact" onClick={() => trackEvent("contact_click", "bottom_cta")} className="neon-btn-filled neon-btn">
                   {t("home.ctaStart")}
                   <ArrowRight size={18} />
                 </Link>
-                <Link href="/packages" className="neon-btn">
+                <Link href="/packages" onClick={() => trackEvent("view_packages_click", "bottom_cta")} className="neon-btn">
                   {t("home.ctaPricing")}
                 </Link>
               </div>

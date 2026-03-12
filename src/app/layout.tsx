@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import {
   Inter,
   Playfair_Display,
@@ -21,6 +22,8 @@ import SplashScreen from "@/components/ui/SplashScreen";
 import FunButton from "@/components/fun/FunButton";
 import TetrisButton from "@/components/fun/TetrisButton";
 import { I18nProvider } from "@/i18n/I18nProvider";
+
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -153,6 +156,18 @@ export default function RootLayout({
         {/* Preload critical hero assets */}
         <link rel="preload" as="image" href="/images/logo.png" />
         <link rel="preload" as="image" href="/images/favicon.png" />
+        {/* Google Analytics 4 */}
+        {GA_ID && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="afterInteractive"
+            />
+            <Script id="ga4-init" strategy="afterInteractive">
+              {`window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', '${GA_ID}');`}
+            </Script>
+          </>
+        )}
       </head>
       <body className="antialiased">
         <I18nProvider>

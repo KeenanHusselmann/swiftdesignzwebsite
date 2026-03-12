@@ -4,6 +4,8 @@ import { useState, useCallback, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
+import { trackEvent } from "@/lib/analytics";
 
 const jokes = [
   "Why don't eggs tell jokes? They'd crack each other up.",
@@ -201,7 +203,16 @@ export default function FunButton() {
 
               <p className="text-sm text-gray-300 leading-relaxed">{popup.text}</p>
 
-              {/* Close */}
+              {/* Soft CTA */}
+              <div className="mt-4 pt-3" style={{ borderTop: "1px solid rgba(48,176,176,0.15)" }}>
+                <Link
+                  href="/contact"
+                  onClick={() => trackEvent("fun_cta_click", "fun_button")}
+                  className="text-xs font-semibold text-[var(--swift-teal)] hover:text-white transition-colors"
+                >
+                  Like what you see? Get a free quote &rarr;
+                </Link>
+              </div>
               <button
                 onClick={() => setPopup(null)}
                 className="absolute top-2 right-3 text-gray-600 hover:text-white text-xs"
