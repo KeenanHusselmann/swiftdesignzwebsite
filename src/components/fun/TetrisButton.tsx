@@ -8,6 +8,7 @@ export default function TetrisButton() {
   const [pos, setPos] = useState({ x: 0, y: 0 });
   const [mounted, setMounted] = useState(false);
   const [showTip, setShowTip] = useState(false);
+  const [visible, setVisible] = useState(true);
   const dirRef = useRef({ dx: 1.1, dy: 0.7 });
   const posRef = useRef({ x: 120, y: 300 });
   const frameRef = useRef<number | null>(null);
@@ -59,6 +60,22 @@ export default function TetrisButton() {
     };
   }, []);
 
+  // Hide after 3s, peek for 3s every 30s
+  useEffect(() => {
+    const hideTimer = setTimeout(() => setVisible(false), 3000);
+    const peekInterval = setInterval(() => {
+      setVisible((cur) => {
+        if (cur) return cur;
+        setTimeout(() => setVisible(false), 3000);
+        return true;
+      });
+    }, 30000);
+    return () => {
+      clearTimeout(hideTimer);
+      clearInterval(peekInterval);
+    };
+  }, []);
+
   const handleClick = () => {
     clickCountRef.current += 1;
     if (clickCountRef.current % 2 === 0) {
@@ -80,7 +97,14 @@ export default function TetrisButton() {
       {/* Bouncing ? button */}
       <div
         className="fixed z-[90] select-none cursor-pointer"
-        style={{ left: pos.x, top: pos.y, willChange: "left, top" }}
+        style={{
+          left: pos.x,
+          top: pos.y,
+          willChange: "left, top",
+          opacity: visible ? 1 : 0,
+          pointerEvents: visible ? "auto" : "none",
+          transition: "opacity 0.4s ease",
+        }}
         onMouseEnter={() => setShowTip(true)}
         onMouseLeave={() => setShowTip(false)}
         onClick={handleClick}
