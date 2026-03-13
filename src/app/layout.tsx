@@ -14,14 +14,7 @@ import {
   Raleway,
 } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
-import CookieConsent from "@/components/ui/CookieConsent";
-import BackgroundEffects from "@/components/ui/BackgroundEffects";
-import SplashScreen from "@/components/ui/SplashScreen";
-import FunButton from "@/components/fun/FunButton";
-import TetrisButton from "@/components/fun/TetrisButton";
-import ClickTracker from "@/components/ui/ClickTracker";
+import SiteShell from "@/components/layout/SiteShell";
 import { I18nProvider } from "@/i18n/I18nProvider";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";
@@ -199,15 +192,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <I18nProvider>
-          <SplashScreen />
-          <BackgroundEffects />
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <CookieConsent />
-          <FunButton />
-          <TetrisButton />
-          <ClickTracker />
+          <SiteShell>{children}</SiteShell>
         </I18nProvider>
       </body>
     </html>
