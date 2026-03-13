@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
     // Send notification to Swift Designz
     const notifyEmail = process.env.CONTACT_NOTIFY_EMAIL ?? "keenan.husselmann39@gmail.com";
     await resend.emails.send({
-      from: "Swift Designz <noreply@swiftdesignz.co.za>",
+      from: `${name} via Swift Designz <noreply@swiftdesignz.co.za>`,
       to: [notifyEmail],
       replyTo: email,
       subject: `New Project Enquiry from ${name}`,
