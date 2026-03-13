@@ -34,6 +34,7 @@ export async function POST(req: NextRequest) {
       html: `
         <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #101010; color: #e0e0e0; padding: 40px; border-radius: 16px; border: 1px solid rgba(48, 176, 176, 0.2);">
           <div style="text-align: center; margin-bottom: 30px;">
+            <img src="https://swiftdesignz.co.za/images/logo.png" alt="Swift Designz" style="height: 60px; width: auto; margin-bottom: 16px; display: block; margin-left: auto; margin-right: auto;" />
             <h1 style="color: #30B0B0; font-size: 24px; margin: 0;">New Project Enquiry</h1>
             <div style="width: 60px; height: 2px; background: linear-gradient(90deg, #30B0B0, transparent); margin: 12px auto;"></div>
           </div>
@@ -81,6 +82,7 @@ export async function POST(req: NextRequest) {
       html: `
         <div style="font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #101010; color: #e0e0e0; padding: 40px; border-radius: 16px; border: 1px solid rgba(48, 176, 176, 0.2);">
           <div style="text-align: center; margin-bottom: 30px;">
+            <img src="https://swiftdesignz.co.za/images/logo.png" alt="Swift Designz" style="height: 60px; width: auto; margin-bottom: 16px; display: block; margin-left: auto; margin-right: auto;" />
             <h1 style="color: #30B0B0; font-size: 24px; margin: 0;">Thank You, ${escapeHtml(name)}!</h1>
             <div style="width: 60px; height: 2px; background: linear-gradient(90deg, #30B0B0, transparent); margin: 12px auto;"></div>
           </div>
