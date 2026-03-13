@@ -191,33 +191,103 @@ const itemVariants = {
 };
 
 function DeployVisual() {
-  const lines = [
-    { text: "$ git push origin main", delay: 0, color: "#e0e0e0" },
-    { text: "Compiling... ████████ 100%", delay: 0.6, color: "#30B0B0" },
-    { text: "Running tests... ✓ passed", delay: 1.2, color: "#4ade80" },
-    { text: "Deploying to production...", delay: 1.8, color: "#e0e0e0" },
-    { text: "✓ Live in 38 seconds", delay: 2.4, color: "#30B0B0" },
-  ];
+  const stages = ["Brief", "Design", "Build", "Live"];
+  // Each node lights up in sequence. Period = duration(0.8) + repeatDelay(3.6) = 4.4s
+  // Staggered by 1.1s so: Brief→Design→Build→Live fires sequentially then resets.
   return (
-    <div className="w-full h-full flex flex-col justify-center px-4 py-3" style={{ background: "rgba(6,10,10,0.95)", fontFamily: "'Courier New', monospace" }}>
-      <div className="flex items-center gap-1.5 mb-3">
-        <div className="w-2.5 h-2.5 rounded-full bg-red-500 opacity-70" />
-        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500 opacity-70" />
-        <div className="w-2.5 h-2.5 rounded-full bg-green-500 opacity-70" />
-        <span className="text-[10px] text-[#555] ml-2">swift-designz ~ deploy</span>
+    <div className="w-full h-full flex flex-col items-center justify-center gap-4 px-5 py-4">
+      {/* Stage nodes row */}
+      <div className="flex items-center w-full">
+        {stages.map((stage, i) => (
+          <div key={i} className="contents">
+            <div className="flex flex-col items-center gap-1.5">
+              <motion.div
+                className="w-9 h-9 rounded-full border-2 flex items-center justify-center"
+                style={{ borderColor: "rgba(48,176,176,0.18)", background: "rgba(6,10,10,0.85)" }}
+                animate={{
+                  borderColor: [
+                    "rgba(48,176,176,0.15)",
+                    "rgba(48,176,176,0.95)",
+                    "rgba(48,176,176,0.95)",
+                    "rgba(48,176,176,0.15)",
+                  ],
+                  background: [
+                    "rgba(6,10,10,0.85)",
+                    "rgba(48,176,176,0.22)",
+                    "rgba(48,176,176,0.22)",
+                    "rgba(6,10,10,0.85)",
+                  ],
+                  boxShadow: [
+                    "0 0 0px rgba(48,176,176,0)",
+                    "0 0 12px rgba(48,176,176,0.5)",
+                    "0 0 12px rgba(48,176,176,0.5)",
+                    "0 0 0px rgba(48,176,176,0)",
+                  ],
+                }}
+                transition={{
+                  delay: i * 1.1,
+                  duration: 0.8,
+                  repeat: Infinity,
+                  repeatDelay: 3.6,
+                  times: [0, 0.2, 0.75, 1],
+                  ease: "easeInOut" as const,
+                }}
+              >
+                <motion.span
+                  style={{ color: "var(--swift-teal)", fontSize: "15px", fontWeight: 700 }}
+                  animate={{ opacity: [0, 0, 1, 1, 0] }}
+                  transition={{
+                    delay: i * 1.1 + 0.25,
+                    duration: 0.6,
+                    repeat: Infinity,
+                    repeatDelay: 3.85,
+                    times: [0, 0.05, 0.25, 0.75, 1],
+                  }}
+                >
+                  ✓
+                </motion.span>
+              </motion.div>
+              <span className="text-[9px] text-gray-500 uppercase tracking-wider">{stage}</span>
+            </div>
+
+            {/* Connector line */}
+            {i < stages.length - 1 && (
+              <div
+                className="flex-1 h-[1.5px] mb-5 mx-1 overflow-hidden rounded-full"
+                style={{ background: "rgba(48,176,176,0.07)" }}
+              >
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ background: "linear-gradient(90deg, var(--swift-teal), rgba(48,176,176,0.4))" }}
+                  animate={{ width: ["0%", "100%", "100%", "0%"] }}
+                  transition={{
+                    delay: i * 1.1 + 0.55,
+                    duration: 0.65,
+                    repeat: Infinity,
+                    repeatDelay: 3.5,
+                    times: [0, 0.45, 0.75, 1],
+                    ease: "easeInOut" as const,
+                  }}
+                />
+              </div>
+            )}
+          </div>
+        ))}
       </div>
-      {lines.map((l, i) => (
+
+      {/* Live status pill */}
+      <div
+        className="flex items-center gap-2 px-3 py-1 rounded-full"
+        style={{ background: "rgba(74,222,128,0.07)", border: "1px solid rgba(74,222,128,0.18)" }}
+      >
         <motion.div
-          key={i}
-          initial={{ opacity: 0, x: -8 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: l.delay, duration: 0.3, repeat: Infinity, repeatDelay: 3.5 }}
-          className="text-[11px] leading-6"
-          style={{ color: l.color }}
-        >
-          {l.text}
-        </motion.div>
-      ))}
+          className="w-1.5 h-1.5 rounded-full"
+          style={{ background: "#4ade80" }}
+          animate={{ opacity: [1, 0.25, 1], scale: [1, 0.7, 1] }}
+          transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" as const }}
+        />
+        <span className="text-[10px] text-gray-400 uppercase tracking-widest">avg turnaround · &lt; 48h</span>
+      </div>
     </div>
   );
 }
