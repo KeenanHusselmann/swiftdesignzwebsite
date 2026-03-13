@@ -150,9 +150,7 @@ const highlights = [
     statLabel: "response time",
     barWidth: "75%",
     desc: "Quick turnaround without compromising on quality.",
-    image:
-      "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80",
-    imageAlt: "Parcels prepared for fast delivery",
+    visual: "deploy",
   },
   {
     title: "Creative Design",
@@ -161,9 +159,7 @@ const highlights = [
     statLabel: "custom crafted",
     barWidth: "90%",
     desc: "Unique, eye-catching designs that make your brand stand out.",
-    image:
-      "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=800&q=80",
-    imageAlt: "Design team collaborating around a creative workspace",
+    visual: "design",
   },
   {
     title: "Dedicated Support",
@@ -172,9 +168,7 @@ const highlights = [
     statLabel: "always here",
     barWidth: "65%",
     desc: "Ongoing support and communication throughout your project.",
-    image:
-      "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&w=800&q=80",
-    imageAlt: "Support specialist assisting a client",
+    visual: "support",
   },
 ];
 
@@ -195,6 +189,122 @@ const itemVariants = {
     transition: { duration: 0.6, ease: "easeOut" as const },
   },
 };
+
+function DeployVisual() {
+  const lines = [
+    { text: "$ git push origin main", delay: 0, color: "#e0e0e0" },
+    { text: "Compiling... ████████ 100%", delay: 0.6, color: "#30B0B0" },
+    { text: "Running tests... ✓ passed", delay: 1.2, color: "#4ade80" },
+    { text: "Deploying to production...", delay: 1.8, color: "#e0e0e0" },
+    { text: "✓ Live in 38 seconds", delay: 2.4, color: "#30B0B0" },
+  ];
+  return (
+    <div className="w-full h-full flex flex-col justify-center px-4 py-3" style={{ background: "rgba(6,10,10,0.95)", fontFamily: "'Courier New', monospace" }}>
+      <div className="flex items-center gap-1.5 mb-3">
+        <div className="w-2.5 h-2.5 rounded-full bg-red-500 opacity-70" />
+        <div className="w-2.5 h-2.5 rounded-full bg-yellow-500 opacity-70" />
+        <div className="w-2.5 h-2.5 rounded-full bg-green-500 opacity-70" />
+        <span className="text-[10px] text-[#555] ml-2">swift-designz ~ deploy</span>
+      </div>
+      {lines.map((l, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, x: -8 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: l.delay, duration: 0.3, repeat: Infinity, repeatDelay: 3.5 }}
+          className="text-[11px] leading-6"
+          style={{ color: l.color }}
+        >
+          {l.text}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+function DesignVisual() {
+  const shapes = [
+    { cx: "25%", cy: "45%", r: 38, color: "#30B0B0", delay: 0 },
+    { cx: "55%", cy: "35%", r: 28, color: "#307070", delay: 0.4 },
+    { cx: "72%", cy: "60%", r: 44, color: "#509090", delay: 0.8 },
+    { cx: "40%", cy: "68%", r: 20, color: "#30B0B0", delay: 1.2 },
+  ];
+  const palette = ["#30B0B0", "#509090", "#307070", "#101010", "#e0e0e0"];
+  return (
+    <div className="w-full h-full relative overflow-hidden" style={{ background: "rgba(6,10,10,0.95)" }}>
+      <svg className="absolute inset-0 w-full h-full">
+        {shapes.map((s, i) => (
+          <motion.circle
+            key={i}
+            cx={s.cx} cy={s.cy} r={s.r}
+            fill={s.color}
+            fillOpacity={0.18}
+            stroke={s.color}
+            strokeOpacity={0.45}
+            strokeWidth={1}
+            animate={{ r: [s.r, s.r + 8, s.r], fillOpacity: [0.18, 0.28, 0.18] }}
+            transition={{ duration: 3, delay: s.delay, repeat: Infinity, ease: "easeInOut" }}
+          />
+        ))}
+        <motion.line x1="15%" y1="50%" x2="85%" y2="50%" stroke="rgba(48,176,176,0.15)" strokeWidth="1" strokeDasharray="4 4"
+          animate={{ strokeOpacity: [0.15, 0.4, 0.15] }} transition={{ duration: 2, repeat: Infinity }} />
+        <motion.line x1="50%" y1="10%" x2="50%" y2="90%" stroke="rgba(48,176,176,0.15)" strokeWidth="1" strokeDasharray="4 4"
+          animate={{ strokeOpacity: [0.15, 0.4, 0.15] }} transition={{ duration: 2, delay: 1, repeat: Infinity }} />
+      </svg>
+      {/* Colour palette strip */}
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+        {palette.map((c, i) => (
+          <motion.div key={i} className="w-5 h-5 rounded-full border border-white/10"
+            style={{ background: c }}
+            animate={{ scale: [1, 1.25, 1] }}
+            transition={{ duration: 1.5, delay: i * 0.2, repeat: Infinity, ease: "easeInOut" }}
+          />
+        ))}
+      </div>
+      <div className="absolute top-3 right-3 text-[10px] text-[#30B0B0] opacity-60 font-mono tracking-widest">DESIGN.SYS</div>
+    </div>
+  );
+}
+
+function SupportVisual() {
+  const messages = [
+    { text: "Hey! I need help with my site.", mine: false, delay: 0 },
+    { text: "On it! What's the issue?", mine: true, delay: 0.8 },
+    { text: "The checkout page is broken 😬", mine: false, delay: 1.6 },
+    { text: "Fixed & deployed ✓", mine: true, delay: 2.6 },
+  ];
+  return (
+    <div className="w-full h-full flex flex-col justify-end px-3 py-3 gap-1.5" style={{ background: "rgba(6,10,10,0.95)" }}>
+      <div className="flex items-center gap-2 mb-1 pb-1.5 border-b border-white/5">
+        <div className="w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold" style={{ background: "rgba(48,176,176,0.2)", color: "#30B0B0" }}>SD</div>
+        <span className="text-[11px] text-[#888]">Swift Designz Support</span>
+        <motion.div className="ml-auto w-1.5 h-1.5 rounded-full bg-green-400"
+          animate={{ opacity: [1, 0.3, 1] }} transition={{ duration: 1.5, repeat: Infinity }} />
+      </div>
+      {messages.map((m, i) => (
+        <motion.div key={i}
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: m.delay, duration: 0.3, repeat: Infinity, repeatDelay: 3.5 }}
+          className={`text-[10.5px] px-2.5 py-1.5 rounded-xl max-w-[80%] ${m.mine ? "self-end" : "self-start"}`}
+          style={{
+            background: m.mine ? "rgba(48,176,176,0.22)" : "rgba(255,255,255,0.07)",
+            color: m.mine ? "#30B0B0" : "#ccc",
+            border: m.mine ? "1px solid rgba(48,176,176,0.3)" : "1px solid rgba(255,255,255,0.08)",
+          }}
+        >
+          {m.text}
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
+function HighlightVisual({ visual }: { visual: string }) {
+  if (visual === "deploy") return <DeployVisual />;
+  if (visual === "design") return <DesignVisual />;
+  return <SupportVisual />;
+}
 
 function CounterStat({
   prefix, from, to, suffix, decimals, duration = 1.8, delay = 0,
@@ -464,21 +574,9 @@ export default function HomePage() {
                   backdropFilter: "blur(20px)",
                 }}
               >
-                {/* ── Full-bleed image ── */}
+                {/* ── Animated visual ── */}
                 <div className="relative h-[200px] overflow-hidden">
-                  {/* Parallax zoom via CSS group-hover */}
-                  <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-110">
-                    <Image
-                      src={item.image}
-                      alt={item.imageAlt}
-                      fill
-                      sizes="(min-width: 768px) 33vw, 100vw"
-                      quality={85}
-                      placeholder="blur"
-                      blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAEklEQVR42mMQkJD4jw8zjAwFAMjAT8EeYpgGAAAAAElFTkSuQmCC"
-                      className="object-cover"
-                    />
-                  </div>
+                  <HighlightVisual visual={item.visual} />
 
                   {/* Cinematic overlay — image fades into card body */}
                   <div
