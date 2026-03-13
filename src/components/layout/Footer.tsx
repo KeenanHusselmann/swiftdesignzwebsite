@@ -96,9 +96,9 @@ export default function Footer() {
           {/* Links */}
           {footerLinks.map((section) => (
             <div key={section.title}>
-              <h4 className="text-sm font-semibold uppercase tracking-[2px] text-[var(--swift-teal)] mb-5">
+              <p className="text-sm font-semibold uppercase tracking-[2px] text-[var(--swift-teal)] mb-5">
                 {t(sectionTitleKeys[section.title] ?? section.title)}
-              </h4>
+              </p>
               <ul className="flex flex-col gap-3">
                 {section.links.map((link) => (
                   <li key={link.href}>

@@ -31,13 +31,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import WebDevCodeSim from "@/components/ui/WebDevCodeSim";
-import EcommerceCheckoutSim from "@/components/ui/EcommerceCheckoutSim";
-import BudgetingAppSim from "@/components/ui/BudgetingAppSim";
-import ProjectTrackingSheetSim from "@/components/ui/ProjectTrackingSheetSim";
-import AiChatSim from "@/components/ui/AiChatSim";
-import SupportVoiceSim from "@/components/ui/SupportVoiceSim";
+import dynamic from "next/dynamic";
 import { useState } from "react";
+
+const WebDevCodeSim = dynamic(() => import("@/components/ui/WebDevCodeSim"), { ssr: false });
+const EcommerceCheckoutSim = dynamic(() => import("@/components/ui/EcommerceCheckoutSim"), { ssr: false });
+const BudgetingAppSim = dynamic(() => import("@/components/ui/BudgetingAppSim"), { ssr: false });
+const ProjectTrackingSheetSim = dynamic(() => import("@/components/ui/ProjectTrackingSheetSim"), { ssr: false });
+const AiChatSim = dynamic(() => import("@/components/ui/AiChatSim"), { ssr: false });
+const SupportVoiceSim = dynamic(() => import("@/components/ui/SupportVoiceSim"), { ssr: false });
 import { useI18n } from "@/i18n/I18nProvider";
 
 function SimWrapper({ children }: { children: React.ReactNode }) {

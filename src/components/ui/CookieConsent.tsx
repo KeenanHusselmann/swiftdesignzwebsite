@@ -70,7 +70,7 @@ export default function CookieConsent() {
                 </button>
                 <button
                   onClick={decline}
-                  className="text-xs text-gray-500 hover:text-white transition-colors py-2 px-4"
+                  className="text-xs text-gray-400 hover:text-white transition-colors py-2 px-4"
                 >
                   Decline
                 </button>
