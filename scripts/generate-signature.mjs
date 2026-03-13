@@ -1,9 +1,15 @@
 import puppeteer from 'puppeteer-core';
 import { fileURLToPath } from 'url';
 import path from 'path';
+import fs from 'fs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outputPath = path.join(__dirname, '..', 'public', 'images', 'signature.png');
+const logoPath = path.join(__dirname, '..', 'public', 'images', 'logo.png');
+
+// Embed logo as base64 so it works offline during generation
+const logoB64 = fs.readFileSync(logoPath).toString('base64');
+const logoSrc = `data:image/png;base64,${logoB64}`;
 
 const html = `<!DOCTYPE html>
 <html>
@@ -82,7 +88,7 @@ const html = `<!DOCTYPE html>
 <body>
 <div class="sig">
   <div class="logo-cell">
-    <img src="https://swiftdesignz.co.za/images/logo.png" alt="Swift Designz" />
+    <img src="${logoSrc}" alt="Swift Designz" />
   </div>
   <div class="info">
     <div class="name">Keenan Husselmann</div>
@@ -118,7 +124,7 @@ const browser = await puppeteer.launch({
 
 const page = await browser.newPage();
 await page.setViewport({ width: 1200, height: 400, deviceScaleFactor: 2 });
-await page.setContent(html, { waitUntil: 'networkidle0', timeout: 15000 });
+await page.setContent(html, { waitUntil: 'domcontentloaded' });
 
 const element = await page.$('.sig');
 await element.screenshot({
