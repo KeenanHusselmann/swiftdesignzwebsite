@@ -398,14 +398,9 @@ export default function HomePage() {
             </span>
           </div>
 
-          <motion.p
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 font-light"
-          >
+          <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 font-light">
             {t("hero.description")}
-          </motion.p>
+          </p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
