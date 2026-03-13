@@ -681,44 +681,7 @@ export default function HomePage() {
                     }}
                   />
 
-                  {/* Glowing stat badge */}
-                  <div
-                    className="absolute top-4 right-4 text-right select-none px-3 py-1.5 rounded-xl"
-                    style={{
-                      background: "rgba(4, 10, 10, 0.78)",
-                      border: "1px solid rgba(48,176,176,0.18)",
-                      backdropFilter: "blur(8px)",
-                    }}
-                  >
-                    <motion.div
-                      className="text-3xl md:text-4xl font-bold"
-                      style={{
-                        color: "var(--swift-teal)",
-                        textShadow:
-                          "0 0 12px rgba(48,176,176,0.6), 0 0 24px rgba(48,176,176,0.25)",
-                        letterSpacing: "-0.02em",
-                      }}
-                      animate={{ opacity: [0.75, 1, 0.75] }}
-                      transition={{
-                        duration: 2.5 + i * 0.4,
-                        repeat: Infinity,
-                        ease: "easeInOut" as const,
-                      }}
-                    >
-                      <CounterStat
-                        prefix={item.counter.prefix}
-                        from={item.counter.from}
-                        to={item.counter.to}
-                        suffix={item.counter.suffix}
-                        decimals={item.counter.decimals}
-                        duration={1.6}
-                        delay={0.3 + i * 0.15}
-                      />
-                    </motion.div>
-                    <div className="text-[9px] uppercase tracking-[0.18em] text-gray-500 mt-0.5">
-                      {t(`home.h${i+1}Stat`)}
-                    </div>
-                  </div>
+
 
                   {/* Top-left circuit corner bracket */}
                   <div
@@ -741,6 +704,38 @@ export default function HomePage() {
                         "linear-gradient(90deg, transparent, rgba(48,176,176,0.4), transparent)",
                     }}
                   />
+
+                  {/* Stat badge */}
+                  <div className="flex items-end gap-3 mb-4">
+                    <motion.div
+                      className="text-4xl md:text-5xl font-bold leading-none"
+                      style={{
+                        color: "var(--swift-teal)",
+                        textShadow:
+                          "0 0 16px rgba(48,176,176,0.55), 0 0 32px rgba(48,176,176,0.2)",
+                        letterSpacing: "-0.03em",
+                      }}
+                      animate={{ opacity: [0.72, 1, 0.72] }}
+                      transition={{
+                        duration: 3 + i * 0.4,
+                        repeat: Infinity,
+                        ease: "easeInOut" as const,
+                      }}
+                    >
+                      <CounterStat
+                        prefix={item.counter.prefix}
+                        from={item.counter.from}
+                        to={item.counter.to}
+                        suffix={item.counter.suffix}
+                        decimals={item.counter.decimals}
+                        duration={3.0}
+                        delay={0.3 + i * 0.15}
+                      />
+                    </motion.div>
+                    <span className="text-[10px] uppercase tracking-[0.18em] text-gray-500 pb-1.5">
+                      {t(`home.h${i+1}Stat`)}
+                    </span>
+                  </div>
 
                   <h3 className="text-lg font-semibold mb-1.5 group-hover:text-[var(--swift-teal)] transition-colors duration-300">
                     {t(`home.h${i+1}Title`)}
