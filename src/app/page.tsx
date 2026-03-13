@@ -223,45 +223,123 @@ function DeployVisual() {
 }
 
 function DesignVisual() {
-  const shapes = [
-    { cx: "25%", cy: "45%", r: 38, color: "#30B0B0", delay: 0 },
-    { cx: "55%", cy: "35%", r: 28, color: "#307070", delay: 0.4 },
-    { cx: "72%", cy: "60%", r: 44, color: "#509090", delay: 0.8 },
-    { cx: "40%", cy: "68%", r: 20, color: "#30B0B0", delay: 1.2 },
+  const steps = [0, 1, 2, 3, 4];
+  const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    const t = setInterval(() => setStep(s => (s + 1) % steps.length), 900);
+    return () => clearInterval(t);
+  }, []);
+
+  const elements = [
+    { x: 18, y: 28, w: 64, h: 10, label: "Header", color: "#30B0B0", appear: 1 },
+    { x: 18, y: 48, w: 44, h: 7, label: "Body text", color: "#509090", appear: 2 },
+    { x: 18, y: 64, w: 28, h: 9, label: "Button", color: "#30B0B0", appear: 3, isBtn: true },
+    { x: 70, y: 44, w: 22, h: 22, label: "Image", color: "#307070", appear: 4, isImg: true },
   ];
-  const palette = ["#30B0B0", "#509090", "#307070", "#101010", "#e0e0e0"];
+
+  const cursorPositions = [
+    { x: "72%", y: "18%" },
+    { x: "20%", y: "30%" },
+    { x: "20%", y: "50%" },
+    { x: "20%", y: "67%" },
+    { x: "71%", y: "52%" },
+  ];
+
   return (
-    <div className="w-full h-full relative overflow-hidden" style={{ background: "rgba(6,10,10,0.95)" }}>
-      <svg className="absolute inset-0 w-full h-full">
-        {shapes.map((s, i) => (
-          <motion.circle
-            key={i}
-            cx={s.cx} cy={s.cy} r={s.r}
-            fill={s.color}
-            fillOpacity={0.18}
-            stroke={s.color}
-            strokeOpacity={0.45}
-            strokeWidth={1}
-            animate={{ r: [s.r, s.r + 8, s.r], fillOpacity: [0.18, 0.28, 0.18] }}
-            transition={{ duration: 3, delay: s.delay, repeat: Infinity, ease: "easeInOut" }}
-          />
-        ))}
-        <motion.line x1="15%" y1="50%" x2="85%" y2="50%" stroke="rgba(48,176,176,0.15)" strokeWidth="1" strokeDasharray="4 4"
-          animate={{ strokeOpacity: [0.15, 0.4, 0.15] }} transition={{ duration: 2, repeat: Infinity }} />
-        <motion.line x1="50%" y1="10%" x2="50%" y2="90%" stroke="rgba(48,176,176,0.15)" strokeWidth="1" strokeDasharray="4 4"
-          animate={{ strokeOpacity: [0.15, 0.4, 0.15] }} transition={{ duration: 2, delay: 1, repeat: Infinity }} />
+    <div className="w-full h-full relative overflow-hidden" style={{ background: "#080d0d" }}>
+      {/* Dot grid */}
+      <svg className="absolute inset-0 w-full h-full opacity-20" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="dotgrid" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
+            <circle cx="1" cy="1" r="0.8" fill="#30B0B0" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#dotgrid)" />
       </svg>
-      {/* Colour palette strip */}
-      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-        {palette.map((c, i) => (
-          <motion.div key={i} className="w-5 h-5 rounded-full border border-white/10"
-            style={{ background: c }}
-            animate={{ scale: [1, 1.25, 1] }}
-            transition={{ duration: 1.5, delay: i * 0.2, repeat: Infinity, ease: "easeInOut" }}
-          />
-        ))}
+
+      {/* Canvas frame */}
+      <div className="absolute inset-4 rounded-lg overflow-hidden"
+        style={{ border: "1px solid rgba(48,176,176,0.2)", background: "rgba(12,18,18,0.9)" }}>
+
+        {/* Toolbar strip */}
+        <div className="flex items-center gap-1.5 px-2 py-1.5 border-b" style={{ borderColor: "rgba(48,176,176,0.12)", background: "rgba(6,10,10,0.8)" }}>
+          {["#30B0B0","#509090","#307070","#e0e0e0","#101010"].map((c,i) => (
+            <div key={i} className="w-3 h-3 rounded-full" style={{ background: c, opacity: step >= 1 ? 1 : 0.3, transition: "opacity 0.4s" }} />
+          ))}
+          <div className="ml-auto text-[9px] font-mono" style={{ color: "rgba(48,176,176,0.5)" }}>swift.fig</div>
+        </div>
+
+        {/* Design area */}
+        <div className="relative" style={{ height: "calc(100% - 28px)" }}>
+          {elements.map((el, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: step >= el.appear ? 1 : 0, scale: step >= el.appear ? 1 : 0.85 }}
+              transition={{ duration: 0.35, ease: "easeOut" }}
+              className="absolute flex items-center justify-center"
+              style={{
+                left: `${el.x}%`, top: `${el.y}%`,
+                width: `${el.w}%`, height: `${el.h}%`,
+                background: el.isBtn
+                  ? el.color
+                  : el.isImg
+                  ? `repeating-linear-gradient(45deg, rgba(48,176,176,0.08) 0px, rgba(48,176,176,0.08) 4px, transparent 4px, transparent 8px)`
+                  : `rgba(48,176,176,0.07)`,
+                border: `1px solid ${el.color}55`,
+                borderRadius: el.isBtn ? "4px" : el.isImg ? "6px" : "3px",
+              }}
+            >
+              {el.isImg ? (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={el.color} strokeWidth="1.5" opacity="0.6">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/>
+                </svg>
+              ) : (
+                <span className="text-[8px] font-mono truncate px-1" style={{ color: el.isBtn ? "#080d0d" : el.color, fontWeight: el.isBtn ? 700 : 400, opacity: 0.9 }}>{el.label}</span>
+              )}
+            </motion.div>
+          ))}
+
+          {/* Selection box on active element */}
+          {step >= 1 && step <= 4 && (() => {
+            const el = elements[step - 1];
+            return (
+              <motion.div
+                key={step}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="absolute pointer-events-none"
+                style={{
+                  left: `calc(${el.x}% - 2px)`, top: `calc(${el.y}% - 2px)`,
+                  width: `calc(${el.w}% + 4px)`, height: `calc(${el.h}% + 4px)`,
+                  border: "1.5px solid #30B0B0",
+                  borderRadius: "4px",
+                  boxShadow: "0 0 6px rgba(48,176,176,0.5)",
+                }}
+              >
+                {["-1px -1px","calc(100% - 2px) -1px","-1px calc(100% - 2px)","calc(100% - 2px) calc(100% - 2px)"].map((pos, i) => (
+                  <div key={i} className="absolute w-2 h-2 rounded-sm bg-white border border-[#30B0B0]"
+                    style={{ left: pos.split(" ")[0], top: pos.split(" ")[1] }} />
+                ))}
+              </motion.div>
+            );
+          })()}
+
+          {/* Cursor */}
+          <motion.div
+            className="absolute pointer-events-none z-10"
+            animate={{ left: cursorPositions[step].x, top: cursorPositions[step].y }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            style={{ position: "absolute" }}
+          >
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M1 1l4.5 11 2-4.5L12 5.5z" fill="white" stroke="#30B0B0" strokeWidth="0.8"/>
+            </svg>
+          </motion.div>
+        </div>
       </div>
-      <div className="absolute top-3 right-3 text-[10px] text-[#30B0B0] opacity-60 font-mono tracking-widest">DESIGN.SYS</div>
     </div>
   );
 }
