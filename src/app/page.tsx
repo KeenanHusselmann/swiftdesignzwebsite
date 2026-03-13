@@ -272,7 +272,7 @@ export default function HomePage() {
       i++;
       setRevealStep(i);
       if (i >= totalLetters + 2) clearInterval(interval);
-    }, 30);
+    }, 10);
     return () => clearInterval(interval);
   }, [totalLetters]);
 
@@ -322,14 +322,6 @@ export default function HomePage() {
                 className="object-contain"
               />
             </motion.div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="mb-8"
-          >
           </motion.div>
 
           <div className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.15] md:leading-[1.2]">
@@ -397,7 +389,7 @@ export default function HomePage() {
                   ? { opacity: 1, y: 0, scale: 1 }
                   : { opacity: 0, y: 30, scale: 0.9 }
               }
-              transition={{ duration: 0.35, ease: "easeOut" }}
+              transition={{ duration: 0.15, ease: "easeOut" }}
               className="text-gradient inline-block font-normal leading-[1.35] pt-3 pb-2 md:pt-4 md:pb-3"
               style={{ fontFamily: excellenceFonts[fontIndex], fontWeight: 400 }}
             >

@@ -5,13 +5,13 @@ import { useEffect, useRef, useState, startTransition } from "react";
 import { useRouter } from "next/navigation";
 
 export default function TetrisButton() {
-  const [pos, setPos] = useState({ x: 0, y: 0 });
   const [mounted, setMounted] = useState(false);
   const [showTip, setShowTip] = useState(false);
   const [visible, setVisible] = useState(true);
   const dirRef = useRef({ dx: 1.1, dy: 0.7 });
   const posRef = useRef({ x: 120, y: 300 });
   const frameRef = useRef<number | null>(null);
+  const btnWrapRef = useRef<HTMLDivElement>(null);
   const clickCountRef = useRef(0);
   const navIndexRef = useRef(0);
   const navPages = ["/about#lets-build", "/portfolio", "/packages", "/services#custom-solution", "/contact"];
@@ -19,13 +19,14 @@ export default function TetrisButton() {
   const router = useRouter();
 
   useEffect(() => {
+    // Set random start position directly on DOM — no React state
+    const startX = Math.random() * (window.innerWidth - 80);
+    const startY = Math.random() * (window.innerHeight - 80);
+    posRef.current = { x: startX, y: startY };
+    if (btnWrapRef.current) {
+      btnWrapRef.current.style.transform = `translate(${startX}px, ${startY}px)`;
+    }
     startTransition(() => setMounted(true));
-    // Start at a random position
-    posRef.current = {
-      x: Math.random() * (window.innerWidth - 80),
-      y: Math.random() * (window.innerHeight - 80),
-    };
-    startTransition(() => setPos({ ...posRef.current }));
 
     const SPEED = 0.55;
     const SIZE = 58;
@@ -50,7 +51,10 @@ export default function TetrisButton() {
 
       dirRef.current = { dx, dy };
       posRef.current = { x: nx, y: ny };
-      setPos({ x: nx, y: ny });
+      // Direct DOM update — zero React re-renders per frame
+      if (btnWrapRef.current) {
+        btnWrapRef.current.style.transform = `translate(${nx}px, ${ny}px)`;
+      }
       frameRef.current = requestAnimationFrame(step);
     }
 
@@ -96,11 +100,12 @@ export default function TetrisButton() {
     <>
       {/* Bouncing ? button */}
       <div
+        ref={btnWrapRef}
         className="fixed z-[90] select-none cursor-pointer"
         style={{
-          left: pos.x,
-          top: pos.y,
-          willChange: "left, top",
+          left: 0,
+          top: 0,
+          willChange: "transform",
           opacity: visible ? 1 : 0,
           pointerEvents: visible ? "auto" : "none",
           transition: "opacity 0.4s ease",
