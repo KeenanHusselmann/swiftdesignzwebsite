@@ -1,18 +1,33 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Mail, MapPin, Send, CheckCircle, AlertCircle, Clock, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useI18n } from "@/i18n/I18nProvider";
 
-export default function ContactPage() {
+function ContactForm() {
   const { t } = useI18n();
+  const searchParams = useSearchParams();
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [planeFly, setPlaneFly] = useState(false);
   const [planeKey, setPlaneKey] = useState(0);
+
+  // Pre-fill message from ?package=&category= query params
+  useEffect(() => {
+    const pkg = searchParams.get("package");
+    const category = searchParams.get("category");
+    if (pkg) {
+      const label = category ? `${category} – ${pkg}` : pkg;
+      setFormState((s) => ({
+        ...s,
+        message: `Hi, I'm interested in the ${label} package. Please send me more details.`,
+      }));
+    }
+  }, [searchParams]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -41,8 +56,6 @@ export default function ContactPage() {
       setErrorMessage(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     }
   };
-
-
 
   return (
     <>
@@ -337,5 +350,13 @@ export default function ContactPage() {
         </div>
       </section>
     </>
+  );
+}
+
+export default function ContactPage() {
+  return (
+    <Suspense>
+      <ContactForm />
+    </Suspense>
   );
 }

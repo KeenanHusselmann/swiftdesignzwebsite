@@ -384,7 +384,7 @@ export default function PackagesPage() {
                     </div>
 
                     <Link
-                      href="/quote"
+                      href={`/contact?package=${encodeURIComponent(pkg.name)}&category=${encodeURIComponent(activeCategory)}`}
                       onClick={() => trackEvent("get_quote_click", "packages", `${pkg.name} – ${activeCategory}`)}
                       className={`${pkg.highlighted ? "neon-btn" : "neon-btn-filled neon-btn"} justify-center w-full`}
                     >
@@ -459,7 +459,7 @@ export default function PackagesPage() {
                   ))}
                 </ul>
                 <div className="flex items-center justify-between">
-                  <Link href="/quote" onClick={() => trackEvent("enquire_click", "training", "PM Training")} className="neon-btn text-sm">
+                  <Link href="/contact?package=PM+Training&category=Training" onClick={() => trackEvent("enquire_click", "training", "PM Training")} className="neon-btn text-sm">
                     {t("packagesPage.enquireNow")} <ArrowRight size={14} />
                   </Link>
                   <span className="text-xs text-gray-600">{t("packagesPage.customPricing")}</span>
@@ -496,7 +496,7 @@ export default function PackagesPage() {
                   ))}
                 </ul>
                 <div className="flex items-center justify-between">
-                  <Link href="/quote" onClick={() => trackEvent("enquire_click", "training", "AI Training")} className="neon-btn-filled neon-btn text-sm">
+                  <Link href="/contact?package=AI+Training&category=Training" onClick={() => trackEvent("enquire_click", "training", "AI Training")} className="neon-btn-filled neon-btn text-sm">
                     {t("packagesPage.enquireNow")} <ArrowRight size={14} />
                   </Link>
                   <span className="text-xs text-gray-600">{t("packagesPage.customPricing")}</span>
@@ -522,7 +522,7 @@ export default function PackagesPage() {
             <p className="text-gray-400 max-w-lg mx-auto mb-8">
               {t("packagesPage.ctaDesc")}
             </p>
-            <Link href="/quote" onClick={() => trackEvent("free_consult_click", "packages_cta")} className="neon-btn-filled neon-btn">
+            <Link href="/contact" onClick={() => trackEvent("free_consult_click", "packages_cta")} className="neon-btn-filled neon-btn">
               {t("packagesPage.freeConsult")} <ArrowRight size={18} />
             </Link>
           </motion.div>

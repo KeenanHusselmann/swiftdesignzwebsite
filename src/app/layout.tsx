@@ -169,6 +169,33 @@ export default function RootLayout({
             </Script>
           </>
         )}
+        {/* LocalBusiness JSON-LD — enables rich results in Google Search */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              name: "Swift Designz",
+              url: "https://swiftdesignz.co.za",
+              logo: "https://swiftdesignz.co.za/images/logo.png",
+              image: "https://swiftdesignz.co.za/images/logo.png",
+              description: "Professional web development, e-commerce solutions, custom software & apps. Fast, elegant, creative digital services in South Africa.",
+              email: "info@swiftdesignz.co.za",
+              areaServed: "South Africa",
+              priceRange: "R2,500 – R25,000+",
+              serviceType: [
+                "Web Development",
+                "E-Commerce Development",
+                "Mobile App Development",
+                "Software Development",
+                "Project Management Training",
+                "AI Training",
+              ],
+              sameAs: [],
+            }),
+          }}
+        />
       </head>
       <body className="antialiased">
         <I18nProvider>
