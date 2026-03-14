@@ -28,6 +28,7 @@ export async function POST(req: NextRequest) {
       service, package: pkg,
       features, lookFeel, themes, keywords,
       scope, timeline, contentReady, referenceUrls,
+      attendees, experienceLevel,
       budget, notes, source,
     } = body;
 
@@ -127,6 +128,8 @@ export async function POST(req: NextRequest) {
             ${row("Timeline", timeline ?? "")}
             ${row("Content Ready", contentReady ?? "")}
             ${row("Reference URLs", referenceUrls ?? "")}
+            ${row("Attendees", attendees ?? "")}
+            ${row("Experience Level", experienceLevel ?? "")}
           </table>
 
           <h3 style="color:#30B0B0;font-size:12px;text-transform:uppercase;letter-spacing:2px;margin:0 0 10px;">Features Requested</h3>

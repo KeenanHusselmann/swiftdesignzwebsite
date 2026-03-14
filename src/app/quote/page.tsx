@@ -156,6 +156,7 @@ interface FormState {
   service: ServiceId | ""; package: string;
   features: string[]; lookFeel: string[]; themes: string[]; keywords: string[];
   scope: string; timeline: string; contentReady: string; referenceUrls: string;
+  attendees: string; experienceLevel: string;
   budget: string; notes: string; source: string;
 }
 
@@ -164,7 +165,16 @@ const INITIAL: FormState = {
   service: "", package: "",
   features: [], lookFeel: [], themes: [], keywords: [],
   scope: "", timeline: "", contentReady: "", referenceUrls: "",
+  attendees: "", experienceLevel: "",
   budget: "", notes: "", source: "",
+};
+
+const DESCRIPTION_PLACEHOLDER: Record<ServiceId, string> = {
+  website:      "What kind of website do you need? What is the goal? Who is your audience? Any specific pages or features in mind?",
+  ecommerce:    "Tell us about your store. What are you selling? Do you have existing branding? How many products do you plan to list?",
+  app:          "What problem does your app solve? Who will use it? What core features must it have? Do you need iOS, Android, or web?",
+  "ai-training": "What are your AI learning goals? What tools does your team currently use? What outcomes do you want from this training?",
+  "pm-training": "What project management challenges do you face? What methodology are you using? What do you want your team to learn?",
 };
 
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
@@ -418,7 +428,7 @@ export default function QuotePage() {
                           <label className={labelCls}>Project Description *</label>
                           <textarea
                             rows={4}
-                            placeholder="What do you need built? What is the goal? Who is the audience? Any specific requirements or ideas?"
+                            placeholder={currentService ? DESCRIPTION_PLACEHOLDER[currentService] : "Describe your project or requirements..."}
                             value={form.scope}
                             onChange={(e) => set("scope", e.target.value)}
                             className={inputCls + " resize-none"}
@@ -502,19 +512,49 @@ export default function QuotePage() {
                               {TIMELINE_OPTIONS.map((o) => <option key={o} value={o} style={{ background: "#101010" }}>{o}</option>)}
                             </select>
                           </div>
-                          <div>
-                            <label className={labelCls}>Do You Have Content Ready?</label>
-                            <select value={form.contentReady} onChange={(e) => set("contentReady", e.target.value)} className={inputCls + " appearance-none cursor-pointer"} style={inputStyle}>
-                              <option value="" style={{ background: "#101010" }}>Select an option</option>
-                              <option value="Yes - ready to go" style={{ background: "#101010" }}>Yes - ready to go</option>
-                              <option value="Partially ready" style={{ background: "#101010" }}>Partially ready</option>
-                              <option value="No - will need help" style={{ background: "#101010" }}>No - will need help with content</option>
-                            </select>
-                          </div>
-                          <div className="md:col-span-2">
-                            <label className={labelCls}>Reference / Inspiration Websites (optional)</label>
-                            <input type="text" placeholder="e.g. https://example.com, https://another.com" value={form.referenceUrls} onChange={(e) => set("referenceUrls", e.target.value)} className={inputCls} style={inputStyle} />
-                          </div>
+
+                          {["website", "ecommerce", "app"].includes(form.service) ? (
+                            <>
+                              <div>
+                                <label className={labelCls}>Do You Have Content Ready?</label>
+                                <select value={form.contentReady} onChange={(e) => set("contentReady", e.target.value)} className={inputCls + " appearance-none cursor-pointer"} style={inputStyle}>
+                                  <option value="" style={{ background: "#101010" }}>Select an option</option>
+                                  <option value="Yes - ready to go" style={{ background: "#101010" }}>Yes - ready to go</option>
+                                  <option value="Partially ready" style={{ background: "#101010" }}>Partially ready</option>
+                                  <option value="No - will need help" style={{ background: "#101010" }}>No - will need help with content</option>
+                                </select>
+                              </div>
+                              <div className="md:col-span-2">
+                                <label className={labelCls}>Reference / Inspiration Websites (optional)</label>
+                                <input type="text" placeholder="e.g. https://example.com, https://another.com" value={form.referenceUrls} onChange={(e) => set("referenceUrls", e.target.value)} className={inputCls} style={inputStyle} />
+                              </div>
+                            </>
+                          ) : ["ai-training", "pm-training"].includes(form.service) ? (
+                            <>
+                              <div>
+                                <label className={labelCls}>Number of Attendees</label>
+                                <select value={form.attendees} onChange={(e) => set("attendees", e.target.value)} className={inputCls + " appearance-none cursor-pointer"} style={inputStyle}>
+                                  <option value="" style={{ background: "#101010" }}>Select a range</option>
+                                  <option value="Just me (1)" style={{ background: "#101010" }}>Just me (1)</option>
+                                  <option value="2 to 5 people" style={{ background: "#101010" }}>2 to 5 people</option>
+                                  <option value="6 to 15 people" style={{ background: "#101010" }}>6 to 15 people</option>
+                                  <option value="16 to 30 people" style={{ background: "#101010" }}>16 to 30 people</option>
+                                  <option value="30+ people" style={{ background: "#101010" }}>30+ people</option>
+                                </select>
+                              </div>
+                              <div className="md:col-span-2">
+                                <label className={labelCls}>Current Experience Level</label>
+                                <select value={form.experienceLevel} onChange={(e) => set("experienceLevel", e.target.value)} className={inputCls + " appearance-none cursor-pointer"} style={inputStyle}>
+                                  <option value="" style={{ background: "#101010" }}>Select a level</option>
+                                  <option value="Complete beginner" style={{ background: "#101010" }}>Complete beginner</option>
+                                  <option value="Some awareness" style={{ background: "#101010" }}>Some awareness — heard of it, not used it</option>
+                                  <option value="Occasional user" style={{ background: "#101010" }}>Occasional user — tried it a few times</option>
+                                  <option value="Regular user" style={{ background: "#101010" }}>Regular user — use it daily</option>
+                                  <option value="Mixed team" style={{ background: "#101010" }}>Mixed — the team has varying levels</option>
+                                </select>
+                              </div>
+                            </>
+                          ) : null}
                         </div>
                       </motion.div>
                     )}

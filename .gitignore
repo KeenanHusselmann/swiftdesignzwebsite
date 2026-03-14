@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# generated screenshots/reels (reproducible via scripts/)
+/screenshots/
