@@ -95,10 +95,8 @@ export async function POST(req: NextRequest) {
       `;
     }
 
-    // Primary goes direct to Gmail — same as contact form (confirmed working in prod).
-    // Secondary goes to info@ which forwards via IT-Guru to keenanswift101@gmail.com.
-    const notifyEmail = process.env.QUOTE_NOTIFY_EMAIL ?? "info@swiftdesignz.co.za";
-    const notifyFallback = process.env.QUOTE_NOTIFY_FALLBACK ?? "keenan.husselmann39@gmail.com";
+    // Use the same email destination as the contact form — confirmed working in prod.
+    const notifyTo = process.env.CONTACT_NOTIFY_EMAIL ?? "info@swiftdesignz.co.za";
 
     const notifyHtml = `
         <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:660px;margin:0 auto;background:#101010;color:#e0e0e0;padding:40px;border-radius:16px;border:1px solid rgba(48,176,176,0.2);">
@@ -167,10 +165,10 @@ export async function POST(req: NextRequest) {
         </div>
       `;
 
-    // Send to primary notify address — fail hard so the user sees an error if this breaks
+    // Single send — same destination as the working contact form
     const { error: notifyError } = await resend.emails.send({
       from: "Swift Designz Quote System <noreply@swiftdesignz.co.za>",
-      to: [notifyFallback],
+      to: [notifyTo],
       replyTo: email,
       subject: `New Quote Request — ${serviceLabel} — ${name}`,
       html: notifyHtml,
@@ -178,18 +176,6 @@ export async function POST(req: NextRequest) {
     if (notifyError) {
       console.error("Quote notify send error:", notifyError);
       throw new Error(notifyError.message ?? "Failed to send notification email");
-    }
-
-    // Also fire to info@ — best-effort, don't fail the whole request if it errors
-    if (notifyEmail !== notifyFallback) {
-      const { error: infoError } = await resend.emails.send({
-        from: "Swift Designz Quote System <noreply@swiftdesignz.co.za>",
-        to: [notifyEmail],
-        replyTo: email,
-        subject: `New Quote Request — ${serviceLabel} — ${name}`,
-        html: notifyHtml,
-      });
-      if (infoError) console.error("Quote info@ send error (non-fatal):", infoError);
     }
 
     // Confirmation to client
