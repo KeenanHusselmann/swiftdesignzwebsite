@@ -95,8 +95,8 @@ export async function POST(req: NextRequest) {
       `;
     }
 
-    // Use the same email destination as the contact form — confirmed working in prod.
-    const notifyTo = process.env.CONTACT_NOTIFY_EMAIL ?? "info@swiftdesignz.co.za";
+    // Dedicated quote notification address — falls back to contact address, then info@
+    const notifyTo = process.env.QUOTE_NOTIFY_EMAIL ?? process.env.CONTACT_NOTIFY_EMAIL ?? "info@swiftdesignz.co.za";
 
     const notifyHtml = `
         <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:660px;margin:0 auto;background:#101010;color:#e0e0e0;padding:40px;border-radius:16px;border:1px solid rgba(48,176,176,0.2);">
