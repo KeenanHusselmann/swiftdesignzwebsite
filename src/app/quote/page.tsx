@@ -613,7 +613,7 @@ export default function QuotePage() {
                           {form.location && <SummaryRow label="Location" value={form.location} />}
                           <div className="border-t border-white/5 pt-2 mt-2">
                             <SummaryRow label="Service" value={SERVICES.find((s) => s.id === form.service)?.label ?? ""} />
-                            <SummaryRow label="Package" value={form.package} highlight />
+                            <SummaryRow label="Package" value={form.package} chip />
                           </div>
                           {form.features.length > 0 && (
                             <div className="border-t border-white/5 pt-2 mt-2">
@@ -937,13 +937,15 @@ export default function QuotePage() {
   );
 }
 
-function SummaryRow({ label, value, highlight = false }: { label: string; value: string; highlight?: boolean }) {
+function SummaryRow({ label, value, highlight = false, chip = false }: { label: string; value: string; highlight?: boolean; chip?: boolean }) {
   if (!value) return null;
   return (
     <div className="flex items-start gap-3">
       <span className="text-gray-500 uppercase text-[10px] tracking-wider w-14 flex-shrink-0 pt-0.5">{label}</span>
       {highlight ? (
         <span className="flex-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide break-all min-w-0" style={{ background: "rgba(48,176,176,0.15)", border: "1px solid rgba(48,176,176,0.35)", color: "#30B0B0" }}>{value}</span>
+      ) : chip ? (
+        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide capitalize" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.15)", color: "#e0e0e0" }}>{value}</span>
       ) : (
         <span className="text-sm text-white min-w-0 break-all">{value}</span>
       )}
