@@ -936,7 +936,10 @@ export default function QuotePage() {
                             <tbody>
                               {phases.map((ph, i) => (
                                 <tr key={i}>
-                                  <td style={{ ...QTD, textAlign: "center", fontWeight: 700, color: "#30B0B0", fontSize: "0.85rem" }}>{i + 1}</td>
+                                  <td style={{ ...QTD, textAlign: "center", fontWeight: 700, color: "#30B0B0", fontSize: "0.85rem" }}>
+                                    <span style={{ fontSize: "0.6rem", fontWeight: 400, color: "#aaa", textTransform: "uppercase", letterSpacing: "1.5px", display: "block", lineHeight: 1 }}>Step</span>
+                                    {i + 1}
+                                  </td>
                                   <td style={QTD}>
                                     <div style={{ fontWeight: 600, color: "#111", fontSize: "0.78rem" }}>{ph.title}</div>
                                     <div style={{ color: "#666", fontSize: "0.72rem", marginTop: "2px", lineHeight: "1.5" }}>{ph.desc}</div>
