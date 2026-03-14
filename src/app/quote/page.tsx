@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { buildPlan, Phase } from "@/lib/quoteUtils";
 import {
   Send, CheckCircle, AlertCircle, ChevronRight, ChevronLeft,
-  Globe, ShoppingCart, Smartphone, Cpu, LayoutList,
+  Globe, ShoppingCart, Smartphone, Cpu, LayoutList, PenLine,
 } from "lucide-react";
 
 // ─── DATA ───────────────────────────────────────────────────────────────────
@@ -240,6 +240,36 @@ export default function QuotePage() {
 
   return (
     <>
+      {/* Fixed top-right notice card */}
+      <motion.div
+        initial={{ opacity: 0, x: 40 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.6, delay: 0.5 }}
+        className="fixed bottom-5 left-4 right-4 z-50 flex items-start gap-3 rounded-2xl px-4 py-3.5 pointer-events-none md:bottom-auto md:top-24 md:left-auto md:right-5 md:max-w-[230px]"
+        style={{
+          background: "rgba(20,14,4,0.72)",
+          border: "1px solid rgba(217,119,6,0.35)",
+          backdropFilter: "blur(14px)",
+          WebkitBackdropFilter: "blur(14px)",
+          boxShadow: "0 4px 32px rgba(217,119,6,0.12), inset 0 1px 0 rgba(255,200,80,0.07)",
+        }}
+      >
+        <motion.div
+          animate={{ rotate: [-8, 8, -8] }}
+          transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+          className="mt-0.5 flex-shrink-0"
+          style={{ color: "#f59e0b" }}
+        >
+          <PenLine size={16} />
+        </motion.div>
+        <div>
+          <p className="text-xs font-semibold mb-1" style={{ color: "#fbbf24" }}>Quick &amp; easy</p>
+          <p className="text-[11px] leading-relaxed" style={{ color: "rgba(253,230,138,0.65)" }}>
+            4 simple steps, under 2 minutes. So straightforward, even my gran nailed it.
+          </p>
+        </div>
+      </motion.div>
+
       <AnimatePresence>
         {planeFly && (
           <motion.div
@@ -278,9 +308,9 @@ export default function QuotePage() {
                 style={{ filter: "drop-shadow(0 0 12px rgba(48,176,176,0.4)) drop-shadow(0 0 24px rgba(48,176,176,0.2))" }}
               />
             </motion.div>
-            <span className="text-xs tracking-[4px] uppercase text-[var(--swift-teal)]">Get a Quote</span>
+            <span className="text-xs tracking-[4px] uppercase" style={{ color: "#f59e0b" }}>Get a Quote</span>
             <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6">
-              Let&apos;s Build <span className="text-gradient">Something</span>
+              Let&apos;s Build <span style={{ background: "linear-gradient(135deg, #f59e0b, #fbbf24, #f97316)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Something</span>
             </h1>
             <p className="text-lg text-gray-400 leading-relaxed">
               Fill in the form below and we&apos;ll put together a tailored proposal.
@@ -320,7 +350,7 @@ export default function QuotePage() {
                   {i < STEPS.length - 1 && (
                     <div
                       className="flex-1 h-px mx-2 mt-[-10px] sm:mt-[-18px] transition-all duration-500"
-                      style={{ background: step > s.id ? "var(--swift-teal)" : "rgba(48,176,176,0.12)" }}
+                      style={{ background: step > s.id ? "#f59e0b" : step === s.id ? "rgba(245,158,11,0.25)" : "rgba(48,176,176,0.12)" }}
                     />
                   )}
                 </div>
@@ -333,7 +363,7 @@ export default function QuotePage() {
                   className="absolute"
                   style={{
                     width: "300%", height: "300%", top: "-100%", left: "-100%",
-                    background: "conic-gradient(from 0deg, transparent 0deg, #30B0B0 60deg, #7ef5f5 120deg, transparent 180deg, transparent 240deg, #509090 300deg, transparent 360deg)",
+                    background: "conic-gradient(from 0deg, transparent 0deg, #f59e0b 40deg, #fbbf24 80deg, transparent 140deg, transparent 220deg, #30B0B0 280deg, #7ef5f5 320deg, transparent 360deg)",
                     animation: "spinElectric 6s linear infinite",
                   }}
                 />
