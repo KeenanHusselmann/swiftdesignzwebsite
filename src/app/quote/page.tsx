@@ -249,15 +249,20 @@ export default function QuotePage() {
   const labelCls = "block text-xs text-gray-500 uppercase tracking-wider mb-2";
 
   const currentService = form.service as ServiceId | "";
+  const hasStarted = step > 1 || Object.values(form).some((v) => Array.isArray(v) ? v.length > 0 : Boolean(v));
 
   return (
     <>
-      {/* Fixed top-right notice card */}
+      {/* Fixed notice card — hidden once user starts filling the form */}
+      <AnimatePresence>
+      {!hasStarted && (
       <motion.div
+        key="quick-notice"
         initial={{ opacity: 0, x: 40 }}
         animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 40, transition: { duration: 0.3 } }}
         transition={{ duration: 0.6, delay: 0.5 }}
-        className="fixed bottom-5 left-4 right-4 z-50 flex items-start gap-3 rounded-2xl px-4 py-3.5 pointer-events-none md:bottom-auto md:top-24 md:left-auto md:right-5 md:max-w-[230px]"
+        className="fixed bottom-24 left-4 right-4 z-50 flex items-start gap-3 rounded-2xl px-4 py-3.5 pointer-events-none md:bottom-auto md:top-24 md:left-auto md:right-5 md:max-w-[230px]"
         style={{
           background: "rgba(20,14,4,0.72)",
           border: "1px solid rgba(217,119,6,0.35)",
@@ -281,6 +286,8 @@ export default function QuotePage() {
           </p>
         </div>
       </motion.div>
+      )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {planeFly && (
