@@ -1,5 +1,5 @@
 ---
-applyTo: "**instagram*,**/social/**,**/content/**"
+applyTo: "{**/*instagram*,**/social/**,**/content/**,**/*caption*,**/*social*}"
 ---
 
 # Swift Designz — Social Media Agent

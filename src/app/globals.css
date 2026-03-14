@@ -429,3 +429,11 @@
   border: 1px solid rgba(245, 158, 11, 0.25);
   animation: borderPulseGold 2.4s ease-in-out infinite;
 }
+
+/* ── Quote preview print ── */
+@media print {
+  .no-print { display: none !important; }
+  nav, footer, header, section:not(:has(#quote-preview)) { display: none !important; }
+  body { background: #fff !important; }
+  #quote-preview { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}

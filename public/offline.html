@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Swift Designz — We'll Be Back Soon</title>
+  <style>
+    /* ── Reset ─────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Brand tokens ──────────────────────────────────────────────────── */
+    :root {
+      --teal:       #30B0B0;
+      --teal-muted: #509090;
+      --teal-deep:  #307070;
+      --dark:       #303030;
+      --black:      #101010;
+      --glass-bg:   rgba(16,16,16,0.65);
+      --glass-border: rgba(48,176,176,0.18);
+    }
+
+    /* ── Base ──────────────────────────────────────────────────────────── */
+    html, body {
+      height: 100%;
+      background: var(--black);
+      color: #e0e0e0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+                   "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* ── Starfield canvas ──────────────────────────────────────────────── */
+    #stars {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+
+    /* ── Ambient glow blobs ────────────────────────────────────────────── */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.18;
+      animation: drift 12s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .blob-1 { width: 500px; height: 500px; background: var(--teal);  top: -150px; left: -100px; animation-duration: 14s; }
+    .blob-2 { width: 350px; height: 350px; background: var(--teal-deep); bottom: -100px; right: -80px; animation-duration: 10s; animation-delay: -5s; }
+
+    @keyframes drift {
+      from { transform: translate(0,0) scale(1);   }
+      to   { transform: translate(40px,30px) scale(1.1); }
+    }
+
+    /* ── Card ──────────────────────────────────────────────────────────── */
+    .card {
+      position: relative;
+      z-index: 10;
+      max-width: 520px;
+      width: 100%;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 2.5rem 2rem;
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow:
+        0 0 0 1px rgba(48,176,176,0.08),
+        0 0 40px rgba(48,176,176,0.08),
+        0 24px 80px rgba(0,0,0,0.6);
+      text-align: center;
+    }
+
+    .tagline {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--teal-muted);
+      margin-bottom: 2rem;
+    }
+
+    /* ── Divider ───────────────────────────────────────────────────────── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--glass-border), transparent);
+      margin: 0 auto 2rem;
+      width: 80%;
+    }
+
+    /* ── Icon ──────────────────────────────────────────────────────────── */
+    .icon-wrap {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(48,176,176,0.08);
+      border: 1px solid rgba(48,176,176,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      animation: pulse-ring 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(48,176,176,0.3); }
+      50%       { box-shadow: 0 0 0 12px rgba(48,176,176,0); }
+    }
+
+    .icon-wrap svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--teal);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ── Heading ───────────────────────────────────────────────────────── */
+    h1 {
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.2;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.01em;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--teal);
+      text-shadow: 0 0 10px rgba(48,176,176,0.4);
+    }
+
+    p.body {
+      font-size: 0.92rem;
+      color: #9ca3af;
+      line-height: 1.7;
+      margin-bottom: 1.75rem;
+    }
+
+    /* ── Contact block ─────────────────────────────────────────────────── */
+    .contact-block {
+      background: rgba(48,176,176,0.06);
+      border: 1px solid rgba(48,176,176,0.12);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.75rem;
+      font-size: 0.85rem;
+    }
+
+    .contact-block .label {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--teal-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-block a {
+      color: var(--teal);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: color 0.2s, text-shadow 0.2s;
+    }
+
+    .contact-block a:hover {
+      color: #50d0d0;
+      text-shadow: 0 0 8px rgba(48,176,176,0.5);
+    }
+
+    /* ── Retry button ──────────────────────────────────────────────────── */
+    .btn-retry {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      border: 1.5px solid var(--teal);
+      color: var(--teal);
+      border-radius: 9999px;
+      padding: 0.6rem 1.5rem;
+      font-size: 0.88rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+
+    .btn-retry:hover {
+      background: var(--teal);
+      color: var(--black);
+      box-shadow: 0 0 20px rgba(48,176,176,0.4);
+    }
+
+    /* ── Status dot ────────────────────────────────────────────────────── */
+    .status {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-top: 1.75rem;
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #f59e0b;
+      animation: blink 1.6s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.2; }
+    }
+
+    /* ── Footer ────────────────────────────────────────────────────────── */
+    .footer-note {
+      position: relative;
+      z-index: 10;
+      margin-top: 1.5rem;
+      font-size: 0.7rem;
+      color: #4b5563;
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Starfield canvas -->
+  <canvas id="stars"></canvas>
+
+  <!-- Background blobs -->
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <!-- Main card -->
+  <div class="card">
+    <img src="images/logo.png" alt="Swift Designz" style="height:52px;width:auto;margin:0 auto 0.5rem;display:block;filter:drop-shadow(0 0 12px rgba(48,176,176,0.4));" />
+    <div class="tagline">Crafting Digital Excellence</div>
+    <div class="divider"></div>
+
+    <!-- Icon: wifi-off -->
+    <div class="icon-wrap">
+      <svg viewBox="0 0 24 24">
+        <line x1="1" y1="1" x2="23" y2="23"/>
+        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55"/>
+        <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39"/>
+        <path d="M10.71 5.05A16 16 0 0 1 22.56 9"/>
+        <path d="M1.42 9a15.91 15.91 0 0 1 4.7-2.88"/>
+        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"/>
+        <line x1="12" y1="20" x2="12.01" y2="20"/>
+      </svg>
+    </div>
+
+    <h1>We'll be back <em>shortly</em></h1>
+    <p class="body">
+      Our site is temporarily unavailable. Rest assured we'll
+      be back online very soon.
+    </p>
+
+    <div class="contact-block">
+      <div class="label">Reach us in the meantime</div>
+      <a href="mailto:info@swiftdesignz.co.za">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+          <polyline points="22,6 12,13 2,6"/>
+        </svg>
+        info@swiftdesignz.co.za
+      </a>
+    </div>
+
+    <button class="btn-retry" onclick="window.location.reload()">
+      <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="23 4 23 10 17 10"/>
+        <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+      </svg>
+      Try again
+    </button>
+
+    <div class="status">
+      <div class="dot"></div>
+      Site temporarily offline
+    </div>
+  </div>
+
+  <p class="footer-note">© 2026 Swift Designz · swiftdesignz.co.za</p>
+
+  <!-- ── Inline starfield ──────────────────────────────────────────────── -->
+  <script>
+    (function () {
+      var canvas = document.getElementById("stars");
+      var ctx    = canvas.getContext("2d");
+      var W, H, stars = [];
+      var COUNT  = 180;
+      var SPEED  = 5;
+      var MAX_Z  = 700;
+
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+
+      function mkStar() {
+        return {
+          x:  (Math.random() - 0.5) * W * 2,
+          y:  (Math.random() - 0.5) * H * 2,
+          z:  Math.random() * MAX_Z,
+          px: 0, py: 0
+        };
+      }
+
+      function init() {
+        resize();
+        stars = [];
+        for (var i = 0; i < COUNT; i++) stars.push(mkStar());
+      }
+
+      function draw() {
+        ctx.fillStyle = "rgba(6,10,18,0.35)";
+        ctx.fillRect(0, 0, W, H);
+
+        var cx = W / 2, cy = H / 2;
+
+        for (var i = 0; i < stars.length; i++) {
+          var s = stars[i];
+          s.z -= SPEED;
+          if (s.z <= 0) { stars[i] = mkStar(); stars[i].z = MAX_Z; continue; }
+
+          var sx = (s.x / s.z) * W + cx;
+          var sy = (s.y / s.z) * H + cy;
+
+          if (sx < 0 || sx > W || sy < 0 || sy > H) {
+            stars[i] = mkStar(); continue;
+          }
+
+          var life   = 1 - s.z / MAX_Z;
+          var size   = Math.max(0.2, life * 3.2);
+          var bright = Math.floor(life * 255);
+          var alpha  = life * 0.95 + 0.05;
+
+          if (s.px !== 0 && s.py !== 0) {
+            ctx.beginPath();
+            ctx.moveTo(s.px, s.py);
+            ctx.lineTo(sx, sy);
+            ctx.strokeStyle = "rgba(" + bright + "," + Math.floor(bright * 0.92) + ",255," + (alpha * 0.4) + ")";
+            ctx.lineWidth   = size * 0.6;
+            ctx.stroke();
+          }
+
+          s.px = sx; s.py = sy;
+
+          ctx.beginPath();
+          ctx.arc(sx, sy, size / 2, 0, Math.PI * 2);
+          ctx.fillStyle = "rgba(" + bright + "," + Math.floor(bright * 0.92) + ",255," + alpha + ")";
+          ctx.fill();
+        }
+
+        requestAnimationFrame(draw);
+      }
+
+      window.addEventListener("resize", init);
+      init();
+      draw();
+    })();
+  </script>
+</body>
+</html>

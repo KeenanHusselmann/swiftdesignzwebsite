@@ -189,6 +189,12 @@ export default function RootLayout({
             }),
           }}
         />
+        {/* Service Worker — offline fallback when Netlify is unreachable */}
+        <Script id="sw-register" strategy="afterInteractive">{`
+          if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').catch(function(){});
+          }
+        `}</Script>
       </head>
       <body className="antialiased">
         <I18nProvider>

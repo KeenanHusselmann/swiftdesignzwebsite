@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Swift Designz — Animated Social Posts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --teal:  #30B0B0;
+  --teal-m: #509090;
+  --teal-d: #307070;
+}
+
+body {
+  background: #050808;
+  font-family: 'Inter', sans-serif;
+  color: #fff;
+  padding: 48px 24px;
+}
+
+/* ── Gallery chrome ── */
+.page-title { text-align:center; font-size:11px; letter-spacing:5px; text-transform:uppercase; color:var(--teal-m); margin-bottom:6px; }
+.page-sub   { text-align:center; font-size:11px; color:#272727; margin-bottom:60px; letter-spacing:1px; }
+.section-label { text-align:center; font-size:10px; letter-spacing:4px; text-transform:uppercase; color:#202020; margin:56px 0 28px; }
+.grid { display:flex; flex-wrap:wrap; gap:40px; justify-content:center; }
+.post-wrap { display:flex; flex-direction:column; align-items:center; gap:14px; }
+.post-label { font-size:10px; letter-spacing:4px; text-transform:uppercase; color:#262626; }
+
+/* ── Solo / recorder mode ── */
+body.solo { margin:0; padding:0; background:#000; overflow:hidden; }
+body.solo .post-scene.active { position:fixed!important; inset:0!important; width:100vw!important; height:100vh!important; border-radius:0!important; }
+body.solo .post-scene:not(.active) { display:none!important; }
+body.solo .page-title, body.solo .page-sub, body.solo .section-label, body.solo .post-label { display:none!important; }
+
+/* ── Base scene ── */
+.post-scene { position:relative; overflow:hidden; border-radius:4px; flex-shrink:0; }
+.post-scene canvas { position:absolute; inset:0; pointer-events:none; }
+
+/* ═══════════════════════════════════════
+   IG-01  ·  CODE RAIN  ·  540 × 540
+═══════════════════════════════════════ */
+.scene-ig-01 { width:540px; height:540px; background:#030c0c; }
+
+.scene-ig-01 .grad {
+  position:absolute; inset:0; z-index:5; pointer-events:none;
+  background: linear-gradient(180deg, rgba(3,12,12,0.55) 0%, transparent 25%, transparent 40%, rgba(3,12,12,0.8) 65%, rgba(3,12,12,0.97) 100%);
+}
+
+.scene-ig-01 .logo-top {
+  position:absolute; top:26px; left:50%; transform:translateX(-50%); z-index:10;
+  animation: fadeInDown 0.8s 1.0s both;
+}
+.scene-ig-01 .logo-top img {
+  height:42px;
+  filter: drop-shadow(0 0 18px rgba(48,176,176,0.75)) drop-shadow(0 0 40px rgba(48,176,176,0.3));
+}
+
+.scene-ig-01 .bottom { position:absolute; bottom:0; left:0; right:0; padding:0 40px 44px; z-index:10; }
+
+.scene-ig-01 .kicker {
+  font-size:9px; letter-spacing:5px; text-transform:uppercase; color:var(--teal);
+  margin-bottom:12px; display:flex; align-items:center; gap:10px;
+  animation: slideUp 0.6s 1.5s both;
+}
+.scene-ig-01 .kicker::before { content:''; display:block; width:28px; height:1px; background:var(--teal); opacity:0.5; }
+
+.scene-ig-01 .headline {
+  font-family:'Orbitron',sans-serif; font-size:44px; font-weight:900; line-height:1.0;
+  letter-spacing:-1px; color:#fff; margin-bottom:18px;
+  animation: slideUp 0.7s 1.85s both;
+}
+.scene-ig-01 .headline em { font-style:normal; color:var(--teal); text-shadow:0 0 24px rgba(48,176,176,0.45); display:block; }
+
+.scene-ig-01 .pills { display:flex; gap:8px; flex-wrap:wrap; animation: slideUp 0.6s 2.8s both; }
+.scene-ig-01 .pill { font-size:9px; letter-spacing:2px; text-transform:uppercase; border:1px solid rgba(48,176,176,0.2); color:var(--teal-m); border-radius:999px; padding:4px 12px; }
+
+.scene-ig-01 .domain {
+  position:absolute; bottom:18px; right:22px; z-index:10;
+  font-size:9px; letter-spacing:2px; color:#1a3535; text-transform:uppercase;
+  animation: fadeIn 0.5s 4.0s both;
+}
+
+/* ═══════════════════════════════════════
+   IG-02  ·  STATS COUNTER  ·  540 × 540
+═══════════════════════════════════════ */
+.scene-ig-02 { width:540px; height:540px; background:#040808; }
+
+.scene-ig-02 .scanlines {
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(48,176,176,0.012) 3px, rgba(48,176,176,0.012) 4px);
+}
+
+/* animated corner brackets */
+.scene-ig-02 .c { position:absolute; width:20px; height:20px; z-index:10; }
+.scene-ig-02 .c-tl { top:18px; left:18px; border-top:2px solid var(--teal); border-left:2px solid var(--teal); animation:fadeIn 0.4s 0.05s both; }
+.scene-ig-02 .c-tr { top:18px; right:18px; border-top:2px solid var(--teal); border-right:2px solid var(--teal); animation:fadeIn 0.4s 0.15s both; }
+.scene-ig-02 .c-bl { bottom:18px; left:18px; border-bottom:2px solid var(--teal); border-left:2px solid var(--teal); animation:fadeIn 0.4s 0.25s both; }
+.scene-ig-02 .c-br { bottom:18px; right:18px; border-bottom:2px solid var(--teal); border-right:2px solid var(--teal); animation:fadeIn 0.4s 0.35s both; }
+
+.scene-ig-02 .body {
+  position:absolute; inset:0; z-index:10;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:56px 44px;
+}
+.scene-ig-02 .logo-top { height:38px; margin-bottom:16px; filter:drop-shadow(0 0 14px rgba(48,176,176,0.5)); animation:fadeInDown 0.6s 0.5s both; }
+.scene-ig-02 .heading { font-size:11px; letter-spacing:5px; text-transform:uppercase; color:var(--teal-m); margin-bottom:24px; animation:fadeIn 0.5s 1.0s both; }
+
+.scene-ig-02 .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; width:100%; margin-bottom:22px; }
+.scene-ig-02 .stat-box {
+  background:rgba(48,176,176,0.05); border:1px solid rgba(48,176,176,0.12);
+  border-radius:12px; padding:18px 8px; text-align:center;
+}
+.scene-ig-02 .stat-box:nth-child(1) { animation:scaleIn 0.5s 1.4s both; }
+.scene-ig-02 .stat-box:nth-child(2) { animation:scaleIn 0.5s 1.75s both; }
+.scene-ig-02 .stat-box:nth-child(3) { animation:scaleIn 0.5s 2.10s both; }
+.scene-ig-02 .sn { font-size:24px; font-weight:900; color:var(--teal); font-family:'Orbitron',sans-serif; line-height:1; margin-bottom:6px; }
+.scene-ig-02 .sl { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#355050; }
+
+.scene-ig-02 .divh { width:50px; height:1px; background:linear-gradient(90deg,transparent,var(--teal),transparent); margin-bottom:16px; animation:scaleInH 0.5s 3.0s both; }
+.scene-ig-02 .tagline { font-size:19px; font-weight:700; color:#fff; text-align:center; line-height:1.3; margin-bottom:6px; animation:slideUp 0.6s 3.2s both; }
+.scene-ig-02 .tagline span { color:var(--teal); }
+.scene-ig-02 .cta { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:var(--teal); margin-top:8px; animation:fadeIn 0.5s 4.1s both; }
+.scene-ig-02 .domain { position:absolute; bottom:22px; right:24px; font-size:9px; letter-spacing:2px; color:#1a3030; text-transform:uppercase; }
+
+/* ═══════════════════════════════════════
+   IG-03  ·  RINGS PULSE  ·  540 × 540
+═══════════════════════════════════════ */
+.scene-ig-03 {
+  width:540px; height:540px;
+  background: radial-gradient(ellipse 75% 70% at 50% 50%, rgba(48,176,176,0.1) 0%, transparent 60%), #050c0c;
+}
+
+.scene-ig-03 .rings { position:absolute; inset:0; z-index:1; }
+.scene-ig-03 .ring {
+  position:absolute; border-radius:50%;
+  top:50%; left:50%; transform:translate(-50%,-50%) scale(0);
+}
+.scene-ig-03 .r1 { width:180px; height:180px; border:1px solid rgba(48,176,176,0.2); animation:ringExpand 0.9s 0.1s cubic-bezier(0.22,1,0.36,1) both; }
+.scene-ig-03 .r2 { width:300px; height:300px; border:1px solid rgba(48,176,176,0.13); animation:ringExpand 0.9s 0.25s cubic-bezier(0.22,1,0.36,1) both; }
+.scene-ig-03 .r3 { width:420px; height:420px; border:1px solid rgba(48,176,176,0.07); animation:ringExpand 0.9s 0.4s cubic-bezier(0.22,1,0.36,1) both; }
+.scene-ig-03 .r4 { width:560px; height:560px; border:1px solid rgba(48,176,176,0.04); animation:ringExpand 0.9s 0.55s cubic-bezier(0.22,1,0.36,1) both; }
+
+/* continuous outward pulse */
+.scene-ig-03 .pulse {
+  position:absolute; border-radius:50%; border:1px solid rgba(48,176,176,0.45);
+  top:50%; left:50%; width:120px; height:120px;
+  animation: pulseRing 3.6s 1.8s infinite;
+}
+.scene-ig-03 .pulse2 { animation-delay:3.4s; }
+
+.scene-ig-03 .body {
+  position:absolute; inset:0; z-index:10;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  text-align:center; padding:40px;
+}
+.scene-ig-03 .logo-center {
+  height:72px; margin-bottom:18px;
+  filter: drop-shadow(0 0 28px rgba(48,176,176,0.65)) drop-shadow(0 0 60px rgba(48,176,176,0.25));
+  animation: logoBloom 0.9s 0.7s both;
+}
+.scene-ig-03 .divh { width:50px; height:1px; background:linear-gradient(90deg,transparent,var(--teal),transparent); margin-bottom:14px; animation:scaleInH 0.5s 1.65s both; }
+.scene-ig-03 .tag { font-size:11px; letter-spacing:5px; text-transform:uppercase; color:var(--teal-m); margin-bottom:12px; animation:fadeIn 0.6s 1.9s both; }
+.scene-ig-03 .h2 { font-size:26px; font-weight:800; color:#fff; letter-spacing:-0.5px; line-height:1.2; margin-bottom:10px; animation:slideUp 0.6s 2.2s both; }
+.scene-ig-03 .h2 em { font-style:normal; color:var(--teal); }
+.scene-ig-03 .sub { font-size:11px; color:#3a5858; line-height:1.7; max-width:310px; margin-bottom:22px; animation:fadeIn 0.7s 2.8s both; }
+.scene-ig-03 .pills { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; animation:fadeIn 0.6s 3.5s both; }
+.scene-ig-03 .pill { border:1px solid rgba(48,176,176,0.18); color:var(--teal); font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:5px 12px; border-radius:999px; background:rgba(48,176,176,0.04); }
+.scene-ig-03 .domain { position:absolute; bottom:22px; right:24px; font-size:9px; letter-spacing:2px; color:#1a3030; text-transform:uppercase; animation:fadeIn 0.5s 4.5s both; }
+
+/* ═══════════════════════════════════════
+   FB-01  ·  SPLIT BUILD  ·  756 × 396
+═══════════════════════════════════════ */
+.scene-fb-01 { width:756px; height:396px; background:#040a0d; }
+
+.scene-fb-01 .glow {
+  position:absolute; top:-80px; right:-40px;
+  width:320px; height:320px; border-radius:50%;
+  background:radial-gradient(circle, rgba(48,176,176,0.12) 0%, transparent 65%);
+  pointer-events:none; z-index:1;
+}
+.scene-fb-01 .left {
+  position:absolute; top:0; left:0; bottom:0; width:268px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+  padding:36px 28px; z-index:10;
+  animation: slideInLeft 0.7s 0.2s both;
+}
+.scene-fb-01 .left img { height:52px; filter:drop-shadow(0 0 18px rgba(48,176,176,0.55)); }
+.scene-fb-01 .badge {
+  font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--teal);
+  background:rgba(48,176,176,0.07); border:1px solid rgba(48,176,176,0.18);
+  padding:5px 14px; border-radius:999px;
+  animation:fadeIn 0.5s 1.0s both;
+}
+
+/* divider line draws itself downward */
+.scene-fb-01 .divv {
+  position:absolute; left:268px; top:0; bottom:0; width:1px;
+  background:linear-gradient(180deg, transparent, rgba(48,176,176,0.22), transparent);
+  z-index:10; transform:scaleY(0); transform-origin:top;
+  animation: scaleInV 0.55s 0.75s both;
+}
+
+.scene-fb-01 .right {
+  position:absolute; top:0; left:268px; right:0; bottom:0;
+  display:flex; flex-direction:column; justify-content:center; padding:40px 42px; z-index:10;
+}
+.scene-fb-01 .kicker { font-size:9px; letter-spacing:4px; text-transform:uppercase; color:var(--teal-m); margin-bottom:10px; animation:slideInRight 0.5s 1.3s both; }
+.scene-fb-01 h2 { font-family:'Orbitron','Inter',sans-serif; font-size:30px; font-weight:900; line-height:1.05; letter-spacing:-0.3px; color:#fff; animation:slideInRight 0.6s 1.6s both; }
+.scene-fb-01 h2 em { font-style:normal; color:var(--teal); }
+.scene-fb-01 .desc { font-size:11.5px; color:#4a7070; line-height:1.65; max-width:340px; margin-top:10px; animation:slideInRight 0.6s 2.0s both; }
+.scene-fb-01 .cta {
+  display:inline-flex; align-items:center; gap:8px;
+  border:1.5px solid var(--teal); color:var(--teal);
+  border-radius:999px; padding:7px 20px;
+  font-size:10px; font-weight:700; letter-spacing:2px; text-transform:uppercase;
+  width:fit-content; margin-top:16px;
+  animation: ctaDraw 0.6s 2.9s both;
+}
+.scene-fb-01 .cta .arr { font-size:14px; line-height:1; }
+.scene-fb-01 .domain { position:absolute; bottom:14px; right:20px; font-size:9px; letter-spacing:2px; color:#182e2e; text-transform:uppercase; animation:fadeIn 0.5s 4.0s both; }
+
+/* ═══════════════════════════════════════
+   FB-02  ·  CARD FLIP  ·  756 × 396
+═══════════════════════════════════════ */
+.scene-fb-02 { width:756px; height:396px; background:#040810; }
+
+.scene-fb-02 .top-stripe {
+  position:absolute; top:0; left:0; right:0; height:3px;
+  background:linear-gradient(90deg, transparent 5%, var(--teal) 50%, transparent 95%);
+  opacity:0; z-index:10; animation:fadeIn 0.5s 0.1s both;
+}
+.scene-fb-02 .body { position:absolute; inset:0; display:flex; flex-direction:column; padding:28px 38px 22px; z-index:5; }
+.scene-fb-02 .top-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.scene-fb-02 .kicker { font-size:8px; letter-spacing:4px; text-transform:uppercase; color:var(--teal-m); margin-bottom:4px; animation:fadeIn 0.5s 0.2s both; }
+.scene-fb-02 .h2 { font-size:22px; font-weight:800; color:#fff; letter-spacing:-0.3px; line-height:1.1; animation:slideUp 0.5s 0.4s both; }
+.scene-fb-02 .h2 span { color:var(--teal); }
+.scene-fb-02 .fb-logo { height:32px; filter:drop-shadow(0 0 10px rgba(48,176,176,0.4)); animation:fadeIn 0.5s 0.3s both; }
+
+.scene-fb-02 .cards {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px; flex:1;
+  perspective:900px;
+}
+.scene-fb-02 .card {
+  background:rgba(48,176,176,0.04); border:1px solid rgba(48,176,176,0.1);
+  border-radius:10px; padding:14px 12px; display:flex; flex-direction:column; gap:7px;
+  transform:rotateY(90deg);
+  animation:cardFlip 0.55s var(--d) cubic-bezier(0.34,1.56,0.64,1) both;
+}
+.scene-fb-02 .card:nth-child(1) { --d:0.9s; }
+.scene-fb-02 .card:nth-child(2) { --d:1.45s; }
+.scene-fb-02 .card:nth-child(3) { --d:2.0s; }
+.scene-fb-02 .card:nth-child(4) { --d:2.55s; }
+.scene-fb-02 .card svg { width:20px; height:20px; }
+.scene-fb-02 .cn { font-size:11px; font-weight:700; color:#d0d0d0; }
+.scene-fb-02 .cf { font-size:14px; font-weight:800; color:var(--teal); }
+.scene-fb-02 .cd { font-size:9px; color:#3a5555; line-height:1.4; }
+.scene-fb-02 .footer { display:flex; align-items:center; justify-content:space-between; margin-top:10px; animation:slideUp 0.5s 3.4s both; }
+.scene-fb-02 .footer .url, .scene-fb-02 .footer .hndl { font-size:9px; letter-spacing:2px; text-transform:uppercase; color:#253838; }
+
+/* ═══════════════════════════════════════
+   KEYFRAMES
+═══════════════════════════════════════ */
+@keyframes fadeIn       { from{opacity:0} to{opacity:1} }
+@keyframes fadeInDown   { from{opacity:0;transform:translateY(-22px) translateX(-50%)} to{opacity:1;transform:translateY(0) translateX(-50%)} }
+@keyframes slideUp      { from{opacity:0;transform:translateY(26px)} to{opacity:1;transform:none} }
+@keyframes slideInLeft  { from{opacity:0;transform:translateX(-44px)} to{opacity:1;transform:none} }
+@keyframes slideInRight { from{opacity:0;transform:translateX(32px)} to{opacity:1;transform:none} }
+@keyframes scaleIn      { from{opacity:0;transform:scale(0.65)} to{opacity:1;transform:scale(1)} }
+@keyframes scaleInH     { from{transform:scaleX(0);opacity:0} to{transform:scaleX(1);opacity:1} }
+@keyframes scaleInV     { from{transform:scaleY(0)} to{transform:scaleY(1)} }
+@keyframes ctaDraw      { from{opacity:0;transform:scale(0.85)} to{opacity:1;transform:scale(1)} }
+
+@keyframes logoBloom {
+  0%  { opacity:0; transform:scale(0.55); filter:drop-shadow(0 0 0px rgba(48,176,176,0)); }
+  65% { transform:scale(1.06); }
+  100%{ opacity:1; transform:scale(1); filter:drop-shadow(0 0 28px rgba(48,176,176,0.65)) drop-shadow(0 0 60px rgba(48,176,176,0.25)); }
+}
+@keyframes ringExpand {
+  from { transform:translate(-50%,-50%) scale(0); opacity:0; }
+  to   { transform:translate(-50%,-50%) scale(1); opacity:1; }
+}
+@keyframes pulseRing {
+  0%   { transform:translate(-50%,-50%) scale(1); opacity:0.45; }
+  100% { transform:translate(-50%,-50%) scale(6.5); opacity:0; }
+}
+@keyframes cardFlip {
+  from { transform:rotateY(90deg); opacity:0; }
+  to   { transform:rotateY(0deg); opacity:1; }
+}
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Swift Designz — Animated Social Posts</h1>
+<p class="page-sub">5 animated posts · Instagram + Facebook · open in browser to preview</p>
+
+<!-- ══════════════ INSTAGRAM 540×540 ══════════════ -->
+<p class="section-label">─ Instagram Posts (540 × 540) ─</p>
+<div class="grid">
+
+  <!-- IG-01: CODE RAIN -->
+  <div class="post-wrap">
+    <div class="post-label">IG-01 · Code Rain</div>
+    <div class="post-scene scene-ig-01" data-post="ig-01">
+      <canvas id="canvas-rain"></canvas>
+      <div class="grad"></div>
+      <div class="logo-top"><img src="images/logo.png" alt="Swift Designz"/></div>
+      <div class="bottom">
+        <div class="kicker">Swift Designz</div>
+        <div class="headline">Build<em>something<br>real.</em></div>
+        <div class="pills">
+          <span class="pill">Web</span>
+          <span class="pill">E-Commerce</span>
+          <span class="pill">Apps</span>
+          <span class="pill">AI Training</span>
+        </div>
+      </div>
+      <div class="domain">swiftdesignz.co.za</div>
+    </div>
+  </div>
+
+  <!-- IG-02: STATS COUNTER -->
+  <div class="post-wrap">
+    <div class="post-label">IG-02 · Stats Counter</div>
+    <div class="post-scene scene-ig-02" data-post="ig-02">
+      <div class="scanlines"></div>
+      <div class="c c-tl"></div><div class="c c-tr"></div>
+      <div class="c c-bl"></div><div class="c c-br"></div>
+      <div class="body">
+        <img class="logo-top" src="images/logo.png" alt="Swift Designz"/>
+        <div class="heading">What we charge</div>
+        <div class="stats-row">
+          <div class="stat-box">
+            <div class="sn" data-to="2500" data-delay="1950">R0</div>
+            <div class="sl">Websites from</div>
+          </div>
+          <div class="stat-box">
+            <div class="sn" data-to="4000" data-delay="2300">R0</div>
+            <div class="sl">Stores from</div>
+          </div>
+          <div class="stat-box">
+            <div class="sn" data-to="5000" data-delay="2650">R0</div>
+            <div class="sl">Apps from</div>
+          </div>
+        </div>
+        <div class="divh"></div>
+        <div class="tagline">Your website is your<br><span>hardest-working employee.</span></div>
+        <div class="cta">Get a custom quote →</div>
+      </div>
+      <div class="domain">swiftdesignz.co.za</div>
+    </div>
+  </div>
+
+  <!-- IG-03: RINGS PULSE -->
+  <div class="post-wrap">
+    <div class="post-label">IG-03 · Rings Pulse</div>
+    <div class="post-scene scene-ig-03" data-post="ig-03">
+      <div class="rings">
+        <div class="ring r1"></div>
+        <div class="ring r2"></div>
+        <div class="ring r3"></div>
+        <div class="ring r4"></div>
+        <div class="pulse"></div>
+        <div class="pulse pulse2"></div>
+      </div>
+      <div class="body">
+        <img class="logo-center" src="images/logo.png" alt="Swift Designz"/>
+        <div class="divh"></div>
+        <div class="tag">Crafting Digital Excellence</div>
+        <div class="h2">We build more than<br><em>websites.</em></div>
+        <p class="sub">End-to-end digital products for businesses worldwide. Fully remote, under one roof.</p>
+        <div class="pills">
+          <span class="pill">Web Dev</span>
+          <span class="pill">E-Commerce</span>
+          <span class="pill">Apps</span>
+          <span class="pill">PM Training</span>
+          <span class="pill">AI Training</span>
+        </div>
+      </div>
+      <div class="domain">swiftdesignz.co.za</div>
+    </div>
+  </div>
+
+</div><!-- /.grid -->
+
+<!-- ══════════════ FACEBOOK 756×396 ══════════════ -->
+<p class="section-label">─ Facebook Posts (756 × 396) ─</p>
+<div class="grid">
+
+  <!-- FB-01: SPLIT BUILD -->
+  <div class="post-wrap">
+    <div class="post-label">FB-01 · Split Build</div>
+    <div class="post-scene scene-fb-01" data-post="fb-01">
+      <div class="glow"></div>
+      <div class="left">
+        <img src="images/logo.png" alt="Swift Designz"/>
+        <span class="badge">Remote · Worldwide</span>
+      </div>
+      <div class="divv"></div>
+      <div class="right">
+        <div class="kicker">Now accepting new clients</div>
+        <h2>Your digital<br><em>presence,</em><br>elevated.</h2>
+        <p class="desc">Professional websites, stores & apps — crafted with clean code, sharp design and zero agency markup.</p>
+        <div class="cta"><span class="arr">→</span> Get A Free Quote</div>
+      </div>
+      <div class="domain">swiftdesignz.co.za</div>
+    </div>
+  </div>
+
+  <!-- FB-02: CARD FLIP -->
+  <div class="post-wrap">
+    <div class="post-label">FB-02 · Card Flip</div>
+    <div class="post-scene scene-fb-02" data-post="fb-02">
+      <div class="top-stripe"></div>
+      <div class="body">
+        <div class="top-row">
+          <div>
+            <div class="kicker">What we build</div>
+            <div class="h2">Five services. <span>One studio.</span></div>
+          </div>
+          <img class="fb-logo" src="images/logo.png" alt="Swift Designz"/>
+        </div>
+        <div class="cards">
+          <div class="card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#30B0B0" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+            <div class="cn">Web Dev</div>
+            <div class="cf">R2,500</div>
+            <div class="cd">Up to 10+ pages, fully custom</div>
+          </div>
+          <div class="card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#30B0B0" stroke-width="1.5" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            <div class="cn">E-Commerce</div>
+            <div class="cf">R4,000</div>
+            <div class="cd">Catalogues to full stores</div>
+          </div>
+          <div class="card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#30B0B0" stroke-width="1.5" stroke-linecap="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+            <div class="cn">Apps</div>
+            <div class="cf">R5,000</div>
+            <div class="cd">MVP to enterprise-grade</div>
+          </div>
+          <div class="card">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#30B0B0" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+            <div class="cn">PM + AI Training</div>
+            <div class="cf">Custom</div>
+            <div class="cd">Workshops & 1-on-1 sessions</div>
+          </div>
+        </div>
+        <div class="footer">
+          <span class="url">swiftdesignz.co.za/packages</span>
+          <span class="hndl">@swiftdesignz101</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /.grid -->
+
+<script>
+/* ── Solo / recorder mode ── */
+(() => {
+  const p = new URLSearchParams(location.search).get('post');
+  if (!p) return;
+  document.body.classList.add('solo');
+  document.querySelectorAll('.post-scene').forEach(el => {
+    if (el.dataset.post === p) el.classList.add('active');
+  });
+})();
+
+/* ── Canvas: Matrix code rain (IG-01) ── */
+(() => {
+  const canvas = document.getElementById('canvas-rain');
+  if (!canvas) return;
+  const scene = canvas.closest('.post-scene');
+  const W = scene.offsetWidth, H = scene.offsetHeight;
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  const COL_W = 14;
+  const cols  = Math.ceil(W / COL_W);
+  const drops = Array.from({ length: cols }, () => Math.random() * -(H / COL_W));
+
+  const CHARS = 'アイウエオカキクケコサシスセソタチツテトナニ01→←↑↓◆░▒▓';
+
+  function tick() {
+    ctx.fillStyle = 'rgba(3,12,12,0.075)';
+    ctx.fillRect(0, 0, W, H);
+
+    for (let i = 0; i < cols; i++) {
+      const y      = drops[i];
+      const ch     = CHARS[Math.floor(Math.random() * CHARS.length)];
+      const alpha  = Math.max(0.06, Math.min(1, (y / (H / COL_W)) * 0.75));
+      const bright = Math.random() > 0.96;
+
+      ctx.font      = `${bright ? 'bold ' : ''}12px monospace`;
+      ctx.fillStyle = bright
+        ? `rgba(180,255,255,${alpha})`
+        : `rgba(48,176,176,${alpha})`;
+      ctx.fillText(ch, i * COL_W, y * COL_W);
+
+      if (drops[i] * COL_W > H && Math.random() > 0.975) drops[i] = 0;
+      drops[i] += 0.35 + Math.random() * 0.3;
+    }
+  }
+  setInterval(tick, 48);
+})();
+
+/* ── Count-up numbers (IG-02) ── */
+(() => {
+  document.querySelectorAll('[data-to]').forEach(el => {
+    const target = parseInt(el.dataset.to, 10);
+    const delay  = parseInt(el.dataset.delay, 10) || 0;
+
+    setTimeout(() => {
+      const start = performance.now();
+      const DURATION = 1500;
+
+      function step(now) {
+        const t    = Math.min(1, (now - start) / DURATION);
+        const ease = 1 - Math.pow(1 - t, 3);
+        el.textContent = 'R' + Math.round(ease * target).toLocaleString('en-ZA');
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    }, delay);
+  });
+})();
+</script>
+
+</body>
+</html>
