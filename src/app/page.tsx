@@ -293,11 +293,11 @@ function DeployVisual() {
 }
 
 function DesignVisual() {
-  const steps = [0, 1, 2, 3, 4];
+  const STEP_COUNT = 5;
   const [step, setStep] = useState(0);
 
   useEffect(() => {
-    const t = setInterval(() => setStep(s => (s + 1) % steps.length), 900);
+    const t = setInterval(() => setStep(s => (s + 1) % STEP_COUNT), 900);
     return () => clearInterval(t);
   }, []);
 

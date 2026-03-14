@@ -141,7 +141,6 @@ const SOURCE_OPTIONS = [
 // ─── PROPOSED PLAN DATA (imported from @/lib/quoteUtils) ───────────────────
 export type { Phase };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const STEPS = [
   { id: 1, label: "Contact Info" },
   { id: 2, label: "Service & Package" },

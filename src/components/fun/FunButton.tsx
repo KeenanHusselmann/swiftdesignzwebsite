@@ -61,6 +61,7 @@ export default function FunButton() {
 
   // Close popup whenever the user navigates to a new page
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPopup(null);
   }, [pathname]);
 
@@ -89,6 +90,7 @@ export default function FunButton() {
   // While popup is open, keep button visible; when closed, hide after 3s
   useEffect(() => {
     if (popup) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(true);
     } else {
       const t = setTimeout(() => setVisible(false), 3000);

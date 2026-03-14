@@ -171,7 +171,7 @@ export default function GlobalError({
                 <RefreshCw size={15} />
                 Try Again
               </button>
-              <a
+              <Link
                 href="/"
                 style={{
                   display: "inline-flex",
@@ -190,7 +190,7 @@ export default function GlobalError({
               >
                 <Home size={15} />
                 Take me home
-              </a>
+              </Link>
             </div>
 
             <p style={{ color: "#333", fontSize: 11, marginTop: 28 }}>

@@ -7,7 +7,6 @@ import {
   Globe,
   Package,
   Briefcase,
-  MessageSquare,
   FolderOpen,
   Phone,
   ArrowUpRight,

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Home, Mail, ArrowLeft } from "lucide-react";
+import { Home, Mail } from "lucide-react";
 
 export default function NotFound() {
   return (
