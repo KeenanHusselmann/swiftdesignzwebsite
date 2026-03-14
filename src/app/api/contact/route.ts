@@ -5,7 +5,20 @@ export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY);
   try {
     const body = await req.json();
-    const { name, email, phone, service, budget, message } = body;
+    const raw = body as Record<string, unknown>;
+
+    // ── Input length limits ────────────────────────────────────────────────────
+    const s = (v: unknown, max: number): string =>
+      typeof v === "string" ? v.slice(0, max) : "";
+    const name    = s(raw.name, 100);
+    const email   = s(raw.email, 254);
+    const phone   = s(raw.phone, 30);
+    const service = s(raw.service, 100);
+    const budget  = s(raw.budget, 50);
+    const message = s(raw.message, 5000);
+
+    // Strip characters that could manipulate email From header (RFC 2822)
+    const fromName = name.replace(/[\r\n"<>]/g, " ").trim().slice(0, 80);
 
     // Validate required fields
     if (!name || !email || !message) {
@@ -26,8 +39,8 @@ export async function POST(req: NextRequest) {
 
     // Send notification to Swift Designz
     const notifyEmail = process.env.CONTACT_NOTIFY_EMAIL ?? "info@swiftdesignz.co.za";
-    await resend.emails.send({
-      from: `${name} via Swift Designz <noreply@swiftdesignz.co.za>`,
+    const { error: notifyError } = await resend.emails.send({
+      from: `${fromName} via Swift Designz <noreply@swiftdesignz.co.za>`,
       to: [notifyEmail],
       replyTo: email,
       subject: `New Project Enquiry from ${name}`,
@@ -73,9 +86,13 @@ export async function POST(req: NextRequest) {
         </div>
       `,
     });
+    if (notifyError) {
+      console.error("Contact notify send error:", notifyError);
+      throw new Error(notifyError.message ?? "Failed to send notification email");
+    }
 
     // Send confirmation to the client
-    await resend.emails.send({
+    const { error: confirmError } = await resend.emails.send({
       from: "Swift Designz <noreply@swiftdesignz.co.za>",
       to: [email],
       subject: "We've received your enquiry - Swift Designz",
@@ -104,6 +121,7 @@ export async function POST(req: NextRequest) {
         </div>
       `,
     });
+    if (confirmError) console.error("Contact client confirmation error (non-fatal):", confirmError);
 
     return NextResponse.json({ success: true });
   } catch (error) {

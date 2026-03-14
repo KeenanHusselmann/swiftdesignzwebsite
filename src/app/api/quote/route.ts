@@ -3,11 +3,24 @@ import { Resend } from "resend";
 import {
   escapeHtml,
   SERVICE_LABELS,
-  PACKAGES_LABELS,
   buildPlan,
   EMAIL_REGEX,
   getPackageLabel,
+  VALID_SERVICES,
 } from "@/lib/quoteUtils";
+
+// ── Input sanitisation helpers ───────────────────────────────────────────────
+/** Coerce to string and hard-cap length. Returns "" for non-strings. */
+const str = (v: unknown, max: number): string =>
+  typeof v === "string" ? v.slice(0, max) : "";
+
+/** Coerce to a string array with item count and per-item length caps. */
+const strArr = (v: unknown, maxItems: number, maxItemLen: number): string[] =>
+  (Array.isArray(v) ? v : [])
+    .slice(0, maxItems)
+    .map((i) => str(i, maxItemLen))
+    .filter(Boolean);
+
 
 function row(label: string, value: string, color = "#e0e0e0") {
   if (!value) return "";
@@ -17,21 +30,31 @@ function row(label: string, value: string, color = "#e0e0e0") {
   </tr>`;
 }
 
-// SERVICE_LABELS, PACKAGES_LABELS, escapeHtml imported from @/lib/quoteUtils
-
 export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY);
   try {
     const body = await req.json();
-    const {
-      name, email, phone, company, location,
-      service, package: pkg,
-      features, lookFeel, themes, keywords,
-      scope, timeline, contentReady, referenceUrls,
-      attendees, experienceLevel,
-      budget, notes, source,
-    } = body;
+    const raw = body as Record<string, unknown>;
 
+    // ── Sanitised fields: enforce length limits before any processing ────────
+    const name            = str(raw.name, 100);
+    const email           = str(raw.email, 254);
+    const phone           = str(raw.phone, 30);
+    const company         = str(raw.company, 100);
+    const location        = str(raw.location, 100);
+    const service         = str(raw.service, 50);
+    const pkg             = str(raw.package, 50);
+    const scope           = str(raw.scope, 5000);
+    const timeline        = str(raw.timeline, 100);
+    const contentReady    = str(raw.contentReady, 100);
+    const referenceUrls   = str(raw.referenceUrls, 500);
+    const attendees       = str(raw.attendees, 50);
+    const experienceLevel = str(raw.experienceLevel, 100);
+    const budget          = str(raw.budget, 100);
+    const notes           = str(raw.notes, 2000);
+    const source          = str(raw.source, 100);
+
+    // ── Validate required fields ──────────────────────────────────────────────
     if (!name || !email) {
       return NextResponse.json({ error: "Your name and email are the bare minimum — we promise we won't spam you." }, { status: 400 });
     }
@@ -39,11 +62,17 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "That email doesn't look quite right. Is it hiding something? (A typo, we mean.)" }, { status: 400 });
     }
 
-    const serviceLabel = SERVICE_LABELS[service] ?? service ?? "Unknown";
-    const featureArr: string[] = Array.isArray(features) ? features : [];
-    const lookFeelArr: string[] = Array.isArray(lookFeel) ? lookFeel : [];
-    const themesArr: string[] = Array.isArray(themes) ? themes : [];
-    const keywordsArr: string[] = Array.isArray(keywords) ? keywords : [];
+    // ── Service allowlist ─────────────────────────────────────────────────────
+    if (service && !VALID_SERVICES.includes(service)) {
+      return NextResponse.json({ error: "That service isn't something we offer. Please select a valid option." }, { status: 400 });
+    }
+    const serviceLabel = SERVICE_LABELS[service] ?? "General Enquiry";
+
+    // ── Arrays: cap item count and per-item length ────────────────────────────
+    const featureArr  = strArr(raw.features, 20, 80);
+    const lookFeelArr = strArr(raw.lookFeel, 10, 50);
+    const themesArr   = strArr(raw.themes, 10, 50);
+    const keywordsArr = strArr(raw.keywords, 20, 50);
 
     const makeTagList = (arr: string[]) => arr.length > 0
       ? arr.map((t) => `<span style="display:inline-block;margin:2px 3px;padding:3px 10px;border-radius:20px;font-size:11px;background:rgba(48,176,176,0.12);border:1px solid rgba(48,176,176,0.25);color:#30B0B0;">${escapeHtml(t)}</span>`).join("")
@@ -55,7 +84,7 @@ export async function POST(req: NextRequest) {
 
     
 
-    const proposedPlan = buildPlan(service as string, pkg ?? "");
+    const proposedPlan = buildPlan(service, pkg);
 
     function buildPlanHtml(): string {
       if (proposedPlan.length === 0) return "";
@@ -170,7 +199,7 @@ export async function POST(req: NextRequest) {
       from: "Swift Designz Quote System <noreply@swiftdesignz.co.za>",
       to: [notifyTo],
       replyTo: email,
-      subject: `New Quote Request — ${serviceLabel} — ${name}`,
+      subject: `New Quote Request — ${serviceLabel} — ${escapeHtml(name)}`,
       html: notifyHtml,
     });
     if (notifyError) {
@@ -179,7 +208,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Confirmation to client
-    const pkgLabel = getPackageLabel(service as string, pkg ?? "");
+    const pkgLabel = getPackageLabel(service, pkg);
     const { error: confirmError } = await resend.emails.send({
       from: "Swift Designz <noreply@swiftdesignz.co.za>",
       to: [email],
