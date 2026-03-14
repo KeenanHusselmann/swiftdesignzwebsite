@@ -183,9 +183,12 @@ export default function QuotePage() {
   const formRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
 
-  // Override browser scroll restoration — always start at top on load/refresh
+  // Disable browser scroll restoration so it can't fight us, then jump to top
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+    if (typeof window !== "undefined") {
+      history.scrollRestoration = "manual";
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" as ScrollBehavior });
+    }
   }, []);
   const [form, setForm] = useState<FormState>(INITIAL);
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
