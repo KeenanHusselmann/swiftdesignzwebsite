@@ -941,9 +941,9 @@ function SummaryRow({ label, value, highlight = false }: { label: string; value:
   if (!value) return null;
   return (
     <div className="flex items-start gap-3">
-      <span className="text-gray-500 uppercase text-[10px] tracking-wider w-20 flex-shrink-0 pt-0.5">{label}</span>
+      <span className="text-gray-500 uppercase text-[10px] tracking-wider w-14 flex-shrink-0 pt-0.5">{label}</span>
       {highlight ? (
-        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide break-all min-w-0" style={{ background: "rgba(48,176,176,0.15)", border: "1px solid rgba(48,176,176,0.35)", color: "#30B0B0" }}>{value}</span>
+        <span className="flex-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide break-all min-w-0" style={{ background: "rgba(48,176,176,0.15)", border: "1px solid rgba(48,176,176,0.35)", color: "#30B0B0" }}>{value}</span>
       ) : (
         <span className="text-sm text-white min-w-0 break-all">{value}</span>
       )}
