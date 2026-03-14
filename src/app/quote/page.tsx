@@ -207,8 +207,8 @@ export default function QuotePage() {
     return true;
   };
 
-  const next = () => { if (canNext()) setStep((s) => (s < 4 ? (s + 1) as 1 | 2 | 3 | 4 : s)); };
-  const back = () => setStep((s) => (s > 1 ? (s - 1) as 1 | 2 | 3 | 4 : s));
+  const next = () => { if (canNext()) { setStep((s) => (s < 4 ? (s + 1) as 1 | 2 | 3 | 4 : s)); window.scrollTo({ top: 0, behavior: "smooth" }); } };
+  const back = () => { setStep((s) => (s > 1 ? (s - 1) as 1 | 2 | 3 | 4 : s)); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
   const submit = async () => {
     setStatus("sending");
