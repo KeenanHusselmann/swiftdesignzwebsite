@@ -97,15 +97,8 @@ export async function POST(req: NextRequest) {
 
     const notifyEmail = process.env.QUOTE_NOTIFY_EMAIL ?? "info@swiftdesignz.co.za";
     const notifyFallback = process.env.QUOTE_NOTIFY_FALLBACK ?? "keenan.husselmann39@gmail.com";
-    const notifyRecipients = [...new Set([notifyEmail, notifyFallback])];
 
-    // Email to Keenan
-    await resend.emails.send({
-      from: "Swift Designz Quote System <noreply@swiftdesignz.co.za>",
-      to: notifyRecipients,
-      replyTo: email,
-      subject: `New Quote Request — ${serviceLabel} — ${name}`,
-      html: `
+    const notifyHtml = `
         <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:660px;margin:0 auto;background:#101010;color:#e0e0e0;padding:40px;border-radius:16px;border:1px solid rgba(48,176,176,0.2);">
           <div style="text-align:center;margin-bottom:32px;">
             <img src="https://swiftdesignz.co.za/images/logo.png" alt="Swift Designz" style="height:55px;width:auto;display:block;margin:0 auto 16px;" />
@@ -170,12 +163,36 @@ export async function POST(req: NextRequest) {
 
           ${source ? `<p style="color:#555;font-size:12px;text-align:center;border-top:1px solid rgba(255,255,255,0.05);padding-top:20px;margin:8px 0 0;">Found via: ${escapeHtml(source)}</p>` : ""}
         </div>
-      `,
+      `;
+
+    // Send to primary notify address — fail hard so the user sees an error if this breaks
+    const { error: notifyError } = await resend.emails.send({
+      from: "Swift Designz Quote System <noreply@swiftdesignz.co.za>",
+      to: [notifyFallback],
+      replyTo: email,
+      subject: `New Quote Request — ${serviceLabel} — ${name}`,
+      html: notifyHtml,
     });
+    if (notifyError) {
+      console.error("Quote notify send error:", notifyError);
+      throw new Error(notifyError.message ?? "Failed to send notification email");
+    }
+
+    // Also fire to info@ — best-effort, don't fail the whole request if it errors
+    if (notifyEmail !== notifyFallback) {
+      const { error: infoError } = await resend.emails.send({
+        from: "Swift Designz Quote System <noreply@swiftdesignz.co.za>",
+        to: [notifyEmail],
+        replyTo: email,
+        subject: `New Quote Request — ${serviceLabel} — ${name}`,
+        html: notifyHtml,
+      });
+      if (infoError) console.error("Quote info@ send error (non-fatal):", infoError);
+    }
 
     // Confirmation to client
     const pkgLabel = getPackageLabel(service as string, pkg ?? "");
-    await resend.emails.send({
+    const { error: confirmError } = await resend.emails.send({
       from: "Swift Designz <noreply@swiftdesignz.co.za>",
       to: [email],
       subject: `Your Quote Request — ${serviceLabel} — Swift Designz`,
@@ -287,6 +304,7 @@ export async function POST(req: NextRequest) {
         </div>
       `,
     });
+    if (confirmError) console.error("Quote client confirmation error (non-fatal):", confirmError);
 
     return NextResponse.json({ success: true });
   } catch (error) {
