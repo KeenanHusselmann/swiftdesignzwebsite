@@ -95,8 +95,10 @@ export async function POST(req: NextRequest) {
       `;
     }
 
+    // Both default to info@ which is known-working (forwards via IT-Guru).
+    // Override QUOTE_NOTIFY_EMAIL in env to change destination.
     const notifyEmail = process.env.QUOTE_NOTIFY_EMAIL ?? "info@swiftdesignz.co.za";
-    const notifyFallback = process.env.QUOTE_NOTIFY_FALLBACK ?? "keenan.husselmann39@gmail.com";
+    const notifyFallback = process.env.QUOTE_NOTIFY_FALLBACK ?? "info@swiftdesignz.co.za";
 
     const notifyHtml = `
         <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:660px;margin:0 auto;background:#101010;color:#e0e0e0;padding:40px;border-radius:16px;border:1px solid rgba(48,176,176,0.2);">

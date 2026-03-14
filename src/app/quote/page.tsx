@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { buildPlan, Phase } from "@/lib/quoteUtils";
 import {
@@ -180,6 +180,7 @@ const DESCRIPTION_PLACEHOLDER: Record<ServiceId, string> = {
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
 
 export default function QuotePage() {
+  const formRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
   const [form, setForm] = useState<FormState>(INITIAL);
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
@@ -207,8 +208,11 @@ export default function QuotePage() {
     return true;
   };
 
-  const next = () => { if (canNext()) { setStep((s) => (s < 4 ? (s + 1) as 1 | 2 | 3 | 4 : s)); window.scrollTo({ top: 0, behavior: "smooth" }); } };
-  const back = () => { setStep((s) => (s > 1 ? (s - 1) as 1 | 2 | 3 | 4 : s)); window.scrollTo({ top: 0, behavior: "smooth" }); };
+  const scrollToForm = () =>
+    formRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  const next = () => { if (canNext()) { setStep((s) => (s < 4 ? (s + 1) as 1 | 2 | 3 | 4 : s)); setTimeout(scrollToForm, 50); } };
+  const back = () => { setStep((s) => (s > 1 ? (s - 1) as 1 | 2 | 3 | 4 : s)); setTimeout(scrollToForm, 50); };
 
   const submit = async () => {
     setStatus("sending");
@@ -320,7 +324,7 @@ export default function QuotePage() {
         </div>
       </section>
 
-      <section className="section pt-4 pb-24">
+      <section className="section pt-4 pb-24" ref={formRef}>
         <div className="container">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
