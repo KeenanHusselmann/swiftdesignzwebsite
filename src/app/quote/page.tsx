@@ -734,7 +734,11 @@ export default function QuotePage() {
                   <CheckCircle size={20} className="text-[var(--swift-teal)] flex-shrink-0" />
                   <div>
                     <p className="text-white font-semibold text-sm">Quote Request Sent!</p>
-                    <p className="text-gray-400 text-xs mt-0.5 break-all">Confirmation sent to <span className="text-[var(--swift-teal)]">{form.email}</span> · We&apos;ll be in touch within 24 hours.</p>
+                    <p className="text-gray-400 text-xs mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                      <span>Confirmation sent to</span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide break-all" style={{ background: "rgba(48,176,176,0.15)", border: "1px solid rgba(48,176,176,0.35)", color: "#30B0B0" }}>{form.email}</span>
+                      <span>· We&apos;ll be in touch within 24 hours.</span>
+                    </p>
                   </div>
                 </div>
 
