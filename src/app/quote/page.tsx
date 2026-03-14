@@ -751,6 +751,45 @@ export default function QuotePage() {
 
                 {/* Quote Document */}
                 <div id="quote-preview" className="rounded-2xl overflow-hidden text-sm" style={{ background: "#fff", color: "#101010" }}>
+                  <style>{`
+                    @media (max-width: 560px) {
+                      #quote-preview .qrow td {
+                        display: block; width: 100% !important; white-space: normal !important;
+                        text-align: center; word-break: break-word; overflow-wrap: anywhere;
+                        padding: 3px 1rem; border-bottom: none;
+                      }
+                      #quote-preview .qrow td:first-child {
+                        font-size: 0.62rem; text-transform: uppercase; letter-spacing: 1.5px;
+                        color: #aaa; padding-top: 0.85rem; padding-bottom: 1px;
+                      }
+                      #quote-preview .qrow td:last-child {
+                        padding-bottom: 0.85rem; border-bottom: 1px solid #f0f0f0;
+                      }
+                      #quote-preview .svc-table thead { display: none; }
+                      #quote-preview .svc-table tr {
+                        display: block; padding: 0.75rem 0; border-bottom: 1px solid #e8e8e8;
+                      }
+                      #quote-preview .svc-table td {
+                        display: block; width: 100% !important; text-align: center;
+                        white-space: normal !important; word-break: break-word;
+                        overflow-wrap: anywhere; padding: 2px 1rem; border: none;
+                      }
+                      #quote-preview .svc-table td::before {
+                        content: attr(data-label); display: block;
+                        font-size: 0.62rem; text-transform: uppercase;
+                        letter-spacing: 1.5px; color: #aaa; margin-bottom: 2px;
+                      }
+                      #quote-preview .plan-table thead { display: none; }
+                      #quote-preview .plan-table tr {
+                        display: block; padding: 0.75rem 0; border-bottom: 1px solid #e0f0f0;
+                      }
+                      #quote-preview .plan-table td {
+                        display: block; width: 100% !important; text-align: center;
+                        white-space: normal !important; word-break: break-word;
+                        padding: 2px 1rem; border-bottom: none;
+                      }
+                    }
+                  `}</style>
                   {/* Header */}
                   <div style={{ background: "#101010", padding: "2rem 2.5rem", display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: "1rem" }}>
                     <div>
@@ -783,7 +822,7 @@ export default function QuotePage() {
 
                     {/* Service */}
                     <QuoteSection title="Service Requested" />
-                    <table style={{ width: "100%", marginBottom: "1.75rem", borderCollapse: "collapse", border: "1px solid #e8e8e8" }}>
+                    <table className="svc-table" style={{ width: "100%", marginBottom: "1.75rem", borderCollapse: "collapse", border: "1px solid #e8e8e8" }}>
                       <thead style={{ background: "#f5f5f5" }}>
                         <tr>
                           <th style={QTH}>Service</th>
@@ -793,14 +832,14 @@ export default function QuotePage() {
                       </thead>
                       <tbody>
                         <tr>
-                          <td style={QTD}>{SERVICES.find(s => s.id === form.service)?.label ?? form.service}</td>
-                          <td style={QTD}>
+                          <td data-label="Service" style={QTD}>{SERVICES.find(s => s.id === form.service)?.label ?? form.service}</td>
+                          <td data-label="Package" style={QTD}>
                             <strong>{PACKAGES[form.service as ServiceId]?.find(p => p.id === form.package)?.label ?? form.package}</strong>
                             <div style={{ fontSize: "0.75rem", color: "#666", marginTop: "2px" }}>
                               {PACKAGES[form.service as ServiceId]?.find(p => p.id === form.package)?.desc}
                             </div>
                           </td>
-                          <td style={{ ...QTD, textAlign: "right", fontWeight: 700, color: "#30B0B0", whiteSpace: "nowrap", fontSize: "1rem" }}>
+                          <td data-label="Starting Price" style={{ ...QTD, textAlign: "right", fontWeight: 700, color: "#30B0B0", whiteSpace: "nowrap", fontSize: "1rem" }}>
                             {PACKAGES[form.service as ServiceId]?.find(p => p.id === form.package)?.price || "Custom"}
                           </td>
                         </tr>
@@ -885,7 +924,7 @@ export default function QuotePage() {
                           <p style={{ fontSize: "0.72rem", color: "#777", marginBottom: "0.9rem", lineHeight: "1.6" }}>
                             Based on your selection, here is a suggested project roadmap. Timelines are estimates and will be confirmed during our initial consultation.
                           </p>
-                          <table style={{ width: "100%", borderCollapse: "collapse", marginBottom: "1rem", border: "1px solid #e0f0f0" }}>
+                          <table className="plan-table" style={{ width: "100%", borderCollapse: "collapse", marginBottom: "1rem", border: "1px solid #e0f0f0" }}>
                             <thead style={{ background: "#f0fafa" }}>
                               <tr>
                                 <th style={{ ...QTH, width: "32px", textAlign: "center" }}>#</th>
@@ -990,7 +1029,7 @@ function QuoteSection({ title }: { title: string }) {
 
 function QuoteRow({ label, value }: { label: string; value: string }) {
   return (
-    <tr>
+    <tr className="qrow">
       <td style={{ ...QTD, color: "#888", fontSize: "0.75rem", width: "130px", whiteSpace: "nowrap" }}>{label}</td>
       <td style={QTD}>{value}</td>
     </tr>
