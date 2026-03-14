@@ -96,11 +96,13 @@ export async function POST(req: NextRequest) {
     }
 
     const notifyEmail = process.env.QUOTE_NOTIFY_EMAIL ?? "info@swiftdesignz.co.za";
+    const notifyFallback = process.env.QUOTE_NOTIFY_FALLBACK ?? "keenan.husselmann39@gmail.com";
+    const notifyRecipients = [...new Set([notifyEmail, notifyFallback])];
 
     // Email to Keenan
     await resend.emails.send({
       from: "Swift Designz Quote System <noreply@swiftdesignz.co.za>",
-      to: [notifyEmail],
+      to: notifyRecipients,
       replyTo: email,
       subject: `New Quote Request — ${serviceLabel} — ${name}`,
       html: `
