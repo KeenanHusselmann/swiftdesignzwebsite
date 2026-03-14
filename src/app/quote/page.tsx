@@ -929,7 +929,13 @@ export default function QuotePage() {
                 {/* Actions */}
                 <div className="no-print flex flex-wrap gap-3 mt-6">
                   <button
-                    onClick={() => { setStatus("idle"); setStep(1); setForm(INITIAL); setQuoteRef(""); }}
+                    onClick={() => {
+                      setStatus("idle");
+                      setStep(1);
+                      setForm(INITIAL);
+                      setQuoteRef("");
+                      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+                    }}
                     className="neon-btn-filled neon-btn flex items-center gap-2 text-sm px-5 py-2.5"
                   >
                     New Quote
