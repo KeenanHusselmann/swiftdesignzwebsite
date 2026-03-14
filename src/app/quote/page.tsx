@@ -734,7 +734,7 @@ export default function QuotePage() {
                   <CheckCircle size={20} className="text-[var(--swift-teal)] flex-shrink-0" />
                   <div>
                     <p className="text-white font-semibold text-sm">Quote Request Sent!</p>
-                    <p className="text-gray-400 text-xs mt-0.5">Confirmation sent to <span className="text-[var(--swift-teal)]">{form.email}</span> · We&apos;ll be in touch within 24 hours.</p>
+                    <p className="text-gray-400 text-xs mt-0.5 break-all">Confirmation sent to <span className="text-[var(--swift-teal)]">{form.email}</span> · We&apos;ll be in touch within 24 hours.</p>
                   </div>
                 </div>
 
@@ -938,7 +938,7 @@ function SummaryRow({ label, value, highlight = false }: { label: string; value:
   return (
     <div className="flex gap-3">
       <span className="text-gray-500 uppercase text-[10px] tracking-wider w-20 flex-shrink-0 pt-0.5">{label}</span>
-      <span className={"text-sm capitalize " + (highlight ? "text-[var(--swift-teal)]" : "text-white")}>{value}</span>
+      <span className={"text-sm min-w-0 break-all " + (highlight ? "text-[var(--swift-teal)]" : "text-white")}>{value}</span>
     </div>
   );
 }
@@ -953,6 +953,7 @@ const QTH: React.CSSProperties = {
 
 const QTD: React.CSSProperties = {
   padding: "0.75rem 0.9rem", verticalAlign: "top", borderBottom: "1px solid #f0f0f0", color: "#222",
+  wordBreak: "break-all", overflowWrap: "anywhere",
 };
 
 function QuoteSection({ title }: { title: string }) {
