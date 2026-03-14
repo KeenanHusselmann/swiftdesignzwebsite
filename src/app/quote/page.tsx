@@ -227,7 +227,7 @@ export default function QuotePage() {
       setQuoteRef(`SD-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`);
     } catch (err) {
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Something went wrong. Try again.");
+      setErrorMsg(err instanceof Error ? err.message : "Something went sideways on our end. Give it another shot!");
     }
   };
 
@@ -660,9 +660,39 @@ export default function QuotePage() {
                           )}
                         </button>
                         {status === "error" && (
-                          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-2 p-4 mt-4 rounded-lg" style={{ background: "rgba(255,100,100,0.08)", border: "1px solid rgba(255,100,100,0.2)" }}>
-                            <AlertCircle size={18} color="#ff6464" />
-                            <p className="text-sm text-[#ff6464]">{errorMsg}</p>
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mt-4 rounded-xl p-4"
+                            style={{
+                              background: "rgba(20,8,8,0.72)",
+                              border: "1px solid rgba(255,80,80,0.22)",
+                              backdropFilter: "blur(12px)",
+                            }}
+                          >
+                            <div className="flex items-start gap-3">
+                              <div
+                                style={{
+                                  flexShrink: 0,
+                                  marginTop: 1,
+                                  width: 32,
+                                  height: 32,
+                                  borderRadius: "50%",
+                                  background: "rgba(255,80,80,0.1)",
+                                  border: "1px solid rgba(255,80,80,0.2)",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  justifyContent: "center",
+                                }}
+                              >
+                                <AlertCircle size={15} color="#ff6464" />
+                              </div>
+                              <div>
+                                <p className="text-sm font-medium mb-0.5" style={{ color: "#ff7070" }}>Oops — something went wrong</p>
+                                <p className="text-xs leading-relaxed" style={{ color: "#aa6060" }}>{errorMsg}</p>
+                                <p className="text-xs mt-1.5" style={{ color: "#554444" }}>Check your details and try again. If it keeps happening, <a href="/contact" style={{ color: "#30B0B0", textDecoration: "none" }}>drop us a message</a> instead.</p>
+                              </div>
+                            </div>
                           </motion.div>
                         )}
                       </motion.div>

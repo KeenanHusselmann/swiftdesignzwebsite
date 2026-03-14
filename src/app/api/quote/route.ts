@@ -33,10 +33,10 @@ export async function POST(req: NextRequest) {
     } = body;
 
     if (!name || !email) {
-      return NextResponse.json({ error: "Name and email are required." }, { status: 400 });
+      return NextResponse.json({ error: "Your name and email are the bare minimum — we promise we won't spam you." }, { status: 400 });
     }
     if (!EMAIL_REGEX.test(email)) {
-      return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
+      return NextResponse.json({ error: "That email doesn't look quite right. Is it hiding something? (A typo, we mean.)" }, { status: 400 });
     }
 
     const serviceLabel = SERVICE_LABELS[service] ?? service ?? "Unknown";
@@ -310,7 +310,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Quote form error:", error);
     return NextResponse.json(
-      { error: "Failed to send quote request. Please try again later." },
+      { error: "Our quote robot tripped over a cable. Give it another shot — it should be fine now!" },
       { status: 500 }
     );
   }

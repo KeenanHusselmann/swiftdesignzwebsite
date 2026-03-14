@@ -53,7 +53,7 @@ function ContactForm() {
       setFormState({ name: "", email: "", message: "" });
     } catch (err) {
       setStatus("error");
-      setErrorMessage(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+      setErrorMessage(err instanceof Error ? err.message : "Something went sideways on our end. Please try again.");
     }
   };
 
@@ -335,11 +335,36 @@ function ContactForm() {
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="flex items-center gap-2 p-4 rounded-lg"
-                      style={{ background: "rgba(255,100,100,0.08)", border: "1px solid rgba(255,100,100,0.2)" }}
+                      className="rounded-xl p-4"
+                      style={{
+                        background: "rgba(20,8,8,0.72)",
+                        border: "1px solid rgba(255,80,80,0.22)",
+                        backdropFilter: "blur(12px)",
+                      }}
                     >
-                      <AlertCircle size={18} color="#ff6464" />
-                      <p className="text-sm text-[#ff6464]">{errorMessage}</p>
+                      <div className="flex items-start gap-3">
+                        <div
+                          style={{
+                            flexShrink: 0,
+                            marginTop: 1,
+                            width: 32,
+                            height: 32,
+                            borderRadius: "50%",
+                            background: "rgba(255,80,80,0.1)",
+                            border: "1px solid rgba(255,80,80,0.2)",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                          }}
+                        >
+                          <AlertCircle size={15} color="#ff6464" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium mb-0.5" style={{ color: "#ff7070" }}>Oops — something went wrong</p>
+                          <p className="text-xs leading-relaxed" style={{ color: "#aa6060" }}>{errorMessage}</p>
+                          <p className="text-xs mt-1.5" style={{ color: "#554444" }}>Double-check your details and try again. Still stuck? <a href="/contact" style={{ color: "#30B0B0", textDecoration: "none" }}>Open a direct inquiry</a>.</p>
+                        </div>
+                      </div>
                     </motion.div>
                   )}
                 </form>

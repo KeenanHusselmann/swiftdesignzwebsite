@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     // Validate required fields
     if (!name || !email || !message) {
       return NextResponse.json(
-        { error: "Name, email, and message are required." },
+        { error: "We need your name, email, and message — otherwise we'd just be staring at a blank form." },
         { status: 400 }
       );
     }
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       return NextResponse.json(
-        { error: "Please provide a valid email address." },
+        { error: "That email address doesn't look quite right. Typo, perhaps?" },
         { status: 400 }
       );
     }
@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Contact form error:", error);
     return NextResponse.json(
-      { error: "Failed to send message. Please try again later." },
+      { error: "Our messenger hit a bump on the way out. Take a breath and try again in a moment!" },
       { status: 500 }
     );
   }
