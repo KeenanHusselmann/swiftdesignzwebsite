@@ -13,6 +13,7 @@ import {
   Sparkles,
   Bot,
 } from "lucide-react";
+import { useI18n } from "@/i18n/I18nProvider";
 
 const LINKS = [
   {
@@ -82,6 +83,7 @@ const item = {
 };
 
 export default function LinksPage() {
+  const { t } = useI18n();
   return (
     <div className="links-page">
       {/* ── Background ── */}
@@ -112,7 +114,7 @@ export default function LinksPage() {
           </div>
           <h1 className="links-name">Swift Designz</h1>
           <p className="links-tagline">
-            Where ideas become digital reality.
+            {t("linksPage.tagline")}
           </p>
           <span className="links-handle">@swiftdesignz101</span>
         </motion.div>

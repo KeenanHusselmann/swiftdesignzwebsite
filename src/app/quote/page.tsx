@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { buildPlan, Phase } from "@/lib/quoteUtils";
+import { useI18n } from "@/i18n/I18nProvider";
 import {
   Send, CheckCircle, AlertCircle, ChevronRight, ChevronLeft,
   Globe, ShoppingCart, Smartphone, Cpu, LayoutList, PenLine,
@@ -142,10 +143,10 @@ const SOURCE_OPTIONS = [
 export type { Phase };
 
 const STEPS = [
-  { id: 1, label: "Contact Info" },
-  { id: 2, label: "Service & Package" },
-  { id: 3, label: "Project Details" },
-  { id: 4, label: "Review & Submit" },
+  { id: 1, key: "step1Label" },
+  { id: 2, key: "step2Label" },
+  { id: 3, key: "step3Label" },
+  { id: 4, key: "step4Label" },
 ];
 
 // ─── TYPES ───────────────────────────────────────────────────────────────────
@@ -179,6 +180,7 @@ const DESCRIPTION_PLACEHOLDER: Record<ServiceId, string> = {
 // ─── COMPONENT ───────────────────────────────────────────────────────────────
 
 export default function QuotePage() {
+  const { t } = useI18n();
   const formRef = useRef<HTMLDivElement>(null);
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1);
 
@@ -279,9 +281,9 @@ export default function QuotePage() {
           <PenLine size={16} />
         </motion.div>
         <div>
-          <p className="text-xs font-semibold mb-1" style={{ color: "#fbbf24" }}>Quick &amp; easy</p>
+          <p className="text-xs font-semibold mb-1" style={{ color: "#fbbf24" }}>{t("quotePage.noticeTitle")}</p>
           <p className="text-[11px] leading-relaxed" style={{ color: "rgba(253,230,138,0.65)" }}>
-            4 simple steps, under 2 minutes. So straightforward, even my gran nailed it.
+            {t("quotePage.noticeBody")}
           </p>
         </div>
       </motion.div>
@@ -326,13 +328,12 @@ export default function QuotePage() {
                 style={{ filter: "drop-shadow(0 0 12px rgba(48,176,176,0.4)) drop-shadow(0 0 24px rgba(48,176,176,0.2))" }}
               />
             </motion.div>
-            <span className="text-xs tracking-[4px] uppercase" style={{ color: "#f59e0b" }}>Get a Quote</span>
+            <span className="text-xs tracking-[4px] uppercase" style={{ color: "#f59e0b" }}>{t("quotePage.eyebrow")}</span>
             <h1 className="text-4xl md:text-6xl font-bold mt-4 mb-6">
-              Let&apos;s Build <span style={{ background: "linear-gradient(135deg, #f59e0b, #fbbf24, #f97316)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>Something</span>
+              {t("quotePage.title")} <span style={{ background: "linear-gradient(135deg, #f59e0b, #fbbf24, #f97316)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text" }}>{t("quotePage.titleHighlight")}</span>
             </h1>
             <p className="text-lg text-gray-400 leading-relaxed">
-              Fill in the form below and we&apos;ll put together a tailored proposal.
-              No obligations, just a conversation about what&apos;s possible.
+              {t("quotePage.desc")}
             </p>
           </motion.div>
         </div>
@@ -362,7 +363,7 @@ export default function QuotePage() {
                       {step > s.id ? <CheckCircle size={14} /> : s.id}
                     </div>
                     <span className={"text-[10px] mt-1.5 uppercase tracking-wider hidden sm:block " + (step === s.id ? "text-[var(--swift-teal)]" : "text-gray-600")}>
-                      {s.label}
+                      {t(`quotePage.${s.key}`)}
                     </span>
                   </div>
                   {i < STEPS.length - 1 && (
@@ -390,28 +391,28 @@ export default function QuotePage() {
 
                     {step === 1 && (
                       <motion.div key="step1" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }}>
-                        <h2 className="text-xl font-bold mb-1 text-white">Your Contact Details</h2>
-                        <p className="text-sm text-gray-500 mb-6">So we know who to send the proposal to.</p>
+                        <h2 className="text-xl font-bold mb-1 text-white">{t("quotePage.step1Title")}</h2>
+                        <p className="text-sm text-gray-500 mb-6">{t("quotePage.step1Sub")}</p>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                           <div>
-                            <label className={labelCls}>Full Name *</label>
-                            <input type="text" required placeholder="Your full name" value={form.name} onChange={(e) => set("name", e.target.value)} className={inputCls} style={inputStyle} />
+                            <label className={labelCls}>{t("quotePage.labelName")}</label>
+                            <input type="text" required placeholder={t("quotePage.phName")} value={form.name} onChange={(e) => set("name", e.target.value)} className={inputCls} style={inputStyle} />
                           </div>
                           <div>
-                            <label className={labelCls}>Email Address *</label>
+                            <label className={labelCls}>{t("quotePage.labelEmail")}</label>
                             <input type="email" required placeholder="your@email.com" value={form.email} onChange={(e) => set("email", e.target.value)} className={inputCls} style={inputStyle} />
                           </div>
                           <div>
-                            <label className={labelCls}>Phone Number</label>
+                            <label className={labelCls}>{t("quotePage.labelPhone")}</label>
                             <input type="tel" placeholder="+" value={form.phone} onChange={(e) => set("phone", e.target.value)} className={inputCls} style={inputStyle} />
                           </div>
                           <div>
-                            <label className={labelCls}>Company / Organisation</label>
-                            <input type="text" placeholder="If applicable" value={form.company} onChange={(e) => set("company", e.target.value)} className={inputCls} style={inputStyle} />
+                            <label className={labelCls}>{t("quotePage.labelCompany")}</label>
+                            <input type="text" placeholder={t("quotePage.phCompany")} value={form.company} onChange={(e) => set("company", e.target.value)} className={inputCls} style={inputStyle} />
                           </div>
                           <div className="md:col-span-2">
-                            <label className={labelCls}>City / Location</label>
-                            <input type="text" placeholder="e.g. Cape Town, South Africa" value={form.location} onChange={(e) => set("location", e.target.value)} className={inputCls} style={inputStyle} />
+                            <label className={labelCls}>{t("quotePage.labelLocation")}</label>
+                            <input type="text" placeholder={t("quotePage.phLocation")} value={form.location} onChange={(e) => set("location", e.target.value)} className={inputCls} style={inputStyle} />
                           </div>
                         </div>
                       </motion.div>
@@ -419,9 +420,9 @@ export default function QuotePage() {
 
                     {step === 2 && (
                       <motion.div key="step2" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }}>
-                        <h2 className="text-xl font-bold mb-1 text-white">What Are You Looking For?</h2>
-                        <p className="text-sm text-gray-500 mb-6">Select a service, then choose your preferred package.</p>
-                        <label className={labelCls}>Service Type *</label>
+                        <h2 className="text-xl font-bold mb-1 text-white">{t("quotePage.step2Title")}</h2>
+                        <p className="text-sm text-gray-500 mb-6">{t("quotePage.step2Sub")}</p>
+                        <label className={labelCls}>{t("quotePage.labelService")}</label>
                         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
                           {SERVICES.map(({ id, label, Icon, desc }) => (
                             <button
@@ -442,7 +443,7 @@ export default function QuotePage() {
                         <AnimatePresence>
                           {currentService && (
                             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                              <label className={labelCls}>Package *</label>
+                              <label className={labelCls}>{t("quotePage.labelPackage")}</label>
                               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                 {PACKAGES[currentService].map((pkg) => (
                                   <button
@@ -470,25 +471,25 @@ export default function QuotePage() {
 
                     {step === 3 && (
                       <motion.div key="step3" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }}>
-                        <h2 className="text-xl font-bold mb-1 text-white">Tell Us About Your Project</h2>
-                        <p className="text-sm text-gray-500 mb-6">The more detail you give us, the more tailored the proposal.</p>
+                        <h2 className="text-xl font-bold mb-1 text-white">{t("quotePage.step3Title")}</h2>
+                        <p className="text-sm text-gray-500 mb-6">{t("quotePage.step3Sub")}</p>
                         <div className="mb-5">
-                          <label className={labelCls}>Project Description *</label>
+                          <label className={labelCls}>{t("quotePage.labelScope")}</label>
                           <textarea
                             rows={4}
-                            placeholder={currentService ? DESCRIPTION_PLACEHOLDER[currentService] : "Describe your project or requirements..."}
+                            placeholder={currentService ? DESCRIPTION_PLACEHOLDER[currentService] : t("quotePage.phNotes")}
                             value={form.scope}
                             onChange={(e) => set("scope", e.target.value)}
                             className={inputCls + " resize-none"}
                             style={inputStyle}
                           />
                           {form.scope.trim().length > 0 && form.scope.trim().length < 10 && (
-                            <p className="text-xs text-amber-500 mt-1.5">Please give us a bit more detail.</p>
+                            <p className="text-xs text-amber-500 mt-1.5">{t("quotePage.validShort")}</p>
                           )}
                         </div>
                         {currentService && (
                           <div className="mb-5">
-                            <label className={labelCls}>Features / Requirements (select all that apply)</label>
+                            <label className={labelCls}>{t("quotePage.labelFeatures")}</label>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                               {FEATURES[currentService].map((f) => (
                                 <button
@@ -512,7 +513,7 @@ export default function QuotePage() {
                         {["website", "ecommerce", "app"].includes(form.service) && (
                           <>
                             <div className="mb-5">
-                              <label className={labelCls}>Look &amp; Feel (select all that apply)</label>
+                              <label className={labelCls}>{t("quotePage.labelLookFeel")}</label>
                               <div className="flex flex-wrap gap-2">
                                 {LOOK_AND_FEEL.map((f) => (
                                   <button key={f} type="button" onClick={() => toggleLookFeel(f)}
@@ -525,7 +526,7 @@ export default function QuotePage() {
                               </div>
                             </div>
                             <div className="mb-5">
-                              <label className={labelCls}>Colour Theme (select all that apply)</label>
+                              <label className={labelCls}>{t("quotePage.labelTheme")}</label>
                               <div className="flex flex-wrap gap-2">
                                 {THEMES.map((f) => (
                                   <button key={f} type="button" onClick={() => toggleTheme(f)}
@@ -538,7 +539,7 @@ export default function QuotePage() {
                               </div>
                             </div>
                             <div className="mb-5">
-                              <label className={labelCls}>Words That Describe Your Brand / Site Vibe</label>
+                              <label className={labelCls}>{t("quotePage.labelVibe")}</label>
                               <div className="flex flex-wrap gap-2">
                                 {VIBE_KEYWORDS.map((f) => (
                                   <button key={f} type="button" onClick={() => toggleKeyword(f)}
@@ -554,9 +555,9 @@ export default function QuotePage() {
                         )}
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                           <div>
-                            <label className={labelCls}>Desired Timeline</label>
+                            <label className={labelCls}>{t("quotePage.labelTimeline")}</label>
                             <select value={form.timeline} onChange={(e) => set("timeline", e.target.value)} className={inputCls + " appearance-none cursor-pointer"} style={inputStyle}>
-                              <option value="" style={{ background: "#101010" }}>Select a timeline</option>
+                              <option value="" style={{ background: "#101010" }}>{t("quotePage.phTimeline")}</option>
                               {TIMELINE_OPTIONS.map((o) => <option key={o} value={o} style={{ background: "#101010" }}>{o}</option>)}
                             </select>
                           </div>
@@ -564,25 +565,25 @@ export default function QuotePage() {
                           {["website", "ecommerce", "app"].includes(form.service) ? (
                             <>
                               <div>
-                                <label className={labelCls}>Do You Have Content Ready?</label>
+                                <label className={labelCls}>{t("quotePage.labelContent")}</label>
                                 <select value={form.contentReady} onChange={(e) => set("contentReady", e.target.value)} className={inputCls + " appearance-none cursor-pointer"} style={inputStyle}>
-                                  <option value="" style={{ background: "#101010" }}>Select an option</option>
+                                  <option value="" style={{ background: "#101010" }}>{t("quotePage.phOption")}</option>
                                   <option value="Yes - ready to go" style={{ background: "#101010" }}>Yes - ready to go</option>
                                   <option value="Partially ready" style={{ background: "#101010" }}>Partially ready</option>
                                   <option value="No - will need help" style={{ background: "#101010" }}>No - will need help with content</option>
                                 </select>
                               </div>
                               <div className="md:col-span-2">
-                                <label className={labelCls}>Reference / Inspiration Websites (optional)</label>
-                                <input type="text" placeholder="e.g. https://example.com, https://another.com" value={form.referenceUrls} onChange={(e) => set("referenceUrls", e.target.value)} className={inputCls} style={inputStyle} />
+                                <label className={labelCls}>{t("quotePage.labelRef")}</label>
+                                <input type="text" placeholder={t("quotePage.phRef")} value={form.referenceUrls} onChange={(e) => set("referenceUrls", e.target.value)} className={inputCls} style={inputStyle} />
                               </div>
                             </>
                           ) : ["ai-training", "pm-training"].includes(form.service) ? (
                             <>
                               <div>
-                                <label className={labelCls}>Number of Attendees</label>
+                                <label className={labelCls}>{t("quotePage.labelAttendees")}</label>
                                 <select value={form.attendees} onChange={(e) => set("attendees", e.target.value)} className={inputCls + " appearance-none cursor-pointer"} style={inputStyle}>
-                                  <option value="" style={{ background: "#101010" }}>Select a range</option>
+                                  <option value="" style={{ background: "#101010" }}>{t("quotePage.phRange")}</option>
                                   <option value="Just me (1)" style={{ background: "#101010" }}>Just me (1)</option>
                                   <option value="2 to 5 people" style={{ background: "#101010" }}>2 to 5 people</option>
                                   <option value="6 to 15 people" style={{ background: "#101010" }}>6 to 15 people</option>
@@ -591,9 +592,9 @@ export default function QuotePage() {
                                 </select>
                               </div>
                               <div className="md:col-span-2">
-                                <label className={labelCls}>Current Experience Level</label>
+                                <label className={labelCls}>{t("quotePage.labelExpLevel")}</label>
                                 <select value={form.experienceLevel} onChange={(e) => set("experienceLevel", e.target.value)} className={inputCls + " appearance-none cursor-pointer"} style={inputStyle}>
-                                  <option value="" style={{ background: "#101010" }}>Select a level</option>
+                                  <option value="" style={{ background: "#101010" }}>{t("quotePage.phLevel")}</option>
                                   <option value="Complete beginner" style={{ background: "#101010" }}>Complete beginner</option>
                                   <option value="Some awareness" style={{ background: "#101010" }}>Some awareness — heard of it, not used it</option>
                                   <option value="Occasional user" style={{ background: "#101010" }}>Occasional user — tried it a few times</option>
@@ -609,49 +610,49 @@ export default function QuotePage() {
 
                     {step === 4 && (
                       <motion.div key="step4" initial={{ opacity: 0, x: 30 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -30 }} transition={{ duration: 0.25 }}>
-                        <h2 className="text-xl font-bold mb-1 text-white">Review &amp; Submit</h2>
-                        <p className="text-sm text-gray-500 mb-6">Double-check your details, then send your request.</p>
+                        <h2 className="text-xl font-bold mb-1 text-white">{t("quotePage.step4Title")}</h2>
+                        <p className="text-sm text-gray-500 mb-6">{t("quotePage.step4Sub")}</p>
                         <div className="rounded-xl p-5 mb-6 space-y-2 text-sm" style={{ background: "rgba(48,176,176,0.04)", border: "1px solid rgba(48,176,176,0.12)" }}>
-                          <SummaryRow label="Name" value={form.name} />
-                          <SummaryRow label="Email" value={form.email} highlight />
-                          {form.phone && <SummaryRow label="Phone" value={form.phone} />}
-                          {form.company && <SummaryRow label="Company" value={form.company} />}
-                          {form.location && <SummaryRow label="Location" value={form.location} />}
+                          <SummaryRow label={t("quotePage.summaryName")} value={form.name} />
+                          <SummaryRow label={t("quotePage.summaryEmail")} value={form.email} highlight />
+                          {form.phone && <SummaryRow label={t("quotePage.summaryPhone")} value={form.phone} />}
+                          {form.company && <SummaryRow label={t("quotePage.summaryCompany")} value={form.company} />}
+                          {form.location && <SummaryRow label={t("quotePage.summaryLocation")} value={form.location} />}
                           <div className="border-t border-white/5 pt-2 mt-2">
-                            <SummaryRow label="Service" value={SERVICES.find((s) => s.id === form.service)?.label ?? ""} />
-                            <SummaryRow label="Package" value={form.package} chip />
+                            <SummaryRow label={t("quotePage.summaryService")} value={SERVICES.find((s) => s.id === form.service)?.label ?? ""} />
+                            <SummaryRow label={t("quotePage.summaryPackage")} value={form.package} chip />
                           </div>
                           {form.features.length > 0 && (
                             <div className="border-t border-white/5 pt-2 mt-2">
-                              <span className="text-gray-500 uppercase text-[10px] tracking-wider">Features requested</span>
+                              <span className="text-gray-500 uppercase text-[10px] tracking-wider">{t("quotePage.summaryFeatures")}</span>
                               <p className="text-[var(--swift-teal)] text-xs mt-1 leading-relaxed">{form.features.join(" · ")}</p>
                             </div>
                           )}
-                          {form.timeline && <SummaryRow label="Timeline" value={form.timeline} />}
-                          {form.contentReady && <SummaryRow label="Content" value={form.contentReady} />}
+                          {form.timeline && <SummaryRow label={t("quotePage.summaryTimeline")} value={form.timeline} />}
+                          {form.contentReady && <SummaryRow label={t("quotePage.summaryContent")} value={form.contentReady} />}
                           {form.lookFeel.length > 0 && (
                             <div className="border-t border-white/5 pt-2 mt-2">
-                              <span className="text-gray-500 uppercase text-[10px] tracking-wider">Look &amp; feel</span>
+                              <span className="text-gray-500 uppercase text-[10px] tracking-wider">{t("quotePage.summaryLookFeel")}</span>
                               <p className="text-[var(--swift-teal)] text-xs mt-1 leading-relaxed">{form.lookFeel.join(" · ")}</p>
                             </div>
                           )}
                           {form.themes.length > 0 && (
                             <div className="border-t border-white/5 pt-2 mt-2">
-                              <span className="text-gray-500 uppercase text-[10px] tracking-wider">Theme</span>
+                              <span className="text-gray-500 uppercase text-[10px] tracking-wider">{t("quotePage.summaryTheme")}</span>
                               <p className="text-[var(--swift-teal)] text-xs mt-1 leading-relaxed">{form.themes.join(" · ")}</p>
                             </div>
                           )}
                           {form.keywords.length > 0 && (
                             <div className="border-t border-white/5 pt-2 mt-2">
-                              <span className="text-gray-500 uppercase text-[10px] tracking-wider">Vibe keywords</span>
+                              <span className="text-gray-500 uppercase text-[10px] tracking-wider">{t("quotePage.summaryVibe")}</span>
                               <p className="text-[var(--swift-teal)] text-xs mt-1 leading-relaxed">{form.keywords.join(" · ")}</p>
                             </div>
                           )}
                         </div>
                         <div className="mb-5">
-                          <label className={labelCls}>Your Budget Range (optional)</label>
+                          <label className={labelCls}>{t("quotePage.labelBudget")}</label>
                           <select value={form.budget} onChange={(e) => set("budget", e.target.value)} className={inputCls + " appearance-none cursor-pointer"} style={inputStyle}>
-                            <option value="" style={{ background: "#101010" }}>Select a range (or leave blank)</option>
+                            <option value="" style={{ background: "#101010" }}>{t("quotePage.phBudget")}</option>
                             <option value="R2,500 to R5,000" style={{ background: "#101010" }}>R2,500 to R5,000</option>
                             <option value="R5,000 to R10,000" style={{ background: "#101010" }}>R5,000 to R10,000</option>
                             <option value="R10,000 to R25,000" style={{ background: "#101010" }}>R10,000 to R25,000</option>
@@ -660,11 +661,11 @@ export default function QuotePage() {
                           </select>
                         </div>
                         <div className="mb-5">
-                          <label className={labelCls}>Anything Else to Add? (optional)</label>
-                          <textarea rows={3} placeholder="Any other details, questions, or context..." value={form.notes} onChange={(e) => set("notes", e.target.value)} className={inputCls + " resize-none"} style={inputStyle} />
+                          <label className={labelCls}>{t("quotePage.labelNotes")}</label>
+                          <textarea rows={3} placeholder={t("quotePage.phNotes")} value={form.notes} onChange={(e) => set("notes", e.target.value)} className={inputCls + " resize-none"} style={inputStyle} />
                         </div>
                         <div className="mb-7">
-                          <label className={labelCls}>How Did You Hear About Us?</label>
+                          <label className={labelCls}>{t("quotePage.labelSource")}</label>
                           <select value={form.source} onChange={(e) => set("source", e.target.value)} className={inputCls + " appearance-none cursor-pointer"} style={inputStyle}>
                             <option value="" style={{ background: "#101010" }}>Select an option</option>
                             {SOURCE_OPTIONS.map((o) => <option key={o} value={o} style={{ background: "#101010" }}>{o}</option>)}
@@ -672,9 +673,9 @@ export default function QuotePage() {
                         </div>
                         <button type="button" onClick={submit} disabled={status === "sending"} className="neon-btn-filled neon-btn w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden">
                           {status === "sending" ? (
-                            <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Sending...</>
+                            <><div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> {t("quotePage.btnSending")}</>
                           ) : (
-                            <><Send size={16} /> Submit Quote Request</>
+                            <><Send size={16} /> {t("quotePage.btnSubmit")}</>
                           )}
                         </button>
                         {status === "error" && (
@@ -706,9 +707,9 @@ export default function QuotePage() {
                                 <AlertCircle size={15} color="#ff6464" />
                               </div>
                               <div>
-                                <p className="text-sm font-medium mb-0.5" style={{ color: "#ff7070" }}>Oops — something went wrong</p>
+                                <p className="text-sm font-medium mb-0.5" style={{ color: "#ff7070" }}>{t("quotePage.errTitle")}</p>
                                 <p className="text-xs leading-relaxed" style={{ color: "#aa6060" }}>{errorMsg}</p>
-                                <p className="text-xs mt-1.5" style={{ color: "#554444" }}>Check your details and try again. If it keeps happening, <a href="/contact" style={{ color: "#30B0B0", textDecoration: "none" }}>drop us a message</a> instead.</p>
+                                <p className="text-xs mt-1.5" style={{ color: "#554444" }}>{t("quotePage.errRetry")} <a href="/contact" style={{ color: "#30B0B0", textDecoration: "none" }}>{t("quotePage.errContact")}</a> {t("quotePage.errSuffix")}</p>
                               </div>
                             </div>
                           </motion.div>
@@ -720,12 +721,12 @@ export default function QuotePage() {
                   <div className={"flex mt-8 " + (step > 1 ? "justify-between" : "justify-end")}>
                     {step > 1 && (
                       <button type="button" onClick={back} className="neon-btn flex items-center gap-2 text-sm px-5 py-2.5">
-                        <ChevronLeft size={16} /> Back
+                        <ChevronLeft size={16} /> {t("quotePage.btnBack")}
                       </button>
                     )}
                     {step < 4 && (
                       <button type="button" onClick={next} disabled={!canNext()} className="neon-btn-filled neon-btn flex items-center gap-2 text-sm px-5 py-2.5 disabled:opacity-40 disabled:cursor-not-allowed">
-                        Next <ChevronRight size={16} />
+                        {t("quotePage.btnNext")} <ChevronRight size={16} />
                       </button>
                     )}
                   </div>
@@ -739,11 +740,11 @@ export default function QuotePage() {
                 <div className="no-print flex items-center gap-3 mb-6 p-4 rounded-xl" style={{ background: "rgba(48,176,176,0.08)", border: "1px solid rgba(48,176,176,0.25)" }}>
                   <CheckCircle size={20} className="text-[var(--swift-teal)] flex-shrink-0" />
                   <div>
-                    <p className="text-white font-semibold text-sm">Quote Request Sent!</p>
+                    <p className="text-white font-semibold text-sm">{t("quotePage.successTitle")}</p>
                     <p className="text-gray-400 text-xs mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1">
-                      <span>Confirmation sent to</span>
+                      <span>{t("quotePage.successPre")}</span>
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide break-all" style={{ background: "rgba(48,176,176,0.15)", border: "1px solid rgba(48,176,176,0.35)", color: "#30B0B0" }}>{form.email}</span>
-                      <span>· We&apos;ll be in touch within 24 hours.</span>
+                      <span>{t("quotePage.successPost")}</span>
                     </p>
                   </div>
                 </div>
@@ -979,7 +980,7 @@ export default function QuotePage() {
                     }}
                     className="neon-btn-filled neon-btn flex items-center gap-2 text-sm px-5 py-2.5"
                   >
-                    New Quote
+                    {t("quotePage.btnNewQuote")}
                   </button>
                 </div>
               </motion.div>

@@ -123,19 +123,19 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "https://swiftdesignz.co.za/images/logo.png",
-        width: 1200,
-        height: 630,
+        url: "https://swiftdesignz.co.za/images/favicon.png",
+        width: 512,
+        height: 512,
         alt: "Swift Designz – Crafting Digital Excellence",
       },
     ],
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "Swift Designz | Crafting Digital Excellence",
     description:
       "Professional web development, e-commerce solutions, custom software & apps.",
-    images: ["https://swiftdesignz.co.za/images/logo.png"],
+    images: ["https://swiftdesignz.co.za/images/favicon.png"],
   },
 };
 
