@@ -13,6 +13,7 @@ function ContactForm() {
   const [formState, setFormState] = useState({ name: "", email: "", message: "" });
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [confirmationSent, setConfirmationSent] = useState(true);
   const [planeFly, setPlaneFly] = useState(false);
   const [planeKey, setPlaneKey] = useState(0);
 
@@ -49,7 +50,8 @@ function ContactForm() {
         throw new Error(data.error || "Failed to send message");
       }
 
-      setStatus("success");
+      const data = await res.json();
+      setConfirmationSent(data.confirmationSent !== false);
       setFormState({ name: "", email: "", message: "" });
     } catch (err) {
       setStatus("error");
@@ -322,11 +324,14 @@ function ContactForm() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       className="flex items-center gap-2 p-4 rounded-lg"
-                      style={{ background: "rgba(48,176,176,0.08)", border: "1px solid rgba(48,176,176,0.2)" }}
+                      style={confirmationSent
+                        ? { background: "rgba(48,176,176,0.08)", border: "1px solid rgba(48,176,176,0.2)" }
+                        : { background: "rgba(217,119,6,0.08)", border: "1px solid rgba(217,119,6,0.3)" }
+                      }
                     >
-                      <CheckCircle size={18} color="var(--swift-teal)" />
-                      <p className="text-sm text-[var(--swift-teal)]">
-                        {t("contactPage.successMsg")}
+                      <CheckCircle size={18} color={confirmationSent ? "var(--swift-teal)" : "#d97706"} className="flex-shrink-0" />
+                      <p className={`text-sm ${confirmationSent ? "text-[var(--swift-teal)]" : "text-amber-400"}`}>
+                        {t(confirmationSent ? "contactPage.successMsg" : "contactPage.confirmationWarning")}
                       </p>
                     </motion.div>
                   )}

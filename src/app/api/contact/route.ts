@@ -121,9 +121,12 @@ export async function POST(req: NextRequest) {
         </div>
       `,
     });
-    if (confirmError) console.error("Contact client confirmation error (non-fatal):", confirmError);
+    if (confirmError) {
+      console.error("Contact client confirmation error:", JSON.stringify(confirmError));
+      return NextResponse.json({ success: true, confirmationSent: false });
+    }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, confirmationSent: true });
   } catch (error) {
     console.error("Contact form error:", error);
     return NextResponse.json(

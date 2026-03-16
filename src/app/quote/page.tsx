@@ -194,6 +194,7 @@ export default function QuotePage() {
   const [form, setForm] = useState<FormState>(INITIAL);
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [confirmationSent, setConfirmationSent] = useState(true);
   const [planeFly, setPlaneFly] = useState(false);
   const [planeKey, setPlaneKey] = useState(0);
   const [quoteRef, setQuoteRef] = useState("");
@@ -236,6 +237,8 @@ export default function QuotePage() {
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error((await res.json()).error || "Failed to send");
+      const data = await res.json();
+      setConfirmationSent(data.confirmationSent !== false);
       setStatus("success");
       setQuoteRef(`SD-${new Date().getFullYear()}-${Math.floor(100000 + Math.random() * 900000)}`);
     } catch (err) {
@@ -741,11 +744,15 @@ export default function QuotePage() {
                   <CheckCircle size={20} className="text-[var(--swift-teal)] flex-shrink-0" />
                   <div>
                     <p className="text-white font-semibold text-sm">{t("quotePage.successTitle")}</p>
-                    <p className="text-gray-400 text-xs mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1">
-                      <span>{t("quotePage.successPre")}</span>
-                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide break-all" style={{ background: "rgba(48,176,176,0.15)", border: "1px solid rgba(48,176,176,0.35)", color: "#30B0B0" }}>{form.email}</span>
-                      <span>{t("quotePage.successPost")}</span>
-                    </p>
+                    {confirmationSent ? (
+                      <p className="text-gray-400 text-xs mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1">
+                        <span>{t("quotePage.successPre")}</span>
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold tracking-wide break-all" style={{ background: "rgba(48,176,176,0.15)", border: "1px solid rgba(48,176,176,0.35)", color: "#30B0B0" }}>{form.email}</span>
+                        <span>{t("quotePage.successPost")}</span>
+                      </p>
+                    ) : (
+                      <p className="text-amber-400 text-xs mt-1">{t("quotePage.confirmationWarning")}</p>
+                    )}
                   </div>
                 </div>
 

@@ -257,7 +257,8 @@
     "sendMsg": "Send Message",
     "sending": "Sending...",
     "sent": "Sent!",
-    "successMsg": "Message sent! We'll be in touch within 24 hours."
+    "successMsg": "Message sent! We'll be in touch within 24 hours.",
+    "confirmationWarning": "Message received! Auto-confirmation couldn\u2019t be delivered to your address \u2014 please check your spam folder. We\u2019ll be in touch within 24 hours regardless."
   },
   "footer": {
     "tagline": "Crafting digital excellence with creative, fast, and elegant solutions. Helping brands stand out in the digital world.",
@@ -370,6 +371,7 @@
     "successTitle": "Quote Request Sent!",
     "successPre": "Confirmation sent to",
     "successPost": "\u00b7 We'll be in touch within 24 hours.",
+    "confirmationWarning": "Quote received! Auto-confirmation couldn\u2019t be delivered to your address \u2014 please check your spam folder. We\u2019ll be in touch within 24 hours regardless.",
     "btnNewQuote": "New Quote"
   },
   "testimonialsPage": {

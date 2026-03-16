@@ -257,7 +257,8 @@
     "sendMsg": "Stuur Boodskap",
     "sending": "Besig om te stuur...",
     "sent": "Gestuur!",
-    "successMsg": "Boodskap gestuur! Ons sal jou binne 24 uur kontak."
+    "successMsg": "Boodskap gestuur! Ons sal jou binne 24 uur kontak.",
+    "confirmationWarning": "Boodskap ontvang! Outomatiese bevestiging kon nie afgelewer word nie \u2014 kyk asseblief jou strooiposvouer. Ons sal jou binne 24 uur kontak."
   },
   "footer": {
     "tagline": "Skep digitale uitnemendheid met kreatiewe, vinnige en elegante oplossings. Help handelsmerke om uit te staan in die digitale wêreld.",
@@ -370,6 +371,7 @@
     "successTitle": "Kwotasieversoek Gestuur!",
     "successPre": "Bevestiging gestuur na",
     "successPost": "\u00b7 Ons sal jou binne 24 uur kontak.",
+    "confirmationWarning": "Kwotasie ontvang! Outomatiese bevestiging kon nie afgelewer word nie \u2014 kyk asseblief jou strooiposvouer. Ons sal jou binne 24 uur kontak.",
     "btnNewQuote": "Nuwe Kwotasie"
   },
   "testimonialsPage": {
