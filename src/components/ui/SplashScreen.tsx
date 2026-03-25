@@ -32,7 +32,7 @@ const DISCLAIMERS = [
     color: "#30B0B0",
     glow: "rgba(48,176,176,0.25)",
     border: "rgba(48,176,176,0.4)",
-    title: "HEALTH WARNING",
+    title: "WARNING",
     body: [
       "This website contains dangerously good design.",
       "Side effects include spontaneous rebranding,",
