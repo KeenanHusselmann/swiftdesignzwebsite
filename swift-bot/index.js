@@ -136,7 +136,7 @@ If CODE, respond with ONLY this JSON (no other text):
 
   const editResponse = await anthropic.messages.create({
     model: 'claude-sonnet-4-5',
-    max_tokens: 4096,
+    max_tokens: 8192,
     system: `You are a code editing assistant for the Swift Designz Next.js website.
 Given the current file contents and an instruction, respond with ONLY a JSON array:
 [
@@ -157,9 +157,10 @@ Return the COMPLETE file content, not just the diff. Only include files that act
 
   let edits;
   try {
-    edits = JSON.parse(editResponse.content[0].text);
+    const editText = editResponse.content[0].text.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
+    edits = JSON.parse(editText);
   } catch {
-    await sendMessage(chatId, '❌ Could not generate edits. Try a more specific instruction.');
+    await sendMessage(chatId, `❌ Could not generate edits. Raw response:\n<code>${editResponse.content[0].text.slice(0, 300)}</code>`);
     return;
   }
 
