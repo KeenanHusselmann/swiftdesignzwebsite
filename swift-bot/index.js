@@ -66,31 +66,48 @@ async function writeFile(path, content, sha, message) {
 
 async function handleInstruction(instruction, chatId) {
   await sendTyping(chatId);
-  await sendMessage(chatId, '🔍 Analysing your instruction...');
 
-  // Step 1: Ask Claude which file(s) to read
-  const planResponse = await anthropic.messages.create({
+  // Step 0: Ask Claude if this is a code instruction or casual chat
+  const intentResponse = await anthropic.messages.create({
     model: 'claude-sonnet-4-5',
     max_tokens: 512,
-    system: `You are a code editing assistant for the Swift Designz Next.js website (GitHub: KeenanHusselmann/swiftdesignzwebsite).
-When given an instruction, respond with ONLY a JSON object:
+    system: `You are Swift Bot, an assistant for Keenan at Swift Designz.
+You can have casual conversations AND edit the Swift Designz website codebase.
+Decide if the user's message is:
+- A CODE instruction (wants to change/edit/update the website)
+- CHAT (greeting, question, casual conversation)
+
+If CHAT, respond naturally and helpfully as Swift Bot.
+If CODE, respond with ONLY this JSON (no other text):
 {
-  "files": ["path/to/file1", "path/to/file2"],
+  "type": "code",
+  "files": ["path/to/file1"],
   "summary": "one line describing what you will change"
-}
-List only the files needed to fulfil the instruction. Use paths relative to repo root.`,
+}`,
     messages: [{ role: 'user', content: instruction }],
   });
 
+  const responseText = intentResponse.content[0].text.trim();
+
+  // Check if it's a code instruction
   let plan;
   try {
-    plan = JSON.parse(planResponse.content[0].text);
+    const parsed = JSON.parse(responseText);
+    if (parsed.type === 'code') {
+      plan = parsed;
+    }
   } catch {
-    await sendMessage(chatId, '❌ Could not parse the plan. Try rephrasing your instruction.');
+    // Not JSON — it's a chat response, send it directly
+  }
+
+  if (!plan) {
+    await sendMessage(chatId, responseText);
     return;
   }
 
-  await sendMessage(chatId, `📋 Plan: <b>${plan.summary}</b>\n\nReading ${plan.files.length} file(s)...`);
+  await sendMessage(chatId, `🔍 <b>${plan.summary}</b>\n\nReading files...`);
+
+  await sendMessage(chatId, `Reading ${plan.files.length} file(s)...`);
 
   // Step 2: Read the files from GitHub
   const fileData = {};
