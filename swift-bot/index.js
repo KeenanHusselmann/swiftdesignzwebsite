@@ -89,10 +89,11 @@ If CODE, respond with ONLY this JSON (no other text):
 
   const responseText = intentResponse.content[0].text.trim();
 
-  // Check if it's a code instruction
+  // Check if it's a code instruction (strip markdown code blocks if present)
   let plan;
   try {
-    const parsed = JSON.parse(responseText);
+    const jsonText = responseText.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '').trim();
+    const parsed = JSON.parse(jsonText);
     if (parsed.type === 'code') {
       plan = parsed;
     }
