@@ -5,6 +5,7 @@ import { useState, FormEvent, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Mail, MapPin, Send, CheckCircle, AlertCircle, Clock, ArrowRight } from "lucide-react";
 import Link from "next/link";
+import { Turnstile } from "@marsidev/react-turnstile";
 import { useI18n } from "@/i18n/I18nProvider";
 
 function ContactForm() {
@@ -14,6 +15,7 @@ function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [confirmationSent, setConfirmationSent] = useState(true);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
   const [planeFly, setPlaneFly] = useState(false);
   const [planeKey, setPlaneKey] = useState(0);
 
@@ -42,7 +44,7 @@ function ContactForm() {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formState),
+        body: JSON.stringify({ ...formState, "cf-turnstile-response": turnstileToken }),
       });
 
       if (!res.ok) {
@@ -297,9 +299,17 @@ function ContactForm() {
                     />
                   </div>
 
+                  <Turnstile
+                    siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
+                    onSuccess={setTurnstileToken}
+                    onExpire={() => setTurnstileToken(null)}
+                    onError={() => setTurnstileToken(null)}
+                    options={{ theme: "dark" }}
+                  />
+
                   <button
                     type="submit"
-                    disabled={status === "sending"}
+                    disabled={status === "sending" || !turnstileToken}
                     className="neon-btn-filled neon-btn w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden"
                   >
                     {status === "sending" ? (
