@@ -145,7 +145,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} ${dancingScript.variable} ${cinzel.variable} ${cormorantGaramond.variable} ${bebasNeue.variable} ${lobster.variable} ${greatVibes.variable} ${abrilFatface.variable} ${orbitron.variable} ${raleway.variable}`}>
+    <html lang="en" data-scroll-behavior="smooth" className={`${inter.variable} ${playfair.variable} ${dancingScript.variable} ${cinzel.variable} ${cormorantGaramond.variable} ${bebasNeue.variable} ${lobster.variable} ${greatVibes.variable} ${abrilFatface.variable} ${orbitron.variable} ${raleway.variable}`}>
       <head>
         {/* Preload critical hero assets */}
         <link rel="preload" as="image" href="/images/logo.png" />

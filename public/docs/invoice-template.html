@@ -10,6 +10,24 @@
   .status-outstanding { background:#fff3cd; color:#856404; border:1px solid #ffc107; }
   .status-paid { background:#d4edda; color:#155724; border:1px solid #28a745; }
   .status-partial { background:#cce5ff; color:#004085; border:1px solid #007bff; }
+  /* Header field sizing */
+  .doc-ref .field { min-width: 48px; width: auto; text-align: right; font-family: 'Orbitron', sans-serif; }
+  .doc-date-line .field { min-width: 90px; }
+  /* Invoice number — plain text, no field styling */
+  .inv-num { background: transparent !important; border-bottom: none !important; padding: 0 !important; font-style: normal !important; min-width: 0 !important; }
+  /* Auto-calculated cells */
+  .inv-line-amt { color: var(--ink) !important; font-weight: 600; }
+  #tot-subtotal { font-weight: 700; color: var(--ink); }
+  #tot-balance { font-weight: 700; color: #e0fafa; }
+  /* Grand total row — lighter teal bg so text is readable */
+  .totals-row.grand { background: #1e4848 !important; }
+  .totals-row.grand .totals-label { color: #a0d8d8; }
+  .totals-row.grand .totals-value { color: #e0fafa; }
+  /* Banking block — lighter teal bg for readability */
+  .banking-block { background: #1e4848 !important; }
+  /* New invoice button */
+  #new-inv-btn { position:fixed; bottom:60px; right:20px; background:#1e3a3a; border:1px solid var(--teal); color:var(--teal); font-family:'Orbitron',sans-serif; font-size:9px; letter-spacing:2px; padding:8px 16px; cursor:pointer; border-radius:4px; text-transform:uppercase; z-index:100; }
+  #new-inv-btn:hover { background:#30B0B0; color:#2f5252; }
 </style>
 </head>
 <body>
@@ -23,10 +41,10 @@
       <div class="doc-subtype">Tax Invoice / Proof of Billing</div>
     </div>
     <div class="doc-meta">
-      <div class="doc-ref">SD-INV-2026-<span class="field" contenteditable="true">001</span></div>
-      <div class="doc-date-line">Invoice Date: <span class="field" contenteditable="true">____ / ____ / ______</span></div>
-      <div class="doc-date-line">Due Date: <span class="field" contenteditable="true">____ / ____ / ______</span></div>
-      <div class="doc-date-line">Quote Ref: <span class="field" contenteditable="true">SD-Q-2026-___</span></div>
+      <div class="doc-ref">SD-INV-<span class="doc-year">2026</span>-<span class="field inv-num" contenteditable="true">001</span></div>
+      <div class="doc-date-line">Invoice Date: <span class="field" id="inv-date" contenteditable="true">____ / ____ / ______</span></div>
+      <div class="doc-date-line">Due Date: <span class="field" id="inv-due-date" contenteditable="true">____ / ____ / ______</span></div>
+      <div class="doc-date-line">Quote Ref: <span class="field" contenteditable="true">SD-Q-<span class="doc-year">2026</span>-___</span></div>
     </div>
   </div>
 
@@ -80,58 +98,59 @@
           <th>#</th>
           <th>Description of Service / Deliverable</th>
           <th style="width:8%">Qty</th>
-          <th style="width:14%">Unit Price</th>
+          <th style="width:14%">Unit Price (R)</th>
           <th style="width:13%">Amount</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="services-tbody">
         <tr>
           <td>1</td>
-          <td contenteditable="true" class="field">e.g. Professional Website — 7-page custom build (SD-Q-2026-001)</td>
-          <td contenteditable="true" class="field" style="text-align:center;">1</td>
-          <td class="col-amount field" contenteditable="true">R</td>
-          <td class="col-amount field" contenteditable="true">R</td>
+          <td contenteditable="true" class="field">e.g. Professional Website — 7-page custom build</td>
+          <td contenteditable="true" class="field inv-qty" style="text-align:center;">1</td>
+          <td class="col-amount field inv-price" contenteditable="true">0</td>
+          <td class="col-amount inv-line-amt">—</td>
         </tr>
         <tr>
           <td>2</td>
           <td contenteditable="true" class="field">e.g. Custom logo / asset creation</td>
-          <td contenteditable="true" class="field" style="text-align:center;">—</td>
-          <td class="col-amount field" contenteditable="true">R</td>
-          <td class="col-amount field" contenteditable="true">R</td>
+          <td contenteditable="true" class="field inv-qty" style="text-align:center;">1</td>
+          <td class="col-amount field inv-price" contenteditable="true">0</td>
+          <td class="col-amount inv-line-amt">—</td>
         </tr>
         <tr>
           <td>3</td>
           <td contenteditable="true" class="field">—</td>
-          <td contenteditable="true" class="field" style="text-align:center;">—</td>
-          <td class="col-amount">—</td>
-          <td class="col-amount">—</td>
+          <td contenteditable="true" class="field inv-qty" style="text-align:center;">—</td>
+          <td class="col-amount field inv-price" contenteditable="true">0</td>
+          <td class="col-amount inv-line-amt">—</td>
         </tr>
         <tr>
           <td>4</td>
           <td contenteditable="true" class="field">—</td>
-          <td contenteditable="true" class="field" style="text-align:center;">—</td>
-          <td class="col-amount">—</td>
-          <td class="col-amount">—</td>
+          <td contenteditable="true" class="field inv-qty" style="text-align:center;">—</td>
+          <td class="col-amount field inv-price" contenteditable="true">0</td>
+          <td class="col-amount inv-line-amt">—</td>
         </tr>
       </tbody>
     </table>
 
     <!-- TOTALS -->
     <div class="totals-box">
-      <div class="totals-row"><span class="totals-label">Subtotal</span><span class="totals-value field" contenteditable="true">R</span></div>
-      <div class="totals-row"><span class="totals-label">Previously Paid</span><span class="totals-value field" contenteditable="true">— R</span></div>
+      <div class="totals-row"><span class="totals-label">Subtotal</span><span class="totals-value" id="tot-subtotal">R 0.00</span></div>
+      <div class="totals-row"><span class="totals-label">Previously Paid</span><span class="totals-value field" id="tot-prev-paid" contenteditable="true">0</span></div>
       <div class="totals-row"><span class="totals-label">VAT (N/A)</span><span class="totals-value">R 0.00</span></div>
-      <div class="totals-row grand"><span class="totals-label">BALANCE DUE</span><span class="totals-value field" contenteditable="true">R</span></div>
+      <div class="totals-row grand"><span class="totals-label">BALANCE DUE</span><span class="totals-value" id="tot-balance">R 0.00</span></div>
     </div>
 
     <!-- PAYMENT INSTRUCTIONS -->
     <div class="section-head">Payment Instructions</div>
     <div class="info-box" style="margin-bottom:10px;">
-      Please use your <strong>Invoice Number (SD-INV-2026-<span contenteditable="true" class="field">001</span>)</strong> as the payment reference. Payment is due by the date stated above. EFT only — no cash accepted.
+      Please use your <strong>Invoice Number (SD-INV-<span class="doc-year">2026</span>-<span contenteditable="true" class="field inv-num">001</span>)</strong> as the payment reference. Payment is due by the date stated above. EFT only — no cash accepted.
     </div>
     <div class="banking-block">
       <div class="banking-head">Banking Details — Keenan Husselmann</div>
       <div class="banking-grid">
+        <div class="banking-item" style="grid-column:1/-1;"><div class="banking-lbl">Address</div><div class="banking-val" style="font-size:12px;">55 Kenneth McArthur Street, Olympia, Windhoek, Namibia</div></div>
         <div class="banking-item"><div class="banking-lbl">Account Name</div><div class="banking-val">Keenan Husselmann</div></div>
         <div class="banking-item"><div class="banking-lbl">Bank</div><div class="banking-val">Bank Windhoek Ltd.</div></div>
         <div class="banking-item"><div class="banking-lbl">Account Type</div><div class="banking-val">Cheque (CHK)</div></div>
@@ -141,7 +160,7 @@
         <div class="banking-item"><div class="banking-lbl">Swift Code</div><div class="banking-val">BWLINANX</div></div>
         <div class="banking-item"><div class="banking-lbl">Currency</div><div class="banking-val">NAD / ZAR (R)</div></div>
       </div>
-      <div class="banking-ref"><strong>Reference:</strong> SD-INV-2026-<span contenteditable="true" class="field" style="color:#d0f0f0;">001</span> · Always include your invoice number as the payment reference.</div>
+      <div class="banking-ref"><strong>Reference:</strong> SD-INV-<span class="doc-year">2026</span>-<span contenteditable="true" class="field inv-num">001</span> · Always include your invoice number as the payment reference.</div>
     </div>
 
     <!-- PAYMENT HISTORY (if applicable) -->
@@ -200,7 +219,7 @@
 
   <!-- ── FOOTER ── -->
   <div class="doc-footer">
-    <div class="doc-footer-left">Swift Designz · Invoice SD-INV-2026-<span contenteditable="true" class="field" style="font-size:9px;border:none;background:transparent;color:var(--teal-dim);">001</span></div>
+    <div class="doc-footer-left">Swift Designz · Invoice SD-INV-<span class="doc-year">2026</span>-<span contenteditable="true" class="field inv-num" style="font-size:9px;border:none;background:transparent;color:var(--teal-dim);">001</span></div>
     <div class="doc-footer-right">keenan@swiftdesignz.co.za · swiftdesignz.co.za<br/>Thank you for choosing Swift Designz.</div>
   </div>
 
@@ -215,24 +234,137 @@
 </script>
 
 <!-- EXPORT DOCX -->
+<div id="new-inv-btn" onclick="newInvoice()">+ New Invoice</div>
 <div id="export-btn" class="export-btn" onclick="exportDOCX()">&#8595;&nbsp;&nbsp;Export DOCX</div>
 <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 <script>
-// Auto-save & restore all editable fields
 (function(){
-  var key='sd_fields_'+location.pathname;
-  function save(){var d={};document.querySelectorAll('[contenteditable]').forEach(function(el,i){d[i]=el.innerHTML;});sessionStorage.setItem(key,JSON.stringify(d));}
-  function restore(){var s=sessionStorage.getItem(key);if(!s)return;try{var d=JSON.parse(s);document.querySelectorAll('[contenteditable]').forEach(function(el,i){if(d[i]!==undefined)el.innerHTML=d[i];});}catch(e){}}
-  document.addEventListener('input',save);
-  restore();
+  var YEAR = new Date().getFullYear();
+  var lsKey    = 'sd_inv_next_' + YEAR;
+  var ssKey    = 'sd_inv_cur_'  + YEAR;
+  var fieldsKey= 'sd_fields_'   + location.pathname;
+  var VER      = 'v3'; // bump this to bust stale sessionStorage on template updates
+  var verKey   = 'sd_ver_'      + location.pathname;
+
+  // ── Bust stale cached field data when template version changes ──
+  if (sessionStorage.getItem(verKey) !== VER) {
+    sessionStorage.removeItem(fieldsKey);
+    sessionStorage.setItem(verKey, VER);
+  }
+
+  // ── Invoice number: increment once per session ──
+  var curNum = sessionStorage.getItem(ssKey);
+  if (!curNum) {
+    curNum = parseInt(localStorage.getItem(lsKey) || '1', 10);
+    localStorage.setItem(lsKey, curNum + 1);
+    sessionStorage.setItem(ssKey, String(curNum));
+  } else {
+    curNum = parseInt(curNum, 10);
+  }
+  var numStr = String(curNum).padStart(3, '0');
+
+  // ── Date helpers ──
+  function fmtDate(d) {
+    return String(d.getDate()).padStart(2,'0') + ' / ' + String(d.getMonth()+1).padStart(2,'0') + ' / ' + d.getFullYear();
+  }
+  var today = new Date();
+  var due   = new Date(today); due.setDate(due.getDate() + 14);
+
+  // ── Apply year, invoice number, dates as defaults ──
+  document.querySelectorAll('.doc-year').forEach(function(el) { el.textContent = YEAR; });
+  document.querySelectorAll('.inv-num').forEach(function(el)  { el.textContent = numStr; });
+  var invDateEl = document.getElementById('inv-date');
+  var dueDateEl = document.getElementById('inv-due-date');
+  if (invDateEl) invDateEl.textContent = fmtDate(today);
+  if (dueDateEl) dueDateEl.textContent = fmtDate(due);
+
+  // ── Update page title ──
+  document.title = 'Invoice SD-INV-' + YEAR + '-' + numStr + ' \u2014 Swift Designz';
+
+  // ── Restore saved field values (user edits from this session) ──
+  var saved = sessionStorage.getItem(fieldsKey);
+  if (saved) {
+    try {
+      var savedData = JSON.parse(saved);
+      document.querySelectorAll('[contenteditable]').forEach(function(el, i) {
+        if (savedData[i] !== undefined) el.innerHTML = savedData[i];
+      });
+    } catch(e) {}
+  }
+
+  // ── Always force-correct dates after restore (never show placeholder) ──
+  if (invDateEl && invDateEl.textContent.indexOf('_') !== -1) invDateEl.textContent = fmtDate(today);
+  if (dueDateEl && dueDateEl.textContent.indexOf('_') !== -1) dueDateEl.textContent = fmtDate(due);
+
+  // ── Initial calculation (runs after restore so saved prices are used) ──
+  calcAll();
+
+  // ── Auto-save on any edit + recalculate ──
+  document.addEventListener('input', function() {
+    calcAll();
+    var d = {};
+    document.querySelectorAll('[contenteditable]').forEach(function(el, i) { d[i] = el.innerHTML; });
+    sessionStorage.setItem(fieldsKey, JSON.stringify(d));
+  });
+
+  // ── Sync all inv-num spans when one is edited ──
+  document.querySelectorAll('.inv-num').forEach(function(el) {
+    el.addEventListener('input', function() {
+      var v = this.textContent;
+      document.querySelectorAll('.inv-num').forEach(function(o) { if (o !== el) o.textContent = v; });
+      // Also update page title
+      document.title = 'Invoice SD-INV-' + YEAR + '-' + v.trim() + ' — Swift Designz';
+    });
+  });
 })();
+
+function parseR(str) {
+  var s = String(str).replace(/R\s*/g, '').replace(/,/g, '').trim();
+  return parseFloat(s) || 0;
+}
+function fmtR(n) {
+  return 'R\u00a0' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+function calcAll() {
+  var rows = document.querySelectorAll('#services-tbody tr');
+  var subtotal = 0;
+  rows.forEach(function(row) {
+    var qtyEl   = row.querySelector('.inv-qty');
+    var priceEl = row.querySelector('.inv-price');
+    var amtEl   = row.querySelector('.inv-line-amt');
+    if (!qtyEl || !priceEl || !amtEl) return;
+    var qty   = parseFloat(qtyEl.textContent.trim()) || 0;
+    var price = parseR(priceEl.textContent);
+    var amt   = qty * price;
+    amtEl.textContent = amt > 0 ? fmtR(amt) : '\u2014';
+    subtotal += amt;
+  });
+  var subtotalEl  = document.getElementById('tot-subtotal');
+  var prevPaidEl  = document.getElementById('tot-prev-paid');
+  var balanceEl   = document.getElementById('tot-balance');
+  if (subtotalEl) subtotalEl.textContent = fmtR(subtotal);
+  if (balanceEl) {
+    var prevPaid = prevPaidEl ? parseR(prevPaidEl.textContent) : 0;
+    var balance  = Math.max(0, subtotal - prevPaid);
+    balanceEl.textContent = fmtR(balance);
+  }
+}
+
+function newInvoice() {
+  if (!confirm('Start a new invoice? This will clear the current form.')) return;
+  var YEAR = new Date().getFullYear();
+  sessionStorage.removeItem('sd_inv_cur_' + YEAR);
+  sessionStorage.removeItem('sd_fields_' + location.pathname);
+  location.reload();
+}
 
 function exportDOCX(){
   var btn=document.getElementById('export-btn');
+  var newBtn=document.getElementById('new-inv-btn');
   var page=document.querySelector('.page');
   var name=document.title.replace(/\s*[-\u2014\u2013]\s*Swift Designz\s*/i,'').trim().replace(/[^\w\s]/g,'').replace(/\s+/g,'-').toLowerCase();
-  btn.style.display='none';
+  btn.style.display='none'; if(newBtn) newBtn.style.display='none';
   var liveF=Array.from(page.querySelectorAll('[contenteditable]'));
   var clone=page.cloneNode(true);
   var cloneF=Array.from(clone.querySelectorAll('[contenteditable]'));
@@ -243,7 +375,7 @@ function exportDOCX(){
   var html='<!DOCTYPE html><html><head><meta charset="UTF-8">'+styleTag+'</head><body>'+clone.outerHTML+'</body></html>';
   var blob=htmlDocx.asBlob(html,{orientation:'portrait',margins:{top:720,right:720,bottom:720,left:720}});
   saveAs(blob,name+'.docx');
-  btn.style.display='';
+  btn.style.display=''; if(newBtn) newBtn.style.display='';
   btn.innerHTML='&#8595;&nbsp;&nbsp;Export DOCX';
 }
 </script></body>`n</html>

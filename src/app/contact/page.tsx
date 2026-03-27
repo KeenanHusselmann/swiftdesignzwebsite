@@ -52,6 +52,7 @@ function ContactForm() {
 
       const data = await res.json();
       setConfirmationSent(data.confirmationSent !== false);
+      setStatus("success");
       setFormState({ name: "", email: "", message: "" });
     } catch (err) {
       setStatus("error");

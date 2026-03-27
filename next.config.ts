@@ -11,6 +11,8 @@ const SECURITY_HEADERS = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   // Disable unnecessary browser features
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=()" },
+  // Force HTTPS for 1 year, include subdomains
+  { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
 ];
 
 const nextConfig: NextConfig = {

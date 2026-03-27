@@ -1,7 +1,7 @@
 [build]
   command = "npm run build"
   publish = ".next"
-  ignore = "git diff --quiet HEAD^ HEAD -- . ':(exclude)swift-bot'"
+  ignore = "git diff --quiet HEAD^ HEAD -- ."
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"

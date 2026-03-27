@@ -577,6 +577,7 @@ export default function HomePage() {
                 alt="Swift Designz"
                 fill
                 priority
+                sizes="(min-width: 768px) 192px, 152px"
                 className="object-contain"
               />
             </motion.div>
