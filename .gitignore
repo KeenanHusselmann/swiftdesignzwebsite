@@ -42,3 +42,6 @@ next-env.d.ts
 
 # generated screenshots/reels (reproducible via scripts/)
 /screenshots/
+
+# Claude worktrees (local only)
+.claude/worktrees/
