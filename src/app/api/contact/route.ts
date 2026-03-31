@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 import { checkRateLimit } from "@/lib/rateLimit";
-import { verifyTurnstile } from "@/lib/turnstile";
 
 export async function POST(req: NextRequest) {
   const limited = checkRateLimit(req);
@@ -10,15 +9,6 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const raw = body as Record<string, unknown>;
-
-    // ── Turnstile verification ──────────────────────────────────────────────
-    const turnstileResult = await verifyTurnstile(raw["cf-turnstile-response"]);
-    if (!turnstileResult.success) {
-      return NextResponse.json(
-        { error: `Human verification failed: ${turnstileResult.errorCodes.join(", ")}` },
-        { status: 400 }
-      );
-    }
 
     // ── Input length limits ────────────────────────────────────────────────────
     const s = (v: unknown, max: number): string =>
