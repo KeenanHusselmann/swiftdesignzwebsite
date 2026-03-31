@@ -12,10 +12,10 @@ export async function POST(req: NextRequest) {
     const raw = body as Record<string, unknown>;
 
     // ── Turnstile verification ──────────────────────────────────────────────
-    const turnstileOk = await verifyTurnstile(raw["cf-turnstile-response"]);
-    if (!turnstileOk) {
+    const turnstileResult = await verifyTurnstile(raw["cf-turnstile-response"]);
+    if (!turnstileResult.success) {
       return NextResponse.json(
-        { error: "Human verification failed. Please refresh and try again." },
+        { error: `Human verification failed: ${turnstileResult.errorCodes.join(", ")}` },
         { status: 400 }
       );
     }
