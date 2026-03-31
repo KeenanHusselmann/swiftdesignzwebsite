@@ -18,10 +18,11 @@ export async function verifyTurnstile(token: unknown): Promise<boolean> {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({ secret, response: token }),
     });
-    const data = await res.json() as { success: boolean };
+    const data = await res.json() as { success: boolean; "error-codes"?: string[]; hostname?: string };
+    console.log("[Turnstile] result:", JSON.stringify(data));
     return data.success === true;
   } catch (err) {
-    console.error("Turnstile verification error:", err);
+    console.error("[Turnstile] verification error:", err);
     return false;
   }
 }
