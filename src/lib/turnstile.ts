@@ -24,7 +24,8 @@ export async function verifyTurnstile(token: unknown): Promise<{ success: boolea
     console.log("[Turnstile] result:", JSON.stringify(data));
     return { success: data.success === true, errorCodes: data["error-codes"] ?? [] };
   } catch (err) {
-    console.error("[Turnstile] verification error:", err);
-    return { success: false, errorCodes: ["fetch-error"] };
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error("[Turnstile] verification error:", msg);
+    return { success: false, errorCodes: [`fetch-error: ${msg}`] };
   }
 }
