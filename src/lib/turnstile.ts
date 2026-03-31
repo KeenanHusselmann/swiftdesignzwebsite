@@ -18,7 +18,7 @@ export async function verifyTurnstile(token: unknown): Promise<{ success: boolea
     const res = await fetch(VERIFY_URL, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ secret, response: token }),
+      body: `secret=${encodeURIComponent(secret)}&response=${encodeURIComponent(token)}`,
     });
     const data = await res.json() as { success: boolean; "error-codes"?: string[]; hostname?: string };
     console.log("[Turnstile] result:", JSON.stringify(data));
