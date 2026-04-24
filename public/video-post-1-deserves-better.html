@@ -181,18 +181,23 @@
   .cards {
     position: absolute;
     top: 870px; left: 60px; right: 60px;
+    bottom: 150px;
     display: flex;
     flex-direction: column;
-    gap: 36px;
+    gap: 24px;
   }
   .card {
+    flex: 1;
     background: rgba(255,255,255,0.04);
     border: 1px solid rgba(245,158,11,0.22);
     border-radius: 28px;
-    padding: 44px 48px;
+    padding: 0 48px;
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(16px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     opacity: 0;
     animation: card-in 0.7s ease forwards;
   }

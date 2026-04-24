@@ -1,7 +1,13 @@
 /**
- * Swift Designz — Video Post Recorder (High Quality)
- * Captures PNG frames at 30fps via Playwright → encodes to H.264 MP4
- * via ffmpeg at 8 Mbps for crisp 1080×1920 social-ready output.
+ * Swift Designz � True HD Video Recorder
+ *
+ * Quality strategy:
+ *   - Scrubs CSS animations to exact time positions via Web Animations API
+ *     (currentTime scrubbing) � no timing drift, frame-perfect animation
+ *   - Captures lossless PNG frames piped directly to ffmpeg stdin
+ *     (bypasses Playwright's internal JPEG screencaster)
+ *   - CRF 18 H.264 encode � visually lossless, uses 20-50 Mbps as needed
+ *   - -tune animation � H.264 profile tuned for animated/graphic content
  *
  * Run: node record-posts.js
  */
@@ -12,105 +18,118 @@ const path         = require('path');
 const fs           = require('fs');
 
 const POSTS = [
-  { file: 'public/video-post-1-deserves-better.html', name: 'post-1-deserves-better' },
-  { file: 'public/video-post-2-why-swift.html',       name: 'post-2-why-swift'       },
-  { file: 'public/video-post-3-logo-showcase.html',   name: 'post-3-logo-showcase'   },
+  { file: 'public/video-post-1-deserves-better.html',              name: 'post-1-deserves-better'   },
+  { file: 'public/video-post-2-why-swift.html',                    name: 'post-2-why-swift'          },
+  { file: 'public/video-post-3-logo-showcase.html',                name: 'post-3-logo-showcase'      },
+  { file: 'public/mobile-posts-static-march2026.html#post1',       name: 'mobile-post-1-services'    },
+  { file: 'public/mobile-posts-static-march2026.html#post2',       name: 'mobile-post-2-pricing'     },
+  { file: 'public/mobile-posts-static-march2026.html#post3',       name: 'mobile-post-3-cta'         },
 ];
 
-const FPS          = 30;
-const DURATION_S   = 16;          // seconds to record per post
-const WARM_UP_MS   = 800;         // let page render before first frame
-const OUTPUT_DIR   = path.resolve('public/video-output');
+const OUTPUT_FPS   = 30;
+const ANIM_SECONDS = 16;
+const FRAMES       = OUTPUT_FPS * ANIM_SECONDS;  // 480
 const WIDTH        = 1080;
 const HEIGHT       = 1920;
-const BITRATE      = '8000k';     // 8 Mbps — crisp 1080p quality
-
-/** Pipe raw PNG frames into ffmpeg and return a Promise that resolves when encoding finishes */
-function encodeMp4(outputPath) {
-  return new Promise((resolve, reject) => {
-    const ff = spawn('ffmpeg', [
-      '-y',                            // overwrite output
-      '-f',    'image2pipe',           // read frames from stdin
-      '-vcodec','png',
-      '-r',    String(FPS),            // input framerate
-      '-i',    'pipe:0',              // stdin
-      '-vcodec','libx264',
-      '-pix_fmt','yuv420p',           // broad compatibility
-      '-b:v',  BITRATE,
-      '-preset','fast',
-      '-movflags','+faststart',        // streaming-friendly
-      outputPath,
-    ], { stdio: ['pipe', 'ignore', 'ignore'] });
-
-    ff.on('close', code => code === 0 ? resolve() : reject(new Error(`ffmpeg exited ${code}`)));
-    ff.on('error', reject);
-
-    // expose the stdin stream so callers can write frames
-    encodeMp4._stdin = ff.stdin;
-  });
-}
+const CRF          = '18';
+const OUTPUT_DIR   = path.resolve('public/video-output');
 
 async function recordPost(browser, post) {
-  const outputPath = path.join(OUTPUT_DIR, `${post.name}.mp4`);
-  const absPath    = path.resolve(post.file).replace(/\\/g, '/');
-  const fileUrl    = `file:///${absPath}`;
+  const outPath = path.join(OUTPUT_DIR, `${post.name}.mp4`);
+
+  const ff = spawn('ffmpeg', [
+    '-y',
+    '-f',        'image2pipe',
+    '-vcodec',   'png',
+    '-r',        String(OUTPUT_FPS),
+    '-i',        'pipe:0',
+    '-vcodec',   'libx264',
+    '-crf',      CRF,
+    '-preset',   'slow',
+    '-tune',     'animation',
+    '-pix_fmt',  'yuv420p',
+    '-r',        String(OUTPUT_FPS),
+    '-movflags', '+faststart',
+    outPath,
+  ], { stdio: ['pipe', 'ignore', 'ignore'] });
+
+  ff.stdin.setMaxListeners(0);
+  ff.on('error', (err) => { throw err; });
 
   const context = await browser.newContext({
-    viewport: { width: WIDTH, height: HEIGHT },
+    viewport:          { width: WIDTH, height: HEIGHT },
     deviceScaleFactor: 1,
   });
+
   const page = await context.newPage();
-  await page.goto(fileUrl, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(WARM_UP_MS);  // let entry animations start
+  const [filePart, hashPart] = post.file.split('#');
+  const absPath = path.resolve(filePart).replace(/\\/g, '/');
+  const url = hashPart ? `file:///${absPath}#${hashPart}` : `file:///${absPath}`;
+  await page.goto(url, { waitUntil: 'networkidle' });
 
-  const totalFrames  = FPS * DURATION_S;
-  const frameDelayMs = 1000 / FPS;
+  // Wait one RAF tick so all CSS animations register in the WAAPI tree
+  await page.evaluate(() => new Promise(r => requestAnimationFrame(r)));
 
-  // Start ffmpeg encoder
-  const encodePromise = encodeMp4(outputPath);
-  const ffStdin       = encodeMp4._stdin;
+  process.stdout.write(`   Capturing ${FRAMES} frames `);
 
-  process.stdout.write(`   Capturing ${totalFrames} frames`);
+  for (let i = 0; i < FRAMES; i++) {
+    const frameTimeMs = (i / OUTPUT_FPS) * 1000;
 
-  for (let i = 0; i < totalFrames; i++) {
-    const frame = await page.screenshot({ type: 'png', clip: { x: 0, y: 0, width: WIDTH, height: HEIGHT } });
-    ffStdin.write(frame);
-    if (i % 30 === 0) process.stdout.write('.');
-    await page.waitForTimeout(frameDelayMs);
+    // Scrub every animation to the exact time this frame represents
+    await page.evaluate((t) => {
+      document.getAnimations().forEach(a => {
+        a.pause();
+        a.currentTime = t;
+      });
+      return new Promise(r => requestAnimationFrame(r));
+    }, frameTimeMs);
+
+    const buf = await page.screenshot({ type: 'png' });
+
+    if (!ff.stdin.write(buf)) {
+      await new Promise(resolve => ff.stdin.once('drain', resolve));
+    }
+
+    if ((i + 1) % 60 === 0) process.stdout.write('.');
   }
 
-  ffStdin.end();
-  await encodePromise;
+  ff.stdin.end();
 
-  process.stdout.write('\n');
+  await new Promise((resolve, reject) => {
+    ff.on('close', (code) => (code === 0 ? resolve() : reject(new Error(`ffmpeg exited with code ${code}`))));
+  });
+
   await context.close();
-  return outputPath;
+
+  const mb = (fs.statSync(outPath).size / 1024 / 1024).toFixed(1);
+  console.log(` done!\n   Saved -> ${post.name}.mp4  (${mb} MB)\n`);
 }
 
 async function main() {
-  if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
-  }
+  if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
-  console.log('\n Swift Designz — High-Quality Video Recorder');
-  console.log(` Resolution : ${WIDTH}×${HEIGHT} (9:16 mobile)`);
-  console.log(` Framerate  : ${FPS}fps  |  Bitrate: ${BITRATE}  |  Duration: ${DURATION_S}s`);
-  console.log(` Output     : ${OUTPUT_DIR}\n`);
+  // Optional filter: node record-posts.js mobile  -> only runs posts whose name includes 'mobile'
+  const filterArg = process.argv[2] || null;
+  const postsToRun = filterArg ? POSTS.filter(p => p.name.includes(filterArg)) : POSTS;
+
+  console.log('\n Swift Designz -- True HD Video Recorder');
+  console.log(` ${WIDTH}x${HEIGHT}  |  CRF ${CRF} (visually lossless)  |  ${OUTPUT_FPS} fps  |  ${ANIM_SECONDS}s per post`);
+  console.log(` Frame-perfect: animations scrubbed to exact time via Web Animations API`);
+  if (filterArg) console.log(` Filter: '${filterArg}' -> ${postsToRun.length} post(s)`);
+  console.log('');
 
   const browser = await chromium.launch({
     headless: true,
-    args: ['--disable-gpu', '--no-sandbox', '--force-device-scale-factor=1'],
+    args: ['--no-sandbox', '--disable-gpu'],
   });
 
-  for (const post of POSTS) {
-    console.log(` → ${post.name}`);
-    const out = await recordPost(browser, post);
-    const mb  = (fs.statSync(out).size / 1024 / 1024).toFixed(1);
-    console.log(`   Saved → ${path.basename(out)}  (${mb} MB)\n`);
+  for (const post of postsToRun) {
+    console.log(` -> ${post.name}`);
+    await recordPost(browser, post);
   }
 
   await browser.close();
-  console.log(' All done! Upload the .mp4 files directly to Instagram Reels, TikTok, or YouTube Shorts.\n');
+  console.log(' All done! Upload .mp4 files directly to Instagram Reels, TikTok, or YouTube Shorts.\n');
 }
 
 main().catch(err => {

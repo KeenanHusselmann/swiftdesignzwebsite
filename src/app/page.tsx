@@ -9,8 +9,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { useI18n } from "@/i18n/I18nProvider";
 import { trackEvent } from "@/lib/analytics";
-import TestimonialCard from "@/components/sections/TestimonialCard";
-import StarfieldCanvas from "@/components/ui/StarfieldCanvas";
+import TestimonialCard from "@/app/components/sections/TestimonialCard";
+import StarfieldCanvas from "@/app/components/ui/StarfieldCanvas";
 
 function DisneyStarAnimation() {
   const [iter, setIter] = useState(0);

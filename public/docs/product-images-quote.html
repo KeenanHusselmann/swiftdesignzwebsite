@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Product Images Service Quote — Swift Designz</title>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+  /* ── SERVICE TABS ── */
+  .svc-tabs { display:flex; gap:0; border:1px solid var(--border); margin-bottom:18px; border-radius:6px; overflow:hidden; flex-wrap:wrap; }
+  .svc-tab  { flex:1; min-width:120px; padding:10px 6px; text-align:center; font-size:9.5px; font-weight:700; letter-spacing:1px; cursor:pointer; border-right:1px solid var(--border); background:var(--bg-alt); color:var(--ink-dim); text-transform:uppercase; transition:all 0.18s; }
+  .svc-tab:last-child { border-right:none; }
+  .svc-tab:hover  { color:var(--teal); }
+  .svc-tab.active { background:var(--teal); color:#fff; }
+  .svc-section    { display:none; }
+  .svc-section.show { display:block; }
+
+  /* ── TIER CARDS ── */
+  .tier-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:6px; }
+  .tier-card { border:1.5px solid var(--border); border-radius:8px; padding:14px 15px; cursor:pointer; transition:border-color 0.2s,background 0.2s; }
+  .tier-card:hover  { border-color:var(--teal); }
+  .tier-card.active { border-color:var(--teal); background:var(--bg-alt); box-shadow:0 0 0 3px rgba(48,176,176,0.12); }
+  .tier-name  { font-weight:700; font-size:13px; color:var(--ink); margin-bottom:3px; }
+  .tier-price { font-family:'Orbitron',sans-serif; font-size:11px; color:var(--teal); font-weight:700; margin-bottom:6px; }
+  .tier-feats { font-size:10.5px; color:var(--ink-mid); line-height:1.6; }
+  .tier-price[contenteditable] { outline:none; cursor:text; border-bottom:1.5px dashed rgba(48,176,176,0.5); padding-bottom:1px; display:inline-block; min-width:50px; }
+  .tier-price[contenteditable]:focus { border-bottom:1.5px solid var(--teal); }
+  .tier-feats[contenteditable] { outline:none; cursor:text; border-radius:3px; padding:2px 3px; margin:-2px -3px; }
+  .tier-feats[contenteditable]:focus { background:rgba(48,176,176,0.07); }
+  .tier-badge { display:inline-block; font-size:7px; letter-spacing:2px; text-transform:uppercase; background:var(--teal); color:#fff; padding:2px 8px; border-radius:999px; margin-left:6px; vertical-align:middle; font-weight:700; }
+  .tier-hint  { font-size:9px; color:var(--teal-dim); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:14px; }
+
+  /* ── ADD-ON RATE BOX ── */
+  .addon-box { display:flex; gap:10px; margin-top:10px; margin-bottom:4px; flex-wrap:wrap; }
+  .addon-item { flex:1; min-width:140px; background:var(--bg-alt); border:1px dashed var(--border); border-radius:6px; padding:10px 14px; }
+  .addon-label { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--teal-dim); margin-bottom:3px; }
+  .addon-value { font-size:12px; font-weight:700; color:var(--ink); }
+  .addon-value[contenteditable] { outline:none; border-bottom:1.5px dashed rgba(48,176,176,0.5); }
+  .addon-value[contenteditable]:focus { border-bottom:1.5px solid var(--teal); }
+
+  /* ── STORE DETAILS MINI-GRID ── */
+  .store-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:14px; }
+  .store-cell { background:var(--bg-alt); border:1px solid var(--border); border-radius:6px; padding:9px 12px; }
+  .store-cell-label { font-size:9px; letter-spacing:1.5px; text-transform:uppercase; color:var(--teal-dim); margin-bottom:3px; }
+  .store-cell-value { font-size:12px; font-weight:600; color:var(--ink); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── HEADER ── -->
+  <div class="doc-header">
+    <img class="doc-logo" src="../images/logo.png" alt="Swift Designz"/>
+    <div class="doc-type-block">
+      <div class="doc-type">Quotation</div>
+      <div class="doc-subtype">Product Images — E-Commerce Add-On Service</div>
+    </div>
+    <div class="doc-meta">
+      <div class="doc-ref">SD-PIQ-2026-<span class="field" contenteditable="true">001</span></div>
+      <div class="doc-date-line">Date: <span id="quote-date" class="field" contenteditable="true">____ / ____ / ______</span></div>
+      <div class="doc-date-line">Valid Until: <span id="quote-valid" class="field" contenteditable="true">____ / ____ / ______</span></div>
+    </div>
+  </div>
+
+  <!-- ── BODY ── -->
+  <div class="doc-body">
+
+    <!-- PARTIES -->
+    <div class="parties">
+      <div class="party">
+        <div class="party-label">Prepared For (Client)</div>
+        <div class="party-name field" contenteditable="true">Client Full Name</div>
+        <div class="party-trade field" contenteditable="true">Company / Store Name (if applicable)</div>
+        <div class="party-line">Email: <span class="field" contenteditable="true">client@email.com</span></div>
+        <div class="party-line">Phone: <span class="field" contenteditable="true">+___ ___ ___ ____</span></div>
+        <div class="party-line">Location: <span class="field" contenteditable="true">City, Country</span></div>
+      </div>
+      <div class="party">
+        <div class="party-label">Prepared By</div>
+        <div class="party-name">Keenan Husselmann</div>
+        <div class="party-trade">Trading as Swift Designz</div>
+        <div class="party-line">Email: <a href="mailto:info@swiftdesignz.co.za">info@swiftdesignz.co.za</a></div>
+        <div class="party-line">Phone: +264 81 853 6789</div>
+        <div class="party-line">Web: swiftdesignz.co.za</div>
+        <div class="party-line">Service: Remote · Worldwide</div>
+      </div>
+    </div>
+
+    <!-- STORE DETAILS -->
+    <div class="section-head">Store Details</div>
+    <div class="store-grid">
+      <div class="store-cell">
+        <div class="store-cell-label">Platform</div>
+        <div class="store-cell-value field" contenteditable="true">e.g. WooCommerce / Shopify</div>
+      </div>
+      <div class="store-cell">
+        <div class="store-cell-label">Store URL</div>
+        <div class="store-cell-value field" contenteditable="true">https://</div>
+      </div>
+      <div class="store-cell">
+        <div class="store-cell-label">Total No. of Products</div>
+        <div class="store-cell-value field" contenteditable="true">0</div>
+      </div>
+    </div>
+
+    <!-- SERVICE TYPE TABS -->
+    <div class="section-head">Service Type</div>
+    <div class="svc-tabs no-print">
+      <div class="svc-tab active" onclick="showSvc('editupload',this)">Edit &amp; Upload</div>
+      <div class="svc-tab" onclick="showSvc('aigenerate',this)">AI-Generated Images</div>
+      <div class="svc-tab" onclick="showSvc('uploadonly',this)">Upload Only</div>
+    </div>
+
+    <!-- ═══════ EDIT & UPLOAD ═══════ -->
+    <div class="svc-section show" id="svc-editupload">
+      <div class="section-head">Edit &amp; Upload — Package Details</div>
+      <p class="tier-hint">Client supplies raw product photos. Swift Designz edits and uploads to the store.</p>
+      <div class="tier-grid">
+        <div class="tier-card active" onclick="selTier(this)">
+          <div class="tier-name">Starter</div>
+          <div class="tier-price" contenteditable="true" onclick="event.stopPropagation()">From R 800</div>
+          <div class="tier-feats" contenteditable="true" onclick="event.stopPropagation()">Up to 10 products · 1 image per product · Background removal &amp; resize · Web-optimized JPG/PNG · Upload &amp; assign to product · 1 revision round</div>
+        </div>
+        <div class="tier-card" onclick="selTier(this)">
+          <div class="tier-name">Standard <span class="tier-badge">Popular</span></div>
+          <div class="tier-price" contenteditable="true" onclick="event.stopPropagation()">From R 2,000</div>
+          <div class="tier-feats" contenteditable="true" onclick="event.stopPropagation()">Up to 30 products · 2 images per product (main + detail) · Background removal, crop &amp; colour correction · Alt text per image · Upload, assign &amp; set featured image · 2 revision rounds</div>
+        </div>
+        <div class="tier-card" onclick="selTier(this)">
+          <div class="tier-name">Full Catalogue</div>
+          <div class="tier-price" contenteditable="true" onclick="event.stopPropagation()">From R 4,000</div>
+          <div class="tier-feats" contenteditable="true" onclick="event.stopPropagation()">Up to 60 products · Up to 4 images per product · Full edit suite (background, crop, colour, sharpen) · Alt text &amp; image metadata · Organised gallery upload · Set featured &amp; product gallery images · 2 revision rounds</div>
+        </div>
+      </div>
+      <div class="addon-box">
+        <div class="addon-item">
+          <div class="addon-label">Add-on: Per Extra Product (beyond package limit)</div>
+          <div class="addon-value" contenteditable="true">R 60 / product</div>
+        </div>
+        <div class="addon-item">
+          <div class="addon-label">Add-on: Extra Image Per Product</div>
+          <div class="addon-value" contenteditable="true">R 30 / image</div>
+        </div>
+        <div class="addon-item">
+          <div class="addon-label">Add-on: Source File Delivery (PSD/PNG full-res)</div>
+          <div class="addon-value" contenteditable="true">R 200 flat fee</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ AI-GENERATED IMAGES ═══════ -->
+    <div class="svc-section" id="svc-aigenerate">
+      <div class="section-head">AI-Generated Product Images — Package Details</div>
+      <p class="tier-hint">Swift Designz generates high-quality AI product images and uploads them to the store.</p>
+      <div class="tier-grid">
+        <div class="tier-card active" onclick="selTier(this)">
+          <div class="tier-name">Starter Batch</div>
+          <div class="tier-price" contenteditable="true" onclick="event.stopPropagation()">From R 600</div>
+          <div class="tier-feats" contenteditable="true" onclick="event.stopPropagation()">10 AI-generated product images · 1 background style · White-background &amp; lifestyle variants · Web-optimized delivery · Upload &amp; assign to products · 1 revision round</div>
+        </div>
+        <div class="tier-card" onclick="selTier(this)">
+          <div class="tier-name">Standard Batch <span class="tier-badge">Popular</span></div>
+          <div class="tier-price" contenteditable="true" onclick="event.stopPropagation()">From R 1,400</div>
+          <div class="tier-feats" contenteditable="true" onclick="event.stopPropagation()">25 AI-generated images · Up to 3 background / scene styles · Mockup &amp; lifestyle variants · Alt text per image · Upload, assign &amp; set featured images · 2 revision rounds</div>
+        </div>
+        <div class="tier-card" onclick="selTier(this)">
+          <div class="tier-name">Full Pack</div>
+          <div class="tier-price" contenteditable="true" onclick="event.stopPropagation()">From R 2,800</div>
+          <div class="tier-feats" contenteditable="true" onclick="event.stopPropagation()">50+ AI-generated images · Unlimited background styles · White-bg, lifestyle &amp; scene variants · Multiple angles per key product · Alt text &amp; image metadata · Full gallery upload &amp; assignment · 2 revision rounds</div>
+        </div>
+      </div>
+      <div class="addon-box">
+        <div class="addon-item">
+          <div class="addon-label">Add-on: Per Extra AI Image (beyond package)</div>
+          <div class="addon-value" contenteditable="true">R 45 / image</div>
+        </div>
+        <div class="addon-item">
+          <div class="addon-label">Add-on: Brand-specific Style Prompting</div>
+          <div class="addon-value" contenteditable="true">R 250 flat fee</div>
+        </div>
+        <div class="addon-item">
+          <div class="addon-label">Add-on: Commercial Use / High-res Pack</div>
+          <div class="addon-value" contenteditable="true">R 300 flat fee</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════ UPLOAD ONLY ═══════ -->
+    <div class="svc-section" id="svc-uploadonly">
+      <div class="section-head">Upload Only — Package Details</div>
+      <p class="tier-hint">Client supplies pre-edited, print-ready images. Swift Designz handles uploading and store assignment only.</p>
+      <div class="tier-grid">
+        <div class="tier-card active" onclick="selTier(this)">
+          <div class="tier-name">Starter</div>
+          <div class="tier-price" contenteditable="true" onclick="event.stopPropagation()">From R 350</div>
+          <div class="tier-feats" contenteditable="true" onclick="event.stopPropagation()">Up to 20 images · Upload &amp; assign to products · Set featured image · Basic alt text</div>
+        </div>
+        <div class="tier-card" onclick="selTier(this)">
+          <div class="tier-name">Standard <span class="tier-badge">Popular</span></div>
+          <div class="tier-price" contenteditable="true" onclick="event.stopPropagation()">From R 700</div>
+          <div class="tier-feats" contenteditable="true" onclick="event.stopPropagation()">Up to 50 images · Upload, assign &amp; sort by category · Set featured &amp; gallery images · Alt text per image · 1 revision / correction round</div>
+        </div>
+        <div class="tier-card" onclick="selTier(this)">
+          <div class="tier-name">Bulk Upload</div>
+          <div class="tier-price" contenteditable="true" onclick="event.stopPropagation()">From R 1,400</div>
+          <div class="tier-feats" contenteditable="true" onclick="event.stopPropagation()">Up to 150 images · Bulk upload with category &amp; product assignment · Featured image per product · Full alt text &amp; metadata · Image order &amp; gallery sequencing · 1 revision / correction round</div>
+        </div>
+      </div>
+      <div class="addon-box">
+        <div class="addon-item">
+          <div class="addon-label">Add-on: Per Extra Image (beyond package)</div>
+          <div class="addon-value" contenteditable="true">R 15 / image</div>
+        </div>
+        <div class="addon-item">
+          <div class="addon-label">Add-on: Category / Collection Structuring</div>
+          <div class="addon-value" contenteditable="true">R 150 flat fee</div>
+        </div>
+        <div class="addon-item">
+          <div class="addon-label">Add-on: Image Compression &amp; File Renaming</div>
+          <div class="addon-value" contenteditable="true">R 100 flat fee</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SCOPE OF WORK ── -->
+    <div style="page-break-inside:avoid;">
+      <div class="section-head">Scope of Work &amp; Deliverables</div>
+      <div class="field-block" contenteditable="true" style="min-height:72px;">List the specific products, image requirements, background styles, any file naming conventions, image dimensions, and any other relevant instructions…</div>
+    </div>
+
+    <!-- ── IMAGE REQUIREMENTS ── -->
+    <div class="section-head">Image Requirements</div>
+    <table class="doc-table">
+      <thead>
+        <tr>
+          <th style="width:22%">Requirement</th>
+          <th style="width:38%">Details</th>
+          <th style="width:22%">Requirement</th>
+          <th style="width:18%">Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Image Format</strong></td>
+          <td class="field" contenteditable="true">JPG &amp; PNG</td>
+          <td><strong>Background Style</strong></td>
+          <td class="field" contenteditable="true">White / Transparent</td>
+        </tr>
+        <tr>
+          <td><strong>Dimensions (px)</strong></td>
+          <td class="field" contenteditable="true">1000 × 1000 (square)</td>
+          <td><strong>Images Per Product</strong></td>
+          <td class="field" contenteditable="true">1 – 4</td>
+        </tr>
+        <tr>
+          <td><strong>File Size Limit</strong></td>
+          <td class="field" contenteditable="true">Under 500 KB / image</td>
+          <td><strong>Alt Text Required</strong></td>
+          <td class="field" contenteditable="true">Yes / No</td>
+        </tr>
+        <tr>
+          <td><strong>Client Supplies Raw Photos</strong></td>
+          <td class="field" contenteditable="true">Yes / No</td>
+          <td><strong>Store Access Provided</strong></td>
+          <td class="field" contenteditable="true">Yes (Admin) / Via CSV</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- ── PRICING BREAKDOWN ── -->
+    <div class="section-head">Pricing Breakdown</div>
+    <table class="doc-table" id="pricing-table">
+      <thead>
+        <tr>
+          <th style="width:4%">#</th>
+          <th>Item / Description</th>
+          <th style="width:7%">Qty</th>
+          <th style="width:16%">Unit Price (R)</th>
+          <th style="width:15%">Amount (R)</th>
+        </tr>
+      </thead>
+      <tbody id="pricing-rows">
+        <tr>
+          <td>1</td>
+          <td id="row1-desc" contenteditable="true" class="field">&#8212; Select a package above &#8212;</td>
+          <td contenteditable="true" class="field price-qty">1</td>
+          <td contenteditable="true" class="field price-unit col-amount">0</td>
+          <td class="col-amount price-amt" style="font-weight:700;color:var(--ink);">R 0.00</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td contenteditable="true" class="field">Add-on / Extra products</td>
+          <td contenteditable="true" class="field price-qty">0</td>
+          <td contenteditable="true" class="field price-unit col-amount">0</td>
+          <td class="col-amount price-amt" style="font-weight:700;color:var(--ink);">R 0.00</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td contenteditable="true" class="field">Add-on / Extra images</td>
+          <td contenteditable="true" class="field price-qty">0</td>
+          <td contenteditable="true" class="field price-unit col-amount">0</td>
+          <td class="col-amount price-amt" style="font-weight:700;color:var(--ink);">R 0.00</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td contenteditable="true" class="field">&#8212;</td>
+          <td contenteditable="true" class="field price-qty">0</td>
+          <td contenteditable="true" class="field price-unit col-amount">0</td>
+          <td class="col-amount price-amt" style="font-weight:700;color:var(--ink);">R 0.00</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td contenteditable="true" class="field">&#8212;</td>
+          <td contenteditable="true" class="field price-qty">0</td>
+          <td contenteditable="true" class="field price-unit col-amount">0</td>
+          <td class="col-amount price-amt" style="font-weight:700;color:var(--ink);">R 0.00</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="totals-box">
+      <div class="totals-row"><span class="totals-label">Subtotal</span><span class="totals-value" id="calc-subtotal">R 0.00</span></div>
+      <div class="totals-row"><span class="totals-label">Discount (R)</span><span class="totals-value field" id="calc-discount" contenteditable="true" style="min-width:80px;">0</span></div>
+      <div class="totals-row grand"><span class="totals-label">TOTAL DUE</span><span class="totals-value" id="calc-total">R 0.00</span></div>
+    </div>
+
+    <!-- ── PAYMENT TERMS ── -->
+    <div class="section-head">Payment Terms</div>
+    <div class="info-box">
+      <strong>Deposit:</strong> <span class="field" contenteditable="true">50% deposit required before work commences.</span><br/>
+      <strong>Balance:</strong> <span class="field" contenteditable="true">Remaining 50% due upon completion and before final files / store access is handed over.</span><br/>
+      <strong>Payment Method:</strong> <span class="field" contenteditable="true">EFT / Bank Transfer (details supplied on invoice)</span>
+    </div>
+
+    <!-- ── IMPORTANT NOTES ── -->
+    <div class="section-head">Important Notes</div>
+    <div class="info-box">
+      <strong>Validity:</strong> This quotation is valid for <strong>14 days</strong> from the date of issue.<br/>
+      <strong>Client Assets:</strong> The client must supply all raw product photos (where applicable) before work begins. Images must be provided in a shared folder (Google Drive / WeTransfer / Dropbox).<br/>
+      <strong>Store Access:</strong> Temporary admin access to the store is required for the upload phase. Access must be provided via a secure method and revoked by the client after delivery.<br/>
+      <strong>Revisions:</strong> Revision rounds are as specified per package. Additional revision rounds are billed at <strong>R350/hour</strong>.<br/>
+      <strong>File Delivery:</strong> All edited image files are delivered digitally (Google Drive / Dropbox link) in addition to being uploaded to the store unless otherwise agreed.<br/>
+      <strong>Copyright:</strong> Full rights to all delivered images transfer to the client upon receipt of final payment. Swift Designz retains the right to display work in portfolio unless confidentiality is requested in writing.<br/>
+      <strong>VAT:</strong> Swift Designz is not VAT registered. No VAT is charged. All prices are final.
+    </div>
+
+    <!-- ── SIGNATURE / ACCEPTANCE ── -->
+    <div class="section-head">Quote Acceptance</div>
+    <p style="font-size:12px;color:var(--ink-mid);margin-bottom:20px;">By signing below, the client confirms they have read this quotation in full, agree to the scope, payment terms, and revision policy, and authorise Keenan Husselmann (Swift Designz) to commence work upon receipt of the agreed deposit.</p>
+    <div class="sig-row">
+      <div>
+        <div class="sig-label">Client Signature</div>
+        <div class="sig-line"></div>
+        <div class="sig-name">Name: <span class="field" contenteditable="true">________________________________</span></div>
+        <div class="sig-name">Date: <span class="field" contenteditable="true">________________________________</span></div>
+      </div>
+      <div>
+        <div class="sig-label">Swift Designz &mdash; Service Provider</div>
+        <div class="sig-line"></div>
+        <div class="sig-name">Keenan Husselmann (Swift Designz)</div>
+        <div class="sig-name">Date: ________________________________</div>
+      </div>
+    </div>
+
+  </div><!-- /.doc-body -->
+
+  <!-- ── FOOTER ── -->
+  <div class="doc-footer">
+    <div class="doc-footer-left">Swift Designz · Keenan Husselmann · Remote &amp; Worldwide</div>
+    <div class="doc-footer-right">info@swiftdesignz.co.za · swiftdesignz.co.za<br/>Subject to Swift Designz Terms &amp; Conditions (SD-TC-2026)</div>
+  </div>
+
+</div><!-- /.page -->
+
+<script>
+  /* ── SERVICE TABS ── */
+  function showSvc(id, el) {
+    document.querySelectorAll('.svc-section').forEach(function(s){ s.classList.remove('show'); });
+    document.querySelectorAll('.svc-tab').forEach(function(t){ t.classList.remove('active'); });
+    document.getElementById('svc-' + id).classList.add('show');
+    el.classList.add('active');
+    var d = document.getElementById('row1-desc');
+    if (d) d.innerText = '\u2014 Select a package above \u2014';
+    var u = document.querySelector('#pricing-rows tr:first-child .price-unit');
+    if (u) { u.innerText = '0'; recalc(); }
+  }
+
+  /* ── TIER CARDS ── */
+  function selTier(el) {
+    var section = el.closest('.svc-section');
+    section.querySelectorAll('.tier-card').forEach(function(c){ c.classList.remove('active'); });
+    el.classList.add('active');
+    var nameEl  = el.querySelector('.tier-name');
+    var badgeEl = nameEl.querySelector('.tier-badge');
+    var name    = nameEl.innerText.replace(badgeEl ? badgeEl.innerText : '', '').trim();
+    var priceText = el.querySelector('.tier-price').innerText;
+    var priceNum  = parseFloat(priceText.replace(/[^\d.]/g, ''));
+    var svcTab  = document.querySelector('.svc-tab.active');
+    var svcName = svcTab ? svcTab.innerText.trim() : '';
+    var d = document.getElementById('row1-desc');
+    if (d) d.innerText = svcName + ' \u2014 ' + name;
+    var u = document.querySelector('#pricing-rows tr:first-child .price-unit');
+    if (u) { u.innerText = isNaN(priceNum) ? '0' : String(priceNum); recalc(); }
+  }
+
+  /* ── AUTO-CALCULATE PRICING TABLE ── */
+  function parseNum(str) {
+    var n = parseFloat(str.replace(/[Rr,\s]/g, ''));
+    return isNaN(n) ? 0 : n;
+  }
+  function fmt(n) {
+    return 'R ' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+  function recalc() {
+    var rows = document.querySelectorAll('#pricing-rows tr');
+    var subtotal = 0;
+    rows.forEach(function(row) {
+      var qtyEl  = row.querySelector('.price-qty');
+      var unitEl = row.querySelector('.price-unit');
+      var amtEl  = row.querySelector('.price-amt');
+      if (!qtyEl || !unitEl || !amtEl) return;
+      var qty  = parseNum(qtyEl.innerText);
+      var unit = parseNum(unitEl.innerText);
+      var amt  = qty * unit;
+      amtEl.innerText = fmt(amt);
+      subtotal += amt;
+    });
+    document.getElementById('calc-subtotal').innerText = fmt(subtotal);
+    var discount = parseNum(document.getElementById('calc-discount').innerText);
+    var total = Math.max(0, subtotal - discount);
+    document.getElementById('calc-total').innerText = fmt(total);
+  }
+  document.getElementById('pricing-rows').addEventListener('input', recalc);
+  document.getElementById('calc-discount').addEventListener('input', recalc);
+  recalc();
+
+  /* ── AUTO-DATE ── */
+  function fmtDate(d) {
+    var dd = String(d.getDate()).padStart(2,'0'),
+        mm = String(d.getMonth()+1).padStart(2,'0'),
+        yy = d.getFullYear();
+    return dd + '/' + mm + '/' + yy;
+  }
+  function calcValidUntil() {
+    var raw = document.getElementById('quote-date').innerText.trim().replace(/[^\d\/]/g,'');
+    var p = raw.split('/');
+    if (p.length === 3 && p[2].length === 4) {
+      var d = new Date(p[2], p[1]-1, p[0]);
+      if (!isNaN(d)) {
+        d.setDate(d.getDate() + 14);
+        document.getElementById('quote-valid').innerText = fmtDate(d);
+      }
+    }
+  }
+  var qd = document.getElementById('quote-date');
+  var qv = document.getElementById('quote-valid');
+  if (qd.innerText.trim().startsWith('_')) {
+    var today = new Date();
+    qd.innerText = fmtDate(today);
+    var validDate = new Date();
+    validDate.setDate(validDate.getDate() + 14);
+    qv.innerText = fmtDate(validDate);
+  }
+  qd.addEventListener('input', calcValidUntil);
+
+  /* ── AUTO-SAVE / RESTORE FIELDS ── */
+  (function(){
+    var key = 'sd_piq_fields_' + location.pathname;
+    function save() {
+      var d = {};
+      document.querySelectorAll('[contenteditable]').forEach(function(el, i) { d[i] = el.innerHTML; });
+      sessionStorage.setItem(key, JSON.stringify(d));
+    }
+    function restore() {
+      var s = sessionStorage.getItem(key);
+      if (!s) return;
+      try {
+        var d = JSON.parse(s);
+        document.querySelectorAll('[contenteditable]').forEach(function(el, i) { if (d[i] !== undefined) el.innerHTML = d[i]; });
+      } catch(e) {}
+    }
+    document.addEventListener('input', save);
+    restore();
+  })();
+</script>
+
+<!-- ── EXPORT PDF BUTTON ── -->
+<div id="export-btn" class="export-btn" onclick="exportPDF()">&#8595;&nbsp;&nbsp;Export PDF</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+function exportPDF() {
+  var btn  = document.getElementById('export-btn');
+  var page = document.querySelector('.page');
+  btn.style.display = 'none';
+  var prevWidth  = page.style.width;
+  var prevShadow = page.style.boxShadow;
+  page.style.width     = '794px';
+  page.style.boxShadow = 'none';
+  document.querySelectorAll('.no-print').forEach(function(el){ el.style.display='none'; });
+  html2pdf().from(page).set({
+    margin: 0,
+    filename: 'swift-designz-product-images-quote.pdf',
+    image: { type:'jpeg', quality:0.98 },
+    html2canvas: { scale:2, useCORS:true, logging:false, windowWidth:794, backgroundColor:'#ffffff', scrollX:0, scrollY:-window.scrollY },
+    jsPDF: { unit:'mm', format:'a4', orientation:'portrait' },
+    pagebreak: { mode:['css','legacy'] }
+  }).save().then(function(){
+    page.style.width     = prevWidth;
+    page.style.boxShadow = prevShadow;
+    document.querySelectorAll('.no-print').forEach(function(el){ el.style.display=''; });
+    btn.style.display = '';
+  });
+}
+</script>
+
+</body>
+</html>

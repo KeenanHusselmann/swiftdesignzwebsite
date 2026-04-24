@@ -14,7 +14,7 @@ import {
   Raleway,
 } from "next/font/google";
 import "./globals.css";
-import SiteShell from "@/components/layout/SiteShell";
+import SiteShell from "@/app/components/layout/SiteShell";
 import { I18nProvider } from "@/i18n/I18nProvider";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID ?? "";

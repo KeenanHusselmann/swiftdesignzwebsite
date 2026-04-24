@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080" />
+<title>Swift Designz — Mobile Story Posts</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 1080px;
+    background: #0a0a0a;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #fff;
+  }
+
+  .post {
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    position: relative;
+    background: #0d0d0d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* ═══════════════════ KEYFRAMES ═══════════════════ */
+
+  @keyframes spin-cw  { from { transform: rotate(0deg);   } to { transform: rotate(360deg);  } }
+  @keyframes spin-ccw { from { transform: rotate(0deg);   } to { transform: rotate(-360deg); } }
+
+  @keyframes shimmer {
+    0%   { background-position: -300% center; }
+    100% { background-position:  300% center; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(48px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.78); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes slide-in-left {
+    from { opacity: 0; transform: translateX(-60px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+
+  @keyframes divider-grow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  @keyframes fav-pulse {
+    0%, 100% {
+      transform: translate(-50%, -50%) scale(1);
+      filter: drop-shadow(0 0 30px rgba(245,158,11,.7)) drop-shadow(0 0 60px rgba(48,176,176,.4));
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.16);
+      filter: drop-shadow(0 0 60px rgba(245,158,11,1)) drop-shadow(0 0 120px rgba(48,176,176,.75));
+    }
+  }
+
+  @keyframes neon-pulse {
+    0%, 100% { box-shadow: 0 0 12px rgba(48,176,176,.35), 0 0 28px rgba(48,176,176,.18); }
+    50%       { box-shadow: 0 0 28px rgba(48,176,176,.8),  0 0 60px rgba(48,176,176,.4);  }
+  }
+
+  @keyframes amber-glow {
+    0%, 100% { box-shadow: 0 0 14px rgba(245,158,11,.4), 0 0 32px rgba(245,158,11,.2); }
+    50%       { box-shadow: 0 0 32px rgba(245,158,11,.9), 0 0 70px rgba(245,158,11,.45); }
+  }
+
+  @keyframes progress-bar {
+    from { width: 0; }
+    to   { width: 100%; }
+  }
+
+  /* ═══════════════════ SHARED COMPONENTS ═══════════════════ */
+
+  /* Favicon badge (posts 1 & 2) — use margin-based centering on rings to avoid
+     conflict between transform:translate and spin animation */
+  .fav-badge {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 180px;
+  }
+
+  .fav-badge .ring-a {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 164px; height: 164px;
+    margin-top: -82px; margin-left: -82px;
+    border-radius: 50%;
+    border: 2px solid rgba(48,176,176,.45);
+    animation: spin-cw 7s linear infinite;
+  }
+
+  .fav-badge .ring-b {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 180px; height: 180px;
+    margin-top: -90px; margin-left: -90px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(245,158,11,.3);
+    animation: spin-ccw 10s linear infinite;
+  }
+
+  .fav-badge img {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 108px; height: 108px;
+    object-fit: cover;
+    animation: fav-pulse 3s ease-in-out infinite;
+  }
+
+  .brand-name {
+    font-size: 60px;
+    font-weight: 900;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    text-align: center;
+    background: linear-gradient(90deg, #F59E0B 0%, #FBBF24 28%, #30B0B0 58%, #F59E0B 100%);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 5s linear infinite;
+  }
+
+  .amber-rule {
+    width: 210px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #F59E0B 30%, #30B0B0 70%, transparent);
+    margin: 0 auto;
+    transform-origin: center;
+    animation: divider-grow 1.2s ease forwards;
+  }
+
+  .bg-blob {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(110px);
+  }
+
+  /* ═══════════════════ POST 1 — SERVICES GRID ═══════════════════ */
+
+  #post1 .blob-tl {
+    width: 560px; height: 560px;
+    top: -80px; left: -100px;
+    background: radial-gradient(circle, rgba(48,176,176,.22), transparent 70%);
+  }
+
+  #post1 .blob-br {
+    width: 640px; height: 640px;
+    bottom: -120px; right: -100px;
+    background: radial-gradient(circle, rgba(245,158,11,.18), transparent 70%);
+  }
+
+  #post1 .fav-badge   { top: 112px; }
+
+  #post1 .p1-headline {
+    position: absolute;
+    top: 358px;
+    width: 100%;
+    padding: 0 64px;
+    text-align: center;
+    animation: fadeUp .75s ease .25s backwards;
+  }
+
+  #post1 .p1-headline h1 {
+    font-size: 80px;
+    font-weight: 900;
+    line-height: 1.08;
+    color: #fff;
+  }
+
+  #post1 .p1-headline h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, #F59E0B, #FBBF24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  #post1 .brand-name {
+    position: absolute;
+    top: 592px;
+    width: 100%;
+    animation: fadeUp .75s ease .5s backwards;
+  }
+
+  #post1 .amber-rule {
+    position: absolute;
+    top: 684px;
+    animation: divider-grow 1.2s ease .7s backwards;
+  }
+
+  #post1 .services-grid {
+    position: absolute;
+    top: 744px;
+    bottom: 188px;
+    left: 54px;
+    right: 54px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 26px;
+  }
+
+  .svc-tile {
+    background: rgba(255,255,255,.055);
+    border: 1px solid rgba(48,176,176,.18);
+    border-radius: 26px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+    animation: scale-in .55s ease backwards;
+  }
+
+  .svc-tile:nth-child(1) { animation-delay: .75s; }
+  .svc-tile:nth-child(2) { animation-delay: .92s; border-color: rgba(245,158,11,.22); }
+  .svc-tile:nth-child(3) { animation-delay: 1.1s; }
+  .svc-tile:nth-child(4) { animation-delay: 1.28s; border-color: rgba(245,158,11,.22); }
+  .svc-tile:nth-child(5) { animation-delay: 1.46s; }
+  .svc-tile:nth-child(6) { animation-delay: 1.64s; background: rgba(48,176,176,.1); border-color: rgba(48,176,176,.35); }
+
+  .svc-tile .svc-code {
+    font-size: 36px;
+    font-weight: 900;
+    letter-spacing: 2px;
+    padding: 10px 20px;
+    border-radius: 12px;
+    line-height: 1;
+  }
+
+  .svc-tile .svc-name {
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    text-align: center;
+    letter-spacing: .5px;
+  }
+
+  .svc-tile .svc-sub {
+    font-size: 22px;
+    color: rgba(255,255,255,.42);
+    text-align: center;
+  }
+
+  .code-teal   { background: rgba(48,176,176,.15);  color: #30B0B0; }
+  .code-amber  { background: rgba(245,158,11,.15); color: #FBBF24; }
+
+  #post1 .footer-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 155px;
+    background: linear-gradient(transparent, rgba(0,0,0,.92));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+  }
+
+  #post1 .footer-bar .url    { font-size: 30px; font-weight: 700; color: #30B0B0; letter-spacing: 2px; }
+  #post1 .footer-bar .sep    { font-size: 26px; color: rgba(255,255,255,.28); }
+  #post1 .footer-bar .handle { font-size: 26px; color: rgba(255,255,255,.45); }
+
+  /* ═══════════════════ POST 2 — PRICING ═══════════════════ */
+
+  #post2 .blob-tl {
+    width: 750px; height: 380px;
+    top: 320px; left: -180px;
+    background: radial-gradient(circle, rgba(245,158,11,.14), transparent 70%);
+  }
+
+  #post2 .blob-br {
+    width: 680px; height: 680px;
+    bottom: 180px; right: -140px;
+    background: radial-gradient(circle, rgba(48,176,176,.18), transparent 70%);
+  }
+
+  #post2 .fav-badge   { top: 104px; }
+
+  #post2 .brand-name {
+    position: absolute;
+    top: 344px;
+    width: 100%;
+    animation: fadeUp .75s ease .2s backwards;
+  }
+
+  #post2 .p2-headline {
+    position: absolute;
+    top: 432px;
+    width: 100%;
+    padding: 0 64px;
+    text-align: center;
+    animation: fadeUp .75s ease .45s backwards;
+  }
+
+  #post2 .p2-headline h1 {
+    font-size: 80px;
+    font-weight: 900;
+    line-height: 1.08;
+    color: #fff;
+  }
+
+  #post2 .p2-headline h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, #F59E0B, #FBBF24);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  #post2 .amber-rule {
+    position: absolute;
+    top: 628px;
+    animation: divider-grow 1.2s ease .65s backwards;
+  }
+
+  #post2 .price-cards {
+    position: absolute;
+    top: 686px;
+    bottom: 148px;
+    left: 54px;
+    right: 54px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .p-card {
+    flex: 1;
+    border-radius: 30px;
+    padding: 42px 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 10px;
+    background: rgba(255,255,255,.05);
+    border: 1px solid rgba(255,255,255,.1);
+    backdrop-filter: blur(12px);
+    animation: scale-in .65s ease backwards;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .p-card:nth-child(1) { animation-delay: .7s; }
+  .p-card:nth-child(2) {
+    animation-delay: .95s;
+    background: linear-gradient(135deg, rgba(48,176,176,.18), rgba(245,158,11,.1));
+    border: 2px solid rgba(48,176,176,.45);
+    animation: scale-in .65s ease .95s backwards, neon-pulse 3s ease-in-out infinite 1.6s;
+  }
+  .p-card:nth-child(3) { animation-delay: 1.2s; }
+
+  .p-card .hot-badge {
+    position: absolute;
+    top: 22px; right: 24px;
+    background: linear-gradient(135deg, #F59E0B, #FBBF24);
+    color: #0d0d0d;
+    font-size: 21px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 20px;
+    border-radius: 100px;
+  }
+
+  .p-card .p-category {
+    font-size: 23px;
+    font-weight: 600;
+    color: rgba(255,255,255,.42);
+    letter-spacing: 3.5px;
+    text-transform: uppercase;
+  }
+
+  .p-card .p-tier {
+    font-size: 46px;
+    font-weight: 900;
+    color: #fff;
+  }
+
+  .p-card:nth-child(2) .p-tier { color: #30B0B0; }
+
+  .p-card .p-price {
+    font-size: 66px;
+    font-weight: 900;
+    color: #F59E0B;
+    line-height: 1;
+  }
+
+  .p-card .p-price small {
+    font-size: 26px;
+    font-weight: 400;
+    color: rgba(255,255,255,.42);
+  }
+
+  .p-card .p-desc {
+    font-size: 26px;
+    color: rgba(255,255,255,.48);
+  }
+
+  #post2 .footer-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 118px;
+    background: linear-gradient(transparent, rgba(0,0,0,.92));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #post2 .footer-bar .url {
+    font-size: 30px;
+    font-weight: 700;
+    color: #30B0B0;
+    letter-spacing: 2px;
+  }
+
+  /* ═══════════════════ POST 3 — CTA ═══════════════════ */
+
+  #post3 .bg-center {
+    width: 860px; height: 860px;
+    top: 50%; left: 50%;
+    margin-top: -430px; margin-left: -430px;
+    background: radial-gradient(circle,
+      rgba(48,176,176,.1) 0%,
+      rgba(245,158,11,.07) 40%,
+      transparent 70%);
+  }
+
+  #post3 .rings-wrap {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 900px;
+    height: 900px;
+  }
+
+  #post3 .ring {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  /* ring-1: 900×900 */
+  #post3 .ring-1 {
+    top: 0; left: 0;
+    width: 900px; height: 900px;
+    border: 1.5px solid rgba(48,176,176,.17);
+    animation: spin-cw 22s linear infinite;
+  }
+  #post3 .ring-1::after {
+    content: '';
+    position: absolute;
+    top: -4px; left: 50%;
+    width: 8px; height: 8px;
+    background: #30B0B0;
+    border-radius: 50%;
+    margin-left: -4px;
+    box-shadow: 0 0 18px #30B0B0;
+  }
+
+  /* ring-2: 700×700 — margin: (900-700)/2 = 100 */
+  #post3 .ring-2 {
+    top: 0; left: 0;
+    width: 700px; height: 700px;
+    margin: 100px;
+    border: 1.5px dashed rgba(245,158,11,.22);
+    animation: spin-ccw 17s linear infinite;
+  }
+  #post3 .ring-2::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 50%;
+    width: 6px; height: 6px;
+    background: #F59E0B;
+    border-radius: 50%;
+    margin-left: -3px;
+    box-shadow: 0 0 14px #F59E0B;
+  }
+
+  /* ring-3: 520×520 — margin: (900-520)/2 = 190 */
+  #post3 .ring-3 {
+    top: 0; left: 0;
+    width: 520px; height: 520px;
+    margin: 190px;
+    border: 1px solid rgba(48,176,176,.28);
+    animation: spin-cw 12s linear infinite;
+  }
+
+  /* ring-4: 360×360 — margin: (900-360)/2 = 270 */
+  #post3 .ring-4 {
+    top: 0; left: 0;
+    width: 360px; height: 360px;
+    margin: 270px;
+    border: 2px solid rgba(245,158,11,.34);
+    animation: spin-ccw 8s linear infinite, amber-glow 3s ease-in-out infinite;
+  }
+
+  /* Center favicon — wrapper uses margin to centre without interfering with animation */
+  #post3 .center-fav {
+    position: absolute;
+    top: 42%; left: 50%;
+    width: 200px; height: 200px;
+    margin-top: -100px; margin-left: -100px;
+  }
+
+  #post3 .center-fav img {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 158px; height: 158px;
+    object-fit: cover;
+    animation: fav-pulse 3s ease-in-out infinite;
+  }
+
+  /* ── PLACEHOLDER to prevent selector orphan ── */
+  #post3 .sun-haze {
+    display: none;
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0; height: 0;
+  }
+  #post3 .sun-corona-outer, #post3 .sun-corona-inner,
+  #post3 .sun-core, #post3 .sun-favicon { display: none; }
+
+  /* ── Text block ── */
+  #post3 .text-block {
+    position: absolute;
+    top: 67%; left: 0; right: 0;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 28px;
+    padding: 0 80px;
+  }
+  #post3 .cta-heading {
+    font-size: 86px; font-weight: 900;
+    text-align: center; line-height: 1.08; color: #fff;
+    animation: fadeUp .8s ease .45s backwards;
+  }
+  #post3 .cta-heading em {
+    font-style: normal;
+    background: linear-gradient(135deg, #F59E0B, #FBBF24);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  #post3 .brand-name  { font-size: 50px; letter-spacing: 5px; animation: fadeUp .8s ease .7s backwards; }
+  #post3 .url-line    { font-size: 34px; font-weight: 700; color: #30B0B0; letter-spacing: 2px; animation: fadeUp .8s ease .9s backwards; }
+  #post3 .pills       { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; animation: fadeUp .8s ease 1.1s backwards; }
+  #post3 .pill        { background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: 100px; padding: 14px 36px; font-size: 26px; font-weight: 600; color: rgba(255,255,255,.72); }
+  #post3 .cta-strip   { width: 100%; background: linear-gradient(135deg, rgba(48,176,176,.22), rgba(245,158,11,.14)); border: 1px solid rgba(48,176,176,.4); border-radius: 22px; padding: 38px; text-align: center; font-size: 34px; font-weight: 800; color: #fff; letter-spacing: 2.5px; text-transform: uppercase; animation: fadeUp .8s ease 1.3s backwards, neon-pulse 3s ease-in-out infinite 2.1s; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     POST 1 — Services Overview
+══════════════════════════════════════════ -->
+<div id="post1" class="post">
+  <div class="bg-blob blob-tl"></div>
+  <div class="bg-blob blob-br"></div>
+
+  <div class="fav-badge">
+    <div class="ring-a"></div>
+    <div class="ring-b"></div>
+    <img src="images/favicon.png" alt="Swift Designz" />
+  </div>
+
+  <div class="p1-headline">
+    <h1>Your Brand,<br /><em>Built Right.</em></h1>
+  </div>
+
+  <div class="brand-name">SWIFT DESIGNZ</div>
+
+  <div class="amber-rule"></div>
+
+  <div class="services-grid">
+    <div class="svc-tile">
+      <div class="svc-code code-teal">WEB</div>
+      <div class="svc-name">Web Design</div>
+      <div class="svc-sub">From R2,500</div>
+    </div>
+    <div class="svc-tile">
+      <div class="svc-code code-amber">SHOP</div>
+      <div class="svc-name">E-Commerce</div>
+      <div class="svc-sub">From R4,000</div>
+    </div>
+    <div class="svc-tile">
+      <div class="svc-code code-teal">APP</div>
+      <div class="svc-name">Mobile Apps</div>
+      <div class="svc-sub">From R5,000</div>
+    </div>
+    <div class="svc-tile">
+      <div class="svc-code code-amber">PM</div>
+      <div class="svc-name">PM Training</div>
+      <div class="svc-sub">Custom Plans</div>
+    </div>
+    <div class="svc-tile">
+      <div class="svc-code code-amber">AI</div>
+      <div class="svc-name">AI Training</div>
+      <div class="svc-sub">Custom Plans</div>
+    </div>
+    <div class="svc-tile">
+      <div class="svc-code code-teal">SA</div>
+      <div class="svc-name">Nationwide</div>
+      <div class="svc-sub">100% Remote</div>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <span class="url">swiftdesignz.co.za</span>
+    <span class="sep">·</span>
+    <span class="handle">@swiftdesignz101</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     POST 2 — Pricing
+══════════════════════════════════════════ -->
+<div id="post2" class="post">
+  <div class="bg-blob blob-tl"></div>
+  <div class="bg-blob blob-br"></div>
+
+  <div class="fav-badge">
+    <div class="ring-a"></div>
+    <div class="ring-b"></div>
+    <img src="images/favicon.png" alt="Swift Designz" />
+  </div>
+
+  <div class="brand-name">SWIFT DESIGNZ</div>
+
+  <div class="p2-headline">
+    <h1>Every Budget.<br /><em>One Studio.</em></h1>
+  </div>
+
+  <div class="amber-rule"></div>
+
+  <div class="price-cards">
+    <div class="p-card">
+      <div class="p-category">Website</div>
+      <div class="p-tier">Starter</div>
+      <div class="p-price">R2,500 <small>from</small></div>
+      <div class="p-desc">3 pages &middot; Custom design</div>
+    </div>
+    <div class="p-card">
+      <div class="hot-badge">Popular</div>
+      <div class="p-category">E-Commerce</div>
+      <div class="p-tier">Business</div>
+      <div class="p-price">R7,500 <small>from</small></div>
+      <div class="p-desc">100 products &middot; Full features</div>
+    </div>
+    <div class="p-card">
+      <div class="p-category">Mobile App</div>
+      <div class="p-tier">MVP</div>
+      <div class="p-price">R5,000 <small>from</small></div>
+      <div class="p-desc">Core features &middot; 1 platform</div>
+    </div>
+  </div>
+
+  <div class="footer-bar">
+    <span class="url">swiftdesignz.co.za</span>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     POST 3 — CTA / Let's Build Something
+══════════════════════════════════════════ -->
+<div id="post3" class="post">
+  <div class="bg-blob bg-center"></div>
+
+  <div class="rings-wrap">
+    <div class="ring ring-1"></div>
+    <div class="ring ring-2"></div>
+    <div class="ring ring-3"></div>
+    <div class="ring ring-4"></div>
+  </div>
+
+  <div class="center-fav">
+    <img src="images/favicon.png" alt="Swift Designz" />
+  </div>
+
+  <div class="text-block">
+    <div class="cta-heading">Let's Build<br /><em>Something Great</em></div>
+    <div class="brand-name">SWIFT DESIGNZ</div>
+    <div class="url-line">swiftdesignz.co.za</div>
+    <div class="pills">
+      <div class="pill">Free Quote</div>
+      <div class="pill">Remote</div>
+      <div class="pill">Nationwide</div>
+    </div>
+    <div class="cta-strip">Start Your Project Today</div>
+  </div>
+</div>
+
+<script>
+  // Hash-based isolation — used by the recorder so each post is captured alone.
+  // Viewing without a hash shows all 3 posts stacked for preview.
+  const hash = location.hash.replace('#', '');
+  if (hash) {
+    document.querySelectorAll('.post').forEach(function(p) {
+      p.style.display = (p.id === hash) ? 'flex' : 'none';
+    });
+  }
+</script>
+</body>
+</html>

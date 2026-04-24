@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import FallingBlocksCanvas from "@/components/ui/FallingBlocksCanvas";
+import FallingBlocksCanvas from "@/app/components/ui/FallingBlocksCanvas";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
 import { useI18n } from "@/i18n/I18nProvider";

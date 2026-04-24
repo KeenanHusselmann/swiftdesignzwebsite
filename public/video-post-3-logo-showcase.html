@@ -47,9 +47,9 @@
     from { transform: rotate(0deg); }
     to   { transform: rotate(-360deg); }
   }
-  @keyframes ring-spin  { to { transform: translate(-50%, -50%) rotate(360deg); } }
-  @keyframes ring-spin-ccw { to { transform: translate(-50%, -50%) rotate(-360deg); } }
-  @keyframes outer-spin { to { transform: translate(-50%, -50%) rotate(-360deg); } }
+  @keyframes ring-spin     { from { transform: rotate(0deg);   } to { transform: rotate(360deg);  } }
+  @keyframes ring-spin-ccw  { from { transform: rotate(0deg);   } to { transform: rotate(-360deg); } }
+  @keyframes outer-spin     { from { transform: rotate(0deg);   } to { transform: rotate(-360deg); } }
   @keyframes progress {
     from { width: 0%; }
     to   { width: 100%; }
@@ -103,10 +103,10 @@
   }
 
   /* ── RING SYSTEM ── */
-  /* all rings are absolutely centered at 50% × 42% */
+  /* all rings are absolutely centered at 50% × 40% */
   .ring {
     position: absolute;
-    top: 42%; left: 50%;
+    top: 40%; left: 50%;
     border-radius: 50%;
     border-style: solid;
     border-color: transparent;
@@ -148,7 +148,7 @@
   /* ── ORBIT ARM + ORBITING FAVICON ── */
   .orbit-arm {
     position: absolute;
-    top: 42%; left: 50%;
+    top: 40%; left: 50%;
     width: 600px; height: 600px;
     margin: -300px 0 0 -300px;
     border-radius: 50%;
@@ -170,7 +170,8 @@
   /* ── CENTER FAVICON (pulsing) ── */
   .center-fav {
     position: absolute;
-    top: 42%; left: 50%;
+    top: 40%; left: 50%;
+    transform: translate(-50%, -50%);
     width: 190px; height: 190px;
     border-radius: 42px;
     object-fit: cover;
@@ -181,7 +182,7 @@
   /* ── BRAND TEXT ── */
   .brand-name {
     position: absolute;
-    top: 67%; left: 0; right: 0;
+    top: 65%; left: 0; right: 0;
     text-align: center;
     font-size: 78px;
     font-weight: 900;
@@ -195,7 +196,7 @@
   }
   .brand-tagline {
     position: absolute;
-    top: 73.5%; left: 0; right: 0;
+    top: 71.5%; left: 0; right: 0;
     text-align: center;
     font-size: 22px;
     letter-spacing: 8px;
@@ -207,7 +208,7 @@
   /* ── AMBER DIVIDER ── */
   .divider {
     position: absolute;
-    top: 78%; left: 50%;
+    top: 76%; left: 50%;
     width: 300px; height: 2px;
     transform: translateX(-50%);
     background: linear-gradient(90deg, transparent, #F59E0B, #30B0B0, transparent);
@@ -217,7 +218,7 @@
   /* ── URL ── */
   .url {
     position: absolute;
-    top: 80%; left: 0; right: 0;
+    top: 78%; left: 0; right: 0;
     text-align: center;
     font-size: 34px;
     font-weight: 700;
@@ -230,7 +231,7 @@
   /* ── SERVICE PILLS ── */
   .pills {
     position: absolute;
-    top: 85.5%; left: 0; right: 0;
+    top: 83%; left: 0; right: 0;
     display: flex;
     justify-content: center;
     gap: 24px;
@@ -295,7 +296,7 @@
 
   <div class="bg"></div>
 
-  <div class="date-tag">March 27, 2026</div>
+  <div class="date-tag">April 11, 2026</div>
 
   <!-- concentric rings -->
   <div class="ring ring-1"></div>

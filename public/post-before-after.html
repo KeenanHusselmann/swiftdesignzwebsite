@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080" />
+<title>Swift Designz — Before & After</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 1080px;
+    background: #050505;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .post {
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    position: relative;
+    background: #060606;
+  }
+
+  /* ════════════════════ KEYFRAMES ════════════════════ */
+
+  @keyframes fade-in {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+  @keyframes fade-in-up {
+    from { opacity: 0; transform: translateY(32px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes wipe-reveal {
+    from { clip-path: inset(0 100% 0 0); }
+    to   { clip-path: inset(0 0% 0 0); }
+  }
+  @keyframes divider-drop {
+    from { opacity: 0; transform: translateX(-50%) scaleY(0); }
+    to   { opacity: 1; transform: translateX(-50%) scaleY(1); }
+  }
+  @keyframes slide-in-left {
+    from { opacity: 0; transform: translateX(-60px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes slide-in-right {
+    from { opacity: 0; transform: translateX(60px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes label-pop {
+    0%   { opacity: 0; transform: scale(.6) translateY(-12px); }
+    70%  { transform: scale(1.08) translateY(0); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  @keyframes stat-fly-in {
+    from { opacity: 0; transform: translateY(28px) scale(.88); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 22px rgba(48,176,176,.45), 0 0 60px rgba(48,176,176,.18); }
+    50%       { box-shadow: 0 0 50px rgba(48,176,176,.8),  0 0 120px rgba(48,176,176,.32); }
+  }
+  @keyframes shimmer {
+    0%   { background-position: -300% center; }
+    100% { background-position:  300% center; }
+  }
+  @keyframes neon-border {
+    0%, 100% { box-shadow: inset 0 0 0 1px rgba(48,176,176,.12); }
+    50%       { box-shadow: inset 0 0 0 1px rgba(48,176,176,.5); }
+  }
+  @keyframes count-up-flash {
+    0%   { filter: drop-shadow(0 0 0px rgba(48,176,176,0)); }
+    30%  { filter: drop-shadow(0 0 28px rgba(48,176,176,1)); }
+    100% { filter: drop-shadow(0 0 12px rgba(48,176,176,.5)); }
+  }
+  @keyframes badge-arrive {
+    from { opacity: 0; transform: scale(0) rotate(-12deg); }
+    80%  { transform: scale(1.12) rotate(4deg); }
+    to   { opacity: 1; transform: scale(1) rotate(0deg); }
+  }
+  @keyframes fav-pulse {
+    0%, 100% { filter: drop-shadow(0 0 18px rgba(245,158,11,.6)) drop-shadow(0 0 36px rgba(48,176,176,.3)); }
+    50%       { filter: drop-shadow(0 0 36px rgba(245,158,11,1))  drop-shadow(0 0 72px rgba(48,176,176,.6)); }
+  }
+  @keyframes spin-cw  { to { transform: rotate(360deg); } }
+  @keyframes spin-ccw { to { transform: rotate(-360deg); } }
+
+  /* ════════════════════ HEADER ════════════════════ */
+
+  .header {
+    position: absolute;
+    top: 80px;
+    left: 0; right: 0;
+    text-align: center;
+    opacity: 0;
+    animation: fade-in-up .8s ease .2s forwards;
+  }
+  .header-eyebrow {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 10px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.3);
+    margin-bottom: 18px;
+  }
+  .header-title {
+    font-size: 88px;
+    font-weight: 900;
+    line-height: 1;
+    letter-spacing: -3px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #c0c0c0 0%, #ffffff 40%, #30B0B0 70%, #F59E0B 100%);
+    background-size: 250% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 5s linear infinite 1.5s;
+  }
+
+  /* ════════════════════ SPLIT SCREEN ARENA ════════════════════ */
+
+  .arena {
+    position: absolute;
+    top: 280px;
+    left: 40px; right: 40px;
+    height: 1020px;
+    border-radius: 24px;
+    overflow: hidden;
+    opacity: 0;
+    animation: fade-in .4s ease .8s forwards;
+    animation-fill-mode: both;
+    /* neon border glow added after reveal */
+  }
+
+  .arena-glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 24px;
+    pointer-events: none;
+    z-index: 20;
+    animation: neon-border 4s ease-in-out infinite 3s;
+  }
+
+  /* LEFT PANEL — before (terrible generic site) */
+  .panel-before {
+    position: absolute;
+    top: 0; left: 0;
+    width: 490px; height: 100%;
+    background: #0e0e0e;
+    overflow: hidden;
+  }
+
+  .panel-before .fake-site {
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+    filter: blur(1.5px) saturate(0.4);
+    opacity: .55;
+    animation: slide-in-left .9s cubic-bezier(.4,0,.2,1) 1.1s both;
+  }
+
+  /* Fake browser chrome */
+  .fake-bar {
+    height: 44px;
+    background: #1c1c1c;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+  .dot { width: 12px; height: 12px; border-radius: 50%; }
+  .dot.r { background: #e74c3c; }
+  .dot.y { background: #f39c12; }
+  .dot.g { background: #2ecc71; }
+  .fake-url {
+    flex: 1;
+    height: 22px;
+    background: #2a2a2a;
+    border-radius: 4px;
+    margin: 0 10px;
+  }
+
+  /* Fake hero */
+  .fake-hero {
+    height: 220px;
+    background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 20px;
+    flex-shrink: 0;
+  }
+  .fake-h1 { width: 70%; height: 28px; background: #3a3a3a; border-radius: 4px; }
+  .fake-h2 { width: 50%; height: 18px; background: #2e2e2e; border-radius: 4px; }
+  .fake-btn { width: 120px; height: 36px; background: #888; border-radius: 6px; margin-top: 8px; }
+
+  /* Fake nav */
+  .fake-nav {
+    height: 48px;
+    background: #181818;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+  .nav-item { height: 14px; background: #333; border-radius: 3px; }
+
+  /* Fake content rows */
+  .fake-content {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: #111;
+  }
+  .fake-row { height: 14px; background: #252525; border-radius: 3px; }
+  .fake-row.short { width: 60%; }
+  .fake-row.med   { width: 80%; }
+
+  /* Fake misaligned cards */
+  .fake-cards {
+    display: flex;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .fake-card {
+    flex: 1;
+    height: 120px;
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 6px;
+  }
+
+  /* RIGHT PANEL — after (Swift Designz) */
+  .panel-after {
+    position: absolute;
+    top: 0; right: 0;
+    width: 490px; height: 100%;
+    background: #080f0f;
+    overflow: hidden;
+    clip-path: inset(0 100% 0 0);
+    animation: wipe-reveal 1.2s cubic-bezier(.4,0,.2,1) 1.8s forwards;
+  }
+
+  .panel-after .swift-site {
+    width: 100%; height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Fake Swift browser bar */
+  .swift-bar {
+    height: 44px;
+    background: linear-gradient(90deg, #0a1919, #091515);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 8px;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(48,176,176,.25);
+  }
+  .swift-url {
+    flex: 1;
+    height: 22px;
+    background: rgba(48,176,176,.12);
+    border-radius: 4px;
+    margin: 0 10px;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    overflow: hidden;
+  }
+
+  /* Swift hero */
+  .swift-hero {
+    height: 220px;
+    background: linear-gradient(135deg, #0d1f1f 0%, #071414 50%, #0b1a0b 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 20px;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(48,176,176,.2);
+    position: relative;
+    overflow: hidden;
+  }
+  .swift-hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 320px; height: 240px;
+    background: radial-gradient(circle, rgba(48,176,176,.22) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .sh1 {
+    width: 80%;
+    height: 26px;
+    background: linear-gradient(90deg, #30B0B0, #509090);
+    border-radius: 4px;
+    box-shadow: 0 0 18px rgba(48,176,176,.5);
+  }
+  .sh2 { width: 55%; height: 16px; background: rgba(255,255,255,.2); border-radius: 4px; }
+  .s-btn {
+    width: 130px; height: 36px;
+    background: linear-gradient(90deg, #30B0B0, #F59E0B);
+    border-radius: 6px;
+    margin-top: 8px;
+    box-shadow: 0 0 22px rgba(48,176,176,.5);
+  }
+
+  /* Swift nav */
+  .swift-nav {
+    height: 48px;
+    background: #060f0f;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 20px;
+    flex-shrink: 0;
+    border-bottom: 1px solid rgba(48,176,176,.12);
+  }
+  .s-nav-item { height: 12px; border-radius: 3px; }
+  .s-nav-item.teal { background: #30B0B0; }
+  .s-nav-item.dim  { background: rgba(48,176,176,.3); }
+
+  /* Swift content */
+  .swift-content {
+    flex: 1;
+    padding: 20px;
+    background: #070d0d;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .s-row { height: 12px; border-radius: 3px; }
+  .s-row.full  { width: 90%; background: rgba(48,176,176,.2); }
+  .s-row.med   { width: 65%; background: rgba(48,176,176,.15); }
+  .s-row.short { width: 40%; background: rgba(245,158,11,.25); }
+
+  /* Swift cards */
+  .swift-cards {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  .swift-card {
+    flex: 1;
+    height: 120px;
+    background: linear-gradient(135deg, rgba(48,176,176,.08), rgba(48,176,176,.03));
+    border: 1px solid rgba(48,176,176,.3);
+    border-radius: 8px;
+    box-shadow: 0 0 14px rgba(48,176,176,.12);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .sc-line { height: 10px; border-radius: 3px; }
+  .sc-line.a { width: 60%; background: rgba(48,176,176,.5); }
+  .sc-line.b { width: 40%; background: rgba(245,158,11,.4); }
+
+  /* CENTRE DIVIDER */
+  .split-divider {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) scaleY(0);
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg,
+      rgba(48,176,176,0) 0%,
+      rgba(48,176,176,.9) 20%,
+      rgba(245,158,11,.9) 50%,
+      rgba(48,176,176,.9) 80%,
+      rgba(48,176,176,0) 100%);
+    box-shadow: 0 0 18px rgba(48,176,176,.7), 0 0 50px rgba(48,176,176,.3);
+    transform-origin: top center;
+    animation: divider-drop .8s cubic-bezier(.4,0,.2,1) 1.6s forwards;
+    z-index: 10;
+  }
+
+  /* LABELS — BEFORE / AFTER */
+  .label-before, .label-after {
+    position: absolute;
+    top: 32px;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    padding: 10px 28px;
+    border-radius: 6px;
+    z-index: 15;
+    opacity: 0;
+  }
+  .label-before {
+    left: 32px;
+    background: rgba(80,20,20,.7);
+    border: 1.5px solid rgba(200,50,50,.4);
+    color: rgba(255,120,120,.85);
+    animation: label-pop .6s cubic-bezier(.16,1,.3,1) 2.2s forwards;
+  }
+  .label-after {
+    right: 32px;
+    background: rgba(10,40,40,.7);
+    border: 1.5px solid rgba(48,176,176,.5);
+    color: #30B0B0;
+    animation: label-pop .6s cubic-bezier(.16,1,.3,1) 2.6s forwards;
+  }
+
+  /* ════════════════════ STATS ROW ════════════════════ */
+
+  .stats-row {
+    position: absolute;
+    top: 1352px;
+    left: 40px; right: 40px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+  }
+
+  .stat-card {
+    flex: 1;
+    background: linear-gradient(135deg, rgba(48,176,176,.07), rgba(48,176,176,.03));
+    border: 1px solid rgba(48,176,176,.28);
+    border-radius: 20px;
+    padding: 30px 16px 26px;
+    text-align: center;
+    opacity: 0;
+    box-shadow: 0 0 20px rgba(48,176,176,.08);
+  }
+  .stat-card:nth-child(1) { animation: stat-fly-in .7s ease 3.4s forwards, glow-pulse 4s ease-in-out infinite 4.5s; }
+  .stat-card:nth-child(2) { animation: stat-fly-in .7s ease 3.7s forwards, glow-pulse 4s ease-in-out infinite 4.8s; }
+  .stat-card:nth-child(3) { animation: stat-fly-in .7s ease 4.0s forwards, glow-pulse 4s ease-in-out infinite 5.1s; }
+
+  .stat-value {
+    font-size: 72px;
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, #F59E0B, #30B0B0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -2px;
+  }
+  .stat-suffix {
+    font-size: 44px;
+    font-weight: 900;
+    display: inline;
+    background: linear-gradient(135deg, #F59E0B, #30B0B0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .stat-label {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.38);
+    margin-top: 10px;
+  }
+
+  /* ════════════════════ CTA STRIP ════════════════════ */
+
+  .cta-strip {
+    position: absolute;
+    bottom: 92px;
+    left: 40px; right: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    opacity: 0;
+    animation: fade-in-up .9s ease 5.0s forwards;
+  }
+
+  .cta-text {
+    font-size: 46px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    text-align: center;
+    color: rgba(255,255,255,.9);
+  }
+  .cta-text span {
+    background: linear-gradient(90deg, #30B0B0, #F59E0B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .cta-brand {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+
+  .fav-badge {
+    position: relative;
+    width: 96px; height: 96px;
+    flex-shrink: 0;
+  }
+  .fav-badge .ring-a {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 90px; height: 90px;
+    margin-top: -45px; margin-left: -45px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(48,176,176,.45);
+    animation: spin-cw 7s linear infinite;
+  }
+  .fav-badge .ring-b {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 100px; height: 100px;
+    margin-top: -50px; margin-left: -50px;
+    border-radius: 50%;
+    border: 1px solid rgba(245,158,11,.3);
+    animation: spin-ccw 10s linear infinite;
+  }
+  .fav-badge img {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 60px; height: 60px;
+    margin-top: -30px; margin-left: -30px;
+    object-fit: cover;
+    animation: fav-pulse 3s ease-in-out infinite;
+  }
+
+  .brand-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .brand-name {
+    font-size: 46px;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #F59E0B, #30B0B0);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 5s linear infinite 6s;
+  }
+  .brand-url {
+    font-size: 26px;
+    font-weight: 700;
+    color: rgba(255,255,255,.35);
+    letter-spacing: 2px;
+  }
+
+  /* Outer neon border frame */
+  .post::after {
+    content: '';
+    position: absolute;
+    inset: 18px;
+    border-radius: 28px;
+    border: 1px solid rgba(48,176,176,.1);
+    pointer-events: none;
+    animation: neon-border 5s ease-in-out infinite 5s;
+  }
+</style>
+</head>
+<body>
+<div class="post">
+
+  <!-- ── Header ── -->
+  <div class="header">
+    <div class="header-eyebrow">Website Upgrade</div>
+    <div class="header-title">The Difference<br>Is Clear.</div>
+  </div>
+
+  <!-- ── Split-screen arena ── -->
+  <div class="arena">
+    <div class="arena-glow"></div>
+
+    <!-- Before panel -->
+    <div class="panel-before">
+      <div class="fake-site">
+        <div class="fake-bar">
+          <div class="dot r"></div>
+          <div class="dot y"></div>
+          <div class="dot g"></div>
+          <div class="fake-url"></div>
+        </div>
+        <div class="fake-nav">
+          <div class="nav-item" style="width:50px"></div>
+          <div class="nav-item" style="width:40px"></div>
+          <div class="nav-item" style="width:60px"></div>
+          <div class="nav-item" style="width:35px"></div>
+        </div>
+        <div class="fake-hero">
+          <div class="fake-h1"></div>
+          <div class="fake-h2"></div>
+          <div class="fake-btn"></div>
+        </div>
+        <div class="fake-content">
+          <div class="fake-row"></div>
+          <div class="fake-row med"></div>
+          <div class="fake-row short"></div>
+          <div class="fake-row"></div>
+          <div class="fake-row med"></div>
+          <div class="fake-cards">
+            <div class="fake-card"></div>
+            <div class="fake-card"></div>
+            <div class="fake-card"></div>
+          </div>
+          <div class="fake-row short"></div>
+          <div class="fake-row"></div>
+          <div class="fake-row med"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- After panel -->
+    <div class="panel-after">
+      <div class="swift-site">
+        <div class="swift-bar">
+          <div class="dot r"></div>
+          <div class="dot y"></div>
+          <div class="dot g"></div>
+          <div class="swift-url"></div>
+        </div>
+        <div class="swift-nav">
+          <div class="s-nav-item teal" style="width:60px"></div>
+          <div class="s-nav-item dim" style="width:48px"></div>
+          <div class="s-nav-item dim" style="width:52px"></div>
+          <div class="s-nav-item dim" style="width:40px"></div>
+        </div>
+        <div class="swift-hero">
+          <div class="sh1"></div>
+          <div class="sh2"></div>
+          <div class="s-btn"></div>
+        </div>
+        <div class="swift-content">
+          <div class="s-row full"></div>
+          <div class="s-row med"></div>
+          <div class="s-row short"></div>
+          <div class="s-row full"></div>
+          <div class="s-row med"></div>
+          <div class="swift-cards">
+            <div class="swift-card">
+              <div class="sc-line a"></div>
+              <div class="sc-line b"></div>
+            </div>
+            <div class="swift-card">
+              <div class="sc-line a"></div>
+              <div class="sc-line b"></div>
+            </div>
+            <div class="swift-card">
+              <div class="sc-line a"></div>
+              <div class="sc-line b"></div>
+            </div>
+          </div>
+          <div class="s-row short"></div>
+          <div class="s-row full"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Labels -->
+    <div class="label-before">BEFORE</div>
+    <div class="label-after">AFTER</div>
+
+    <!-- Centre divider -->
+    <div class="split-divider"></div>
+  </div>
+
+  <!-- ── Stats ── -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div><span class="stat-value" id="stat-speed">0</span><span class="stat-suffix">×</span></div>
+      <div class="stat-label">Faster Load</div>
+    </div>
+    <div class="stat-card">
+      <div><span class="stat-value" id="stat-conv">0</span><span class="stat-suffix">%</span></div>
+      <div class="stat-label">More Leads</div>
+    </div>
+    <div class="stat-card">
+      <div><span class="stat-value" id="stat-score">0</span></div>
+      <div class="stat-label">Perf Score</div>
+    </div>
+  </div>
+
+  <!-- ── CTA ── -->
+  <div class="cta-strip">
+    <div class="cta-text">Your business deserves<br><span>the After.</span></div>
+    <div class="cta-brand">
+      <div class="fav-badge">
+        <div class="ring-a"></div>
+        <div class="ring-b"></div>
+        <img src="images/favicon.png" alt="Swift Designz" />
+      </div>
+      <div class="brand-stack">
+        <div class="brand-name">SWIFT DESIGNZ</div>
+        <div class="brand-url">swiftdesignz.co.za</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function countUp(id, target, duration, startDelay, suffix) {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const start = performance.now();
+      function tick(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        el.textContent = Math.round(eased * target);
+        if (progress < 1) requestAnimationFrame(tick);
+        else el.textContent = target;
+      }
+      requestAnimationFrame(tick);
+    }, startDelay);
+  }
+
+  countUp('stat-speed', 8,  1200, 3500, '×');
+  countUp('stat-conv',  3.4 * 10, 1400, 3900, '%'); // will show 34 then we'll fix below
+  countUp('stat-score', 98, 1500, 4200, '');
+
+  // stat-conv should be 3.4× → show as "3.4"
+  setTimeout(() => {
+    const el = document.getElementById('stat-conv');
+    if (!el) return;
+    const start = performance.now();
+    const dur = 1400;
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.textContent = (e * 340 / 100).toFixed(1);
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = '3.4';
+    }
+    requestAnimationFrame(tick);
+  }, 3900);
+</script>
+</body>
+</html>

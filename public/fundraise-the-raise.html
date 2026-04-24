@@ -1,0 +1,388 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080" />
+<title>Swift Designz — The Raise</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Inter:wght@300;400;600;700;800&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal: #30B0B0;
+    --teal-dim: #509090;
+    --teal-deep: #307070;
+    --amber: #F59E0B;
+  }
+
+  html, body {
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: #04090D;
+    font-family: 'Inter', sans-serif;
+    color: #fff;
+    position: relative;
+    transform-origin: top left;
+  }
+
+  @keyframes shimmer { 0% { background-position: -300% center; } 100% { background-position: 300% center; } }
+
+  /* BACKGROUND */
+  .bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 50% 8%, rgba(48,176,176,0.12) 0%, transparent 58%),
+      radial-gradient(ellipse 45% 35% at 80% 80%, rgba(245,158,11,0.07) 0%, transparent 55%),
+      #04090D;
+  }
+  .bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(60deg,  rgba(48,176,176,0.025) 0, rgba(48,176,176,0.025) 1px, transparent 1px, transparent 48px),
+      repeating-linear-gradient(120deg, rgba(48,176,176,0.025) 0, rgba(48,176,176,0.025) 1px, transparent 1px, transparent 48px);
+  }
+
+  /* CORNER ACCENTS */
+  .corner { position: absolute; width: 36px; height: 36px; z-index: 25; pointer-events: none; opacity: 0.6; }
+  .corner.tl { top: 20px; left: 20px;   border-top: 2px solid var(--teal); border-left: 2px solid var(--teal); }
+  .corner.tr { top: 20px; right: 20px;  border-top: 2px solid var(--teal); border-right: 2px solid var(--teal); }
+  .corner.bl { bottom: 20px; left: 20px;  border-bottom: 2px solid var(--teal); border-left: 2px solid var(--teal); }
+  .corner.br { bottom: 20px; right: 20px; border-bottom: 2px solid var(--teal); border-right: 2px solid var(--teal); }
+
+  /* LOGO */
+  .logo-mark {
+    position: absolute;
+    top: 22px; right: 56px;
+    height: 48px;
+    opacity: 0.85;
+    z-index: 26;
+  }
+
+  /* HEADLINE */
+  .headline-area {
+    position: absolute;
+    top: 40px; left: 0; right: 0;
+    text-align: center;
+  }
+  .hl-small {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+  .hl-big {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 76px;
+    font-weight: 900;
+    color: var(--teal);
+    letter-spacing: 2px;
+    line-height: 1.05;
+    text-shadow: 0 0 30px rgba(48,176,176,.55), 0 0 70px rgba(48,176,176,.2);
+  }
+  .hl-sub {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-top: 8px;
+  }
+
+  /* PROGRESS BAR */
+  .progress-area {
+    position: absolute;
+    top: 238px; left: 100px; right: 100px;
+  }
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .progress-labels span {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--teal-dim);
+  }
+  .progress-track {
+    width: 100%;
+    height: 14px;
+    background: rgba(48,176,176,0.1);
+    border-radius: 99px;
+    border: 1px solid rgba(48,176,176,0.2);
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 6%;
+    background: linear-gradient(90deg, var(--teal-deep), var(--teal), var(--amber));
+    border-radius: 99px;
+    box-shadow: 0 0 14px rgba(48,176,176,.5);
+  }
+
+  /* COPY AREA */
+  .copy-area {
+    position: absolute;
+    top: 295px; left: 72px; right: 72px;
+    bottom: 420px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 20;
+  }
+  .section-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 22px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--teal-dim);
+    text-align: center;
+    padding: 0 0 18px;
+  }
+  .para {
+    padding: 22px 0;
+    font-size: 40px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: rgba(255,255,255,0.82);
+    text-align: center;
+  }
+  .para strong { font-weight: 700; color: #fff; }
+  .para em { font-style: normal; color: var(--teal); font-weight: 600; }
+  .para-sep {
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(48,176,176,0.4) 30%, rgba(48,176,176,0.4) 70%, transparent 100%);
+  }
+  .para-sep.amber {
+    background: linear-gradient(90deg, transparent 0%, rgba(245,158,11,0.3) 30%, rgba(245,158,11,0.3) 70%, transparent 100%);
+  }
+  .para.highlight {
+    font-size: 48px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.95);
+    padding: 22px 0;
+  }
+  .para.highlight em { color: var(--teal); }
+
+  /* QUOTE (inline in copy flow) */
+  .quote-inline {
+    font-family: 'Inter', sans-serif;
+    font-size: 30px;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--teal);
+    text-align: center;
+    letter-spacing: 0.3px;
+    line-height: 1.5;
+    text-shadow: 0 0 20px rgba(48,176,176,0.3);
+    padding: 8px 0;
+  }
+  .quote-inline::before { content: '\201C'; }
+  .quote-inline::after  { content: '\201D'; }
+
+  /* QUOTE STRIP (standalone — unused) */
+  .quote-strip {
+    position: absolute;
+    bottom: 530px; left: 72px; right: 72px;
+    text-align: center;
+    z-index: 20;
+  }
+  .quote-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 26px;
+    font-style: italic;
+    font-weight: 600;
+    color: var(--teal);
+    letter-spacing: 0.3px;
+    line-height: 1.5;
+    text-shadow: 0 0 20px rgba(48,176,176,0.3);
+  }
+  .quote-text::before { content: '\201C'; }
+  .quote-text::after  { content: '\201D'; }
+
+  /* CTA BOX */
+  .cta-box {
+    position: absolute;
+    bottom: 160px; left: 80px; right: 80px;
+    background: rgba(48,176,176,0.06);
+    border: 2px solid rgba(48,176,176,0.35);
+    border-radius: 20px;
+    padding: 36px 40px;
+    text-align: center;
+    box-shadow: 0 0 28px rgba(48,176,176,.2), 0 0 60px rgba(48,176,176,.08);
+    z-index: 20;
+  }
+  .cta-from {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 18px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--teal-dim);
+    margin-bottom: 8px;
+  }
+  .cta-amount {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 72px;
+    font-weight: 900;
+    color: var(--teal);
+    text-shadow: 0 0 24px rgba(48,176,176,.6);
+    margin-bottom: 6px;
+    line-height: 1.05;
+  }
+  .cta-method {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 14px;
+  }
+  .cta-number {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 42px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 3px;
+    text-shadow: 0 0 14px rgba(48,176,176,.3);
+  }
+
+  /* FOOTER */
+  .footer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 110px;
+    background: linear-gradient(transparent, rgba(3,7,10,.95) 40%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 28px;
+    gap: 8px;
+    z-index: 25;
+  }
+  .footer-tag {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.28);
+  }
+  .footer-links {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .footer-links .url {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--teal);
+    letter-spacing: 1.5px;
+    text-shadow: 0 0 14px rgba(48,176,176,.4);
+  }
+  .footer-links .url span { color: #dff0f0; }
+  .footer-links .sep { font-size: 17px; color: rgba(255,255,255,.2); }
+  .footer-links .handle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: rgba(255,255,255,.35);
+    letter-spacing: 2px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<div class="corner tl"></div><div class="corner tr"></div>
+<div class="corner bl"></div><div class="corner br"></div>
+
+<img class="logo-mark" src="images/logo.png" alt="Swift Designz" />
+
+<!-- Headline -->
+<div class="headline-area">
+  <div class="hl-small">Swift Designz is raising</div>
+  <div class="hl-big">N$50,000</div>
+  <div class="hl-sub">To upgrade the setup &amp; scale up properly</div>
+</div>
+
+<!-- Progress bar -->
+<div class="progress-area">
+  <div class="progress-labels">
+    <span>Raised: N$3,000</span>
+    <span>Goal: N$50,000</span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill"></div>
+  </div>
+</div>
+
+<!-- Copy — no cards, plain text + divider lines -->
+<div class="copy-area">
+
+  <div class="section-label">Every cent goes to</div>
+
+  <div class="para">
+    <strong>Dev Monitor &amp; Hardware</strong> &middot; <em>Software Licences</em>
+  </div>
+
+  <div class="para-sep"></div>
+
+  <div class="para">
+    <strong>Proper Workspace</strong> &middot; <em>3 Months Business Runway</em>
+  </div>
+
+  <div class="para-sep amber"></div>
+
+  <div class="para highlight">
+    No platform. No fees. <em>No middleman.</em><br/>
+    I trust my community more than any crowdfund app.
+  </div>
+
+  <div class="para-sep"></div>
+
+  <div class="para">
+    This is <em>active community involvement.</em><br/>
+    You're helping me help a business owner who needs<br/>
+    to get their name out there. <strong>Every rand makes that happen.</strong>
+  </div>
+
+  <div class="para-sep amber"></div>
+
+  <div class="quote-inline">At Swift Designz you don&rsquo;t settle for less, you get the best.</div>
+
+</div>
+
+<!-- Quote standalone (hidden) -->
+<!-- Quote standalone (hidden) -->
+<div class="quote-strip" style="display:none">
+  <div class="quote-text">At Swift Designz you don&rsquo;t settle for less, you get the best.</div>
+</div>
+
+<!-- CTA -->
+<div class="cta-box">
+  <div class="cta-from">Starting from</div>
+  <div class="cta-amount">N$50</div>
+  <div class="cta-method">WhatsApp or eWallet</div>
+  <div class="cta-number">+264 81 853 6789</div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="footer-tag">Built by a Namibian &middot; For the community</div>
+  <div class="footer-links">
+    <span class="url"><span>swift</span>designz.co.za</span>
+    <span class="sep">&middot;</span>
+    <span class="handle">@swiftdesignz101</span>
+  </div>
+</div>
+
+
+
+</body>
+</html>

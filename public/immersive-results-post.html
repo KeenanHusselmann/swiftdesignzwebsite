@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Swift Designz — Small Businesses. Big Results.</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Inter:wght@300;400;600;700;900&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --teal: #30B0B0; --teal-dim: #509090; --teal-deep: #307070; --amber: #F59E0B; --amber-dim: #FBBF24; }
+
+  html {
+    width: 1080px; height: 1920px;
+    overflow: hidden; background: #03080B;
+  }
+
+  body {
+    width: 1080px; height: 1920px;
+    overflow: hidden; background: #03080B;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+  }
+
+  canvas { position: absolute; inset: 0; z-index: 0; }
+
+  /* ── VIGNETTE ── */
+  .vignette {
+    position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background: radial-gradient(ellipse 85% 70% at 50% 50%,
+      transparent 40%, rgba(2,6,8,0.38) 100%);
+  }
+
+  /* ── CORNER BRACKETS ── */
+  .corner {
+    position: absolute; width: 48px; height: 48px;
+    z-index: 25; pointer-events: none;
+    animation: cPulse 3.5s ease-in-out infinite alternate;
+  }
+  @keyframes cPulse {
+    from { opacity: 0.20; }
+    to   { opacity: 0.90; filter: drop-shadow(0 0 6px var(--teal)); }
+  }
+  .corner.tl { top: 28px;    left: 28px;    border-top:   2px solid var(--teal); border-left:   2px solid var(--teal); }
+  .corner.tr { top: 28px;    right: 28px;   border-top:   2px solid var(--teal); border-right:  2px solid var(--teal); }
+  .corner.bl { bottom: 28px; left: 28px;    border-bottom:2px solid var(--teal); border-left:   2px solid var(--teal); }
+  .corner.br { bottom: 28px; right: 28px;   border-bottom:2px solid var(--teal); border-right:  2px solid var(--teal); }
+
+  /* ── PROGRESS BAR ── */
+  .progress {
+    position: absolute; bottom: 0; left: 0; height: 4px; width: 0;
+    background: linear-gradient(90deg, var(--teal-deep), var(--teal), #a8ffff);
+    box-shadow: 0 0 16px var(--teal), 0 0 32px rgba(48,176,176,0.4);
+    z-index: 28;
+    animation: fillBar 14s 0.6s linear forwards;
+  }
+  @keyframes fillBar { to { width: 100%; } }
+
+  /* ── STATUS BADGE ── */
+  .status {
+    position: absolute; top: 40px; right: 74px; z-index: 26;
+    display: flex; align-items: center; gap: 10px;
+    opacity: 0; animation: fadeIn 0.5s 1.2s forwards;
+  }
+  .status-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--teal); box-shadow: 0 0 12px var(--teal);
+    animation: blink 1.8s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  .status-txt {
+    font-family: 'Share Tech Mono', monospace; font-size: 11px;
+    letter-spacing: 3.5px; text-transform: uppercase; color: var(--teal-dim);
+  }
+
+  /* ── VERTICAL DATA STRIPS ── */
+  .data-left, .data-right {
+    position: absolute; top: 50%; z-index: 22;
+    font-family: 'Share Tech Mono', monospace; font-size: 9px;
+    letter-spacing: 1.5px; color: rgba(48,176,176,0.2); pointer-events: none;
+  }
+  .data-left  { left: 30px;  transform:translateY(-50%) rotate(180deg); writing-mode:vertical-lr; opacity:0; animation:fadeIn 0.8s 1.0s forwards; }
+  .data-right { right: 30px; transform:translateY(-50%);                writing-mode:vertical-rl; opacity:0; animation:fadeIn 0.8s 1.2s forwards; }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  /* ── LOGO WATERMARK (top-right corner) ── */
+  .logo-mark {
+    position: absolute; top: 32px; left: 58px; z-index: 27;
+    height: 34px; opacity: 0;
+    animation: fadeIn 0.6s 0.8s forwards;
+    filter: drop-shadow(0 0 8px rgba(48,176,176,0.5));
+  }
+
+  /* ── CARD OVERLAY ── */
+  .overlay {
+    position: absolute; inset: 0; z-index: 20;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    pointer-events: none; overflow: hidden;
+  }
+
+  .card {
+    position: relative;
+    width: 880px;
+    background: rgba(3,12,18,0.22);
+    border: 1px solid rgba(48,176,176,0.30);
+    border-radius: 24px;
+    padding: 68px 72px 60px;
+    text-align: center;
+    box-shadow: 0 0 80px rgba(48,176,176,0.10), inset 0 0 100px rgba(48,176,176,0.04), 0 0 0 1px rgba(48,176,176,0.05);
+    opacity: 0;
+  }
+  .card::before {
+    content:''; position:absolute; top:-1px; left:12%; right:12%; height:1px;
+    background:linear-gradient(90deg,transparent,var(--teal),transparent);
+  }
+  .card::after {
+    content:''; position:absolute; bottom:-1px; left:30%; right:30%; height:1px;
+    background:linear-gradient(90deg,transparent,var(--teal-deep),transparent);
+  }
+
+  /* ── CARD — LOGO WRAP ── */
+  .logo-wrap { position:relative; display:inline-block; margin-bottom:32px; }
+  .logo-halo {
+    position:absolute; inset:-32px; border-radius:50%;
+    background:radial-gradient(circle, rgba(48,176,176,0.28) 0%, transparent 65%);
+    animation:halo 3s ease-in-out infinite alternate;
+  }
+  @keyframes halo { from{opacity:0.45;transform:scale(0.88);} to{opacity:1;transform:scale(1.16);} }
+  .logo-img {
+    height: 80px; width: 80px; position:relative;
+    filter:drop-shadow(0 0 18px rgba(48,176,176,0.9));
+    border-radius:50%;
+    animation:logoSpin 10s linear infinite;
+  }
+  @keyframes logoSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+  /* ── CARD — EYEBROW ── */
+  .card-eyebrow {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px; font-weight: 700; letter-spacing: 5px;
+    text-transform: uppercase; color: var(--teal-dim);
+    margin-bottom: 18px;
+  }
+
+  /* ── CARD — HEADLINE ── */
+  .headline {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 58px; font-weight: 900;
+    color: #fff; line-height: 1.10; letter-spacing: -0.5px;
+    margin-bottom: 18px;
+    text-shadow: 0 0 40px rgba(48,176,176,0.3);
+  }
+  .headline em {
+    font-style:normal; color:var(--teal); display:block;
+    text-shadow:0 0 22px rgba(48,176,176,0.9),0 0 55px rgba(48,176,176,0.4);
+    animation:glowBreath 4s ease-in-out infinite alternate;
+  }
+  .headline .amber {
+    font-style:normal; color:var(--amber); display:block;
+    text-shadow:0 0 22px rgba(245,158,11,0.9),0 0 55px rgba(245,158,11,0.4);
+    animation:amberBreath 4s ease-in-out infinite alternate;
+  }
+  @keyframes glowBreath {
+    from { text-shadow:0 0 18px rgba(48,176,176,0.6),0 0 40px rgba(48,176,176,0.25); }
+    to   { text-shadow:0 0 32px rgba(48,176,176,1),0 0 75px rgba(48,176,176,0.55); }
+  }
+  @keyframes amberBreath {
+    from { text-shadow:0 0 18px rgba(245,158,11,0.6),0 0 40px rgba(245,158,11,0.25); }
+    to   { text-shadow:0 0 32px rgba(245,158,11,1),0 0 75px rgba(245,158,11,0.55); }
+  }
+
+  /* ── CARD — SUBTEXT ── */
+  .card-sub {
+    font-size: 13px; font-weight: 700; letter-spacing: 5.5px;
+    text-transform: uppercase; color: var(--teal-dim);
+    margin-bottom: 38px;
+  }
+
+  /* ── CARD — DIVIDER ── */
+  .divider {
+    height: 1px; width: 0; margin: 0 auto 38px;
+    background: linear-gradient(90deg,transparent,var(--teal),transparent);
+  }
+  .divider.divider-in { animation: expandW 0.7s cubic-bezier(0.16,1,0.3,1) forwards; }
+  @keyframes expandW { to { width: 200px; } }
+
+  /* ── CARD — PILLS ── */
+  .pills { display:flex; flex-wrap:wrap; justify-content:center; gap:12px; margin-bottom:38px; }
+  .pill {
+    border:1px solid rgba(48,176,176,0.35); background:rgba(48,176,176,0.08);
+    color:var(--teal); font-size:11px; font-weight:700; letter-spacing:2.5px;
+    text-transform:uppercase; padding:11px 24px; border-radius:999px;
+    opacity:0; transform:scale(0.7) translateY(10px);
+  }
+  .pill.amber-pill {
+    border-color:rgba(245,158,11,0.35); background:rgba(245,158,11,0.08); color:var(--amber-dim);
+  }
+  @keyframes pillIn { to { opacity:1; transform:scale(1) translateY(0); } }
+
+  /* ── CARD — STAT ROW (card 2) ── */
+  .stat-row {
+    display: flex; justify-content: space-around; gap: 18px;
+    margin-bottom: 38px; opacity: 0; transition: opacity 0.4s;
+  }
+  .stat-row.show { opacity: 1; }
+  .stat-item {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    flex: 1;
+    background: rgba(48,176,176,0.06);
+    border: 1px solid rgba(48,176,176,0.18);
+    border-radius: 18px; padding: 24px 12px;
+  }
+  .stat-val {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 40px; font-weight: 900; color: var(--teal);
+    text-shadow: 0 0 20px rgba(48,176,176,0.8);
+    line-height: 1;
+  }
+  .stat-lbl {
+    font-size: 11px; font-weight: 600; letter-spacing: 2.5px;
+    text-transform: uppercase; color: rgba(255,255,255,0.48);
+    text-align: center;
+  }
+
+  /* ── CARD — BODY TEXT (card 3) ── */
+  .card-body {
+    font-size: 30px; font-weight: 400; line-height: 1.58;
+    color: rgba(255,255,255,0.72); margin-bottom: 38px;
+    opacity: 0;
+  }
+  .card-body.show { opacity: 1; }
+  .card-body strong { color: #fff; font-weight: 700; }
+
+  /* ── CARD — CTA ── */
+  .cta { opacity: 0; }
+  .cta-label { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: rgba(80,144,144,0.52); margin-bottom: 10px; }
+  .cta-url {
+    font-family:'Orbitron',sans-serif; font-size:19px; font-weight:700;
+    color:#dff0f0; letter-spacing:1.5px;
+    text-shadow:0 0 18px rgba(48,176,176,0.45);
+  }
+  .cta-url span { color:var(--teal); }
+
+  /* ── HANDLE ── */
+  .handle {
+    position:absolute; bottom:42px; left:50%; transform:translate(-50%,16px);
+    z-index:26; font-family:'Share Tech Mono',monospace; font-size:13px;
+    letter-spacing:4px; text-transform:uppercase; color:rgba(80,144,144,0.42);
+    white-space:nowrap; opacity:0;
+    animation:handle 0.7s 1.5s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  @keyframes handle { to { opacity:1; transform:translate(-50%,0); } }
+
+  /* ── CARD TRANSITION ANIMATIONS ── */
+  @keyframes cardZoomIn {
+    from { opacity:0; transform:scale(0.06) translateY(20px); filter:blur(20px); }
+    to   { opacity:1; transform:scale(1)    translateY(0);    filter:blur(0); }
+  }
+  @keyframes cardExitLeft {
+    from { opacity:1; transform:translateX(0)      scale(1);    filter:blur(0); }
+    to   { opacity:0; transform:translateX(-170%)  scale(0.52); filter:blur(7px); }
+  }
+  @keyframes cardExitRight {
+    from { opacity:1; transform:translateX(0)     scale(1);    filter:blur(0); }
+    to   { opacity:0; transform:translateX(170%)  scale(0.52); filter:blur(7px); }
+  }
+  @keyframes cardEnterRight {
+    from { opacity:0; transform:translateX(170%)  scale(0.52); filter:blur(8px); }
+    to   { opacity:1; transform:translateX(0)     scale(1);    filter:blur(0); }
+  }
+  @keyframes cardEnterLeft {
+    from { opacity:0; transform:translateX(-170%) scale(0.52); filter:blur(8px); }
+    to   { opacity:1; transform:translateX(0)     scale(1);    filter:blur(0); }
+  }
+  .card.card-zoom-in     { animation:cardZoomIn     1.0s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .card.card-exit-left   { animation:cardExitLeft   0.52s cubic-bezier(0.55,0,1,0.45) forwards; }
+  .card.card-exit-right  { animation:cardExitRight  0.52s cubic-bezier(0.55,0,1,0.45) forwards; }
+  .card.card-enter-right { animation:cardEnterRight 0.62s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .card.card-enter-left  { animation:cardEnterLeft  0.62s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+  /* ── LOGO OUTRO ── */
+  #logo-outro {
+    position:absolute; inset:0; z-index:30;
+    display:flex; align-items:center; justify-content:center;
+    pointer-events:none; opacity:0;
+  }
+  #logo-outro.active { opacity:1; }
+  #outro-logo {
+    width:140px; height:140px; border-radius:50%;
+    filter:drop-shadow(0 0 32px rgba(48,176,176,1)) drop-shadow(0 0 70px rgba(48,176,176,0.6));
+    transform-origin:center center;
+  }
+  @keyframes outroFlyIn {
+    0%   { opacity:0; transform:translate(-520px,760px) scale(0.18) rotate(0deg); }
+    30%  { opacity:1; }
+    100% { opacity:1; transform:translate(0,0) scale(1.0) rotate(540deg); }
+  }
+  @keyframes outroPulse {
+    0%,100% { filter:drop-shadow(0 0 32px rgba(48,176,176,1)) drop-shadow(0 0 70px rgba(48,176,176,0.6)); transform:scale(1) rotate(0deg); }
+    50%     { filter:drop-shadow(0 0 60px rgba(48,176,176,1)) drop-shadow(0 0 120px rgba(48,176,176,0.9)); transform:scale(1.12) rotate(180deg); }
+  }
+  @keyframes outroWarp {
+    0%   { opacity:1; transform:scale(1)    rotate(0deg)   translate(0,0); }
+    40%  { opacity:1; transform:scale(1.22) rotate(200deg) translate(0,0); filter:drop-shadow(0 0 80px rgba(180,255,255,1)); }
+    100% { opacity:0; transform:scale(0.02) rotate(900deg) translate(0,0); filter:drop-shadow(0 0 4px rgba(48,176,176,0.3)); }
+  }
+
+  /* ── SFX HINT ── */
+  #sfx-hint {
+    position:absolute; bottom:68px; right:34px; z-index:30;
+    font-family:'Share Tech Mono',monospace;
+    font-size:11px; letter-spacing:2.5px;
+    color:var(--teal-dim); pointer-events:auto; cursor:pointer;
+    opacity:0; transition:opacity 0.6s;
+    text-transform:uppercase;
+  }
+  #sfx-hint.show  { opacity:0.52; }
+  #sfx-hint.armed { opacity:0; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+<div class="vignette"></div>
+
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+<div class="progress"></div>
+
+<!-- Logo watermark top-left -->
+<img class="logo-mark" src="images/logo.png" alt="Swift Designz" />
+
+<div class="status">
+  <div class="status-dot"></div>
+  <div class="status-txt">Client Results Online</div>
+</div>
+
+<div class="data-left">SD · RESULTS · V1.0 · CLIENTS_FIRST · ZERO_COMPROMISE</div>
+<div class="data-right">FAST · PROFESSIONAL · AFFORDABLE · DELIVERED · LIVE</div>
+
+<div class="overlay">
+  <div class="card">
+    <!-- content injected by JS -->
+  </div>
+</div>
+
+<div id="logo-outro">
+  <img id="outro-logo" src="images/favicon.png" alt="Swift Designz"/>
+</div>
+
+<div id="sfx-hint">[ SFX ] CLICK TO ENABLE</div>
+<div class="handle">@swiftdesignz101</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+//  SPACE WARP CANVAS  —  1080×1920
+// ═══════════════════════════════════════════════════════════
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+const W = canvas.width  = 1080;
+const H = canvas.height = 1920;
+const cx = W/2, cy = H/2;
+const TR=48, TG=176, TB=176;
+
+// ── WARP STARS ──────────────────────────────────────────────
+const N_STARS = 900;
+const MAX_Z   = 950;
+
+function mkStar(initial) {
+  const z = initial ? Math.random() * MAX_Z : MAX_Z;
+  return {
+    x: (Math.random()-0.5)*W*1.9,
+    y: (Math.random()-0.5)*H*1.9,
+    z, pz: z,
+    size: 0.3 + Math.random()*1.8,
+    col:  Math.random(),
+  };
+}
+let stars    = Array.from({length:N_STARS}, ()=>mkStar(true));
+let warpRings= [];
+let lastRing = 0;
+
+// ── HUD ARCS ─────────────────────────────────────────────────
+const HUD = [
+  { r:520, rot:0,   rotSpd: 0.0026, segs:4, gapFrac:0.28, lw:0.7, a:0.06 },
+  { r:380, rot:2.1, rotSpd:-0.0042, segs:3, gapFrac:0.35, lw:0.6, a:0.05 },
+  { r:640, rot:4.5, rotSpd: 0.0016, segs:5, gapFrac:0.18, lw:0.5, a:0.04 },
+  { r:200, rot:1.0, rotSpd:-0.0070, segs:6, gapFrac:0.22, lw:0.5, a:0.04 },
+];
+
+// ── DATA PACKETS ──────────────────────────────────────────────
+const PKTS = Array.from({length:32}, ()=>({
+  x: Math.random()*W, y: Math.random()*H,
+  vx:(Math.random()-0.5)*0.5, vy:(Math.random()-0.5)*0.5,
+  w: 16+Math.random()*44, h: 5+Math.random()*8,
+  op: 0.04+Math.random()*0.06,
+  ph: Math.random()*Math.PI*2, freq:0.018+Math.random()*0.032,
+}));
+
+// ── STREAKS ───────────────────────────────────────────────────
+let streaks    = [];
+let lastStreak = 0;
+
+// ── COMETS & BLASTS ──────────────────────────────────────────
+let comets    = [];
+let blasts    = [];
+let lastComet = 0;
+
+function mkComet() {
+  const side = Math.floor(Math.random()*4);
+  let sx, sy;
+  if      (side===0){sx=Math.random()*W; sy=-20;}
+  else if (side===1){sx=W+20; sy=Math.random()*H;}
+  else if (side===2){sx=Math.random()*W; sy=H+20;}
+  else              {sx=-20; sy=Math.random()*H;}
+  const tx=cx+(Math.random()-.5)*900, ty=cy+(Math.random()-.5)*1300;
+  const dx=tx-sx, dy=ty-sy, d=Math.sqrt(dx*dx+dy*dy)||1;
+  const spd=5+Math.random()*7;
+  return {
+    x:sx,y:sy,vx:(dx/d)*spd,vy:(dy/d)*spd,
+    px:-(dy/d),py:(dx/d),
+    zAmp:18+Math.random()*52,zFreq:0.055+Math.random()*0.095,
+    zPhase:Math.random()*Math.PI*2,
+    trail:[],t:0,ttl:65+Math.floor(Math.random()*80),
+  };
+}
+function boom(x,y){
+  const n=14+Math.floor(Math.random()*24);
+  for(let i=0;i<n;i++){
+    const a=(i/n)*Math.PI*2+Math.random()*.6;
+    const spd=1+Math.random()*8;
+    blasts.push({x,y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,life:1,decay:.016+Math.random()*.028,size:.5+Math.random()*3,flash:Math.random()>.62});
+  }
+}
+
+// ── SPEED RAMP ────────────────────────────────────────────────
+let warpSpd = 0.6;
+const TARGET_SPD = 5.5;
+let frame = 0, scanY = 0;
+
+function render(ts) {
+  frame++;
+  if (warpSpd < TARGET_SPD) warpSpd += 0.018;
+
+  ctx.fillStyle='rgba(3,7,10,0.88)';
+  ctx.fillRect(0,0,W,H);
+
+  const breathe = 0.5+0.5*Math.sin(frame*0.018);
+  const cg = ctx.createRadialGradient(cx,cy,0,cx,cy,260+breathe*65);
+  cg.addColorStop(0,`rgba(${TR},${TG},${TB},${0.05+breathe*0.04})`);
+  cg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=cg; ctx.fillRect(0,0,W,H);
+
+  // ── STARS ──
+  for(const s of stars){
+    s.pz=s.z; s.z-=warpSpd;
+    if(s.z<=1){s.x=(Math.random()-0.5)*W*1.9;s.y=(Math.random()-0.5)*H*1.9;s.z=MAX_Z;s.pz=MAX_Z;continue;}
+    const sx=(s.x/s.z)*cx+cx, sy=(s.y/s.z)*cy+cy;
+    const px=(s.x/s.pz)*cx+cx, py=(s.y/s.pz)*cy+cy;
+    if(sx<-20||sx>W+20||sy<-20||sy>H+20){s.z=1;continue;}
+    const t=1-s.z/MAX_Z;
+    const rr=Math.floor(TR+(220-TR)*t*s.col);
+    const gg=Math.floor(TG+(225-TG)*t*(0.7+s.col*0.3));
+    const bb=Math.floor(TB+(215-TB)*t*0.55);
+    const alpha=Math.min(1,t*1.7+0.04);
+    const lw=s.size*(0.4+t*1.8);
+    ctx.save();
+    ctx.strokeStyle=`rgba(${rr},${gg},${bb},${alpha})`;
+    ctx.lineWidth=lw;
+    if(t>0.65){ctx.shadowBlur=lw*5;ctx.shadowColor=`rgba(${TR},${TG},${TB},0.55)`;}
+    ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(sx,sy);ctx.stroke();
+    ctx.restore();
+  }
+
+  // ── WARP RINGS ──
+  if(warpSpd>7 && ts-lastRing>1050){warpRings.push({r:5,op:0.6,spd:7+Math.random()*7});lastRing=ts;}
+  warpRings=warpRings.filter(ring=>{
+    ring.r+=ring.spd;ring.op-=0.014;
+    if(ring.op<=0)return false;
+    ctx.save();ctx.globalAlpha=ring.op;ctx.strokeStyle=`rgba(${TR},${TG},${TB},1)`;
+    ctx.lineWidth=1.3;ctx.shadowBlur=10;ctx.shadowColor=`rgba(${TR},${TG},${TB},0.8)`;
+    ctx.beginPath();ctx.arc(cx,cy,ring.r,0,Math.PI*2);ctx.stroke();ctx.restore();
+    return true;
+  });
+
+  // ── HUD ARCS ──
+  for(const h of HUD){
+    h.rot+=h.rotSpd;
+    ctx.save();
+    ctx.globalAlpha=h.a*(0.55+0.45*breathe);
+    ctx.strokeStyle=`rgba(${TR},${TG},${TB},1)`;
+    ctx.lineWidth=h.lw;
+    const span=(Math.PI*2/h.segs)*(1-h.gapFrac);
+    for(let i=0;i<h.segs;i++){
+      const start=h.rot+i*(Math.PI*2/h.segs);
+      ctx.beginPath();ctx.arc(cx,cy,h.r,start,start+span);ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  // ── STREAKS ──
+  if(ts-lastStreak>600+Math.random()*800){
+    const ang=Math.random()*Math.PI*2,fromR=50+Math.random()*80,toR=fromR+60+Math.random()*140;
+    streaks.push({x1:cx+Math.cos(ang)*fromR,y1:cy+Math.sin(ang)*fromR,x2:cx+Math.cos(ang)*toR,y2:cy+Math.sin(ang)*toR,life:1,lw:0.8+Math.random()*1.4});
+    lastStreak=ts;
+  }
+  streaks=streaks.filter(s=>{
+    s.life-=0.055;if(s.life<=0)return false;
+    ctx.save();ctx.globalAlpha=s.life*0.8;ctx.strokeStyle=`rgba(${TR},${TG},${TB},1)`;
+    ctx.lineWidth=s.lw;ctx.shadowBlur=8;ctx.shadowColor=`rgba(${TR},${TG},${TB},0.9)`;
+    ctx.beginPath();ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);ctx.stroke();ctx.restore();
+    return true;
+  });
+
+  // ── COMETS ──
+  if(ts-lastComet>2000+Math.random()*3000){comets.push(mkComet());lastComet=ts;}
+  for(let i=comets.length-1;i>=0;i--){
+    const c=comets[i];c.t++;
+    const zOff=c.zAmp*Math.sin(c.zFreq*c.t+c.zPhase);
+    const hx=c.x+c.px*zOff,hy=c.y+c.py*zOff;
+    c.trail.push({x:hx,y:hy});if(c.trail.length>28)c.trail.shift();
+    c.x+=c.vx;c.y+=c.vy;
+    const alive=c.t<c.ttl&&hx>-80&&hx<W+80&&hy>-80&&hy<H+80;
+    if(!alive){boom(hx,hy);comets.splice(i,1);continue;}
+    const fade=1-c.t/c.ttl;
+    for(let j=1;j<c.trail.length;j++){
+      const tf=j/c.trail.length;
+      ctx.save();ctx.globalAlpha=tf*0.80*fade;ctx.strokeStyle=`rgba(${TR},${TG},${TB},1)`;
+      ctx.lineWidth=tf*2.4;ctx.shadowBlur=tf*14;ctx.shadowColor=`rgba(${TR},${TG},${TB},0.85)`;
+      ctx.beginPath();ctx.moveTo(c.trail[j-1].x,c.trail[j-1].y);ctx.lineTo(c.trail[j].x,c.trail[j].y);ctx.stroke();ctx.restore();
+    }
+    ctx.save();ctx.globalAlpha=fade*0.95;ctx.fillStyle='rgba(195,250,250,1)';
+    ctx.shadowBlur=22;ctx.shadowColor=`rgba(${TR},${TG},${TB},1)`;
+    ctx.beginPath();ctx.arc(hx,hy,2.8,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+  for(let i=blasts.length-1;i>=0;i--){
+    const p=blasts[i];p.x+=p.vx;p.y+=p.vy;p.vx*=0.92;p.vy*=0.92;p.life-=p.decay;
+    if(p.life<=0){blasts.splice(i,1);continue;}
+    ctx.save();ctx.globalAlpha=p.life*(p.flash?.90:.52);
+    ctx.fillStyle=p.flash?'rgba(200,252,252,1)':`rgba(${TR},${TG},${TB},1)`;
+    if(p.flash){ctx.shadowBlur=12;ctx.shadowColor=`rgba(${TR},${TG},${TB},1)`;}
+    ctx.beginPath();ctx.arc(p.x,p.y,p.size*p.life,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+
+  // ── DATA PACKETS ──
+  for(const p of PKTS){
+    p.x+=p.vx;p.y+=p.vy;p.ph+=p.freq;
+    if(p.x<-70)p.x=W+50;if(p.x>W+70)p.x=-50;
+    if(p.y<-70)p.y=H+50;if(p.y>H+70)p.y=-50;
+    const alpha=p.op*(0.35+0.65*Math.abs(Math.sin(p.ph)));
+    ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=`rgba(${TR},${TG},${TB},1)`;
+    ctx.lineWidth=0.7;ctx.strokeRect(p.x,p.y,p.w,p.h);
+    ctx.fillStyle=`rgba(${TR},${TG},${TB},0.10)`;ctx.fillRect(p.x+1,p.y+1,p.w-2,p.h-2);
+    ctx.restore();
+  }
+
+  // ── SCANLINE ──
+  scanY=(scanY+1.5)%H;
+  ctx.save();ctx.globalAlpha=0.04;ctx.strokeStyle=`rgba(${TR},${TG},${TB},1)`;
+  ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,scanY);ctx.lineTo(W,scanY);ctx.stroke();ctx.restore();
+
+  // ── VANISHING POINT ──
+  const dp=0.5+0.5*Math.sin(frame*0.045);
+  ctx.save();ctx.globalAlpha=0.55+0.45*dp;
+  ctx.beginPath();ctx.arc(cx,cy,3.5,0,Math.PI*2);
+  ctx.fillStyle=`rgba(${TR},${TG},${TB},1)`;
+  ctx.shadowBlur=28;ctx.shadowColor=`rgba(${TR},${TG},${TB},1)`;
+  ctx.fill();ctx.restore();
+
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+// ═══════════════════════════════════════════════════════════
+//  CARD SEQUENCE
+//  Card 1: 1.0s  →  3.8s
+//  Card 2: 4.3s  →  7.1s
+//  Card 3: 7.6s  →  10.4s
+//  Card 4: 10.9s →  13.0s
+//  Outro : 13.5s
+// ═══════════════════════════════════════════════════════════
+const card = document.querySelector('.card');
+
+function clearCard() {
+  card.innerHTML = '';
+  card.className = 'card';
+  card.style.opacity = '0';
+}
+
+function typeText(elId, text, delay, charDelay, onDone) {
+  const el = document.getElementById(elId);
+  if (!el) return;
+  let i = 0;
+  setTimeout(function tick() {
+    if (i <= text.length) {
+      el.textContent = text.slice(0, i);
+      SFX.typeClick();
+      i++;
+      if (i <= text.length) setTimeout(tick, charDelay);
+      else if (onDone) setTimeout(onDone, 120);
+    }
+  }, delay);
+}
+
+// ── CARD 1: Small Businesses. Big Results. ──────────────────
+function showCard1() {
+  clearCard();
+  card.innerHTML = `
+    <div class="logo-wrap">
+      <div class="logo-halo"></div>
+      <img class="logo-img" src="images/favicon.png" alt="Swift Designz"/>
+    </div>
+    <div class="card-eyebrow">Swift Designz Presents</div>
+    <div class="headline">
+      <span>Small Businesses.</span>
+      <em>Big Results.</em>
+    </div>
+    <div class="card-sub"><span id="sub1"></span><span id="cur1" style="color:var(--teal);font-family:'Share Tech Mono',monospace;font-size:14px;opacity:0;"> |</span></div>
+    <div class="divider"></div>
+    <div class="pills">
+      <span class="pill">Fast</span>
+      <span class="pill amber-pill">Affordable</span>
+      <span class="pill">Professional</span>
+      <span class="pill amber-pill">No Compromise</span>
+    </div>
+    <div class="cta">
+      <div class="cta-label">Your digital home</div>
+      <div class="cta-url"><span>swift</span>designz.co.za</div>
+    </div>
+  `;
+  card.classList.add('card-zoom-in');
+
+  setTimeout(() => {
+    const divider = card.querySelector('.divider');
+    if (divider) divider.classList.add('divider-in');
+  }, 700);
+
+  const subText = 'YOUR TRANSFORMATION STARTS HERE';
+  typeText('sub1', subText, 900, 55, () => {
+    const cur = document.getElementById('cur1');
+    if (cur) { cur.style.opacity='1'; cur.style.animation='blink 1.2s ease-in-out infinite'; }
+    // Animate pills in
+    const pills = card.querySelectorAll('.pill');
+    pills.forEach((p,i)=>{
+      setTimeout(()=>{ p.style.animation=`pillIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards`; },i*110);
+    });
+    setTimeout(()=>{
+      const cta=card.querySelector('.cta');
+      if(cta)cta.style.animation='fadeIn 0.7s forwards';
+    },500+pills.length*110);
+
+    SFX.ping();
+  });
+}
+
+// ── CARD 2: Stats / Proof ─────────────────────────────────
+function showCard2(fromDir) {
+  clearCard();
+  card.innerHTML = `
+    <div class="card-eyebrow">Track Record</div>
+    <div class="headline">
+      <span>Your Vision.</span>
+      <em>Delivered.</em>
+    </div>
+    <div class="divider" style="margin-bottom:32px;"></div>
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="stat-val">2+</div>
+        <div class="stat-lbl">Years Web<br/>Experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val" style="color:var(--amber);text-shadow:0 0 20px rgba(245,158,11,0.8);">R2.5K</div>
+        <div class="stat-lbl">Websites<br/>from only</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-val">100%</div>
+        <div class="stat-lbl">Remote<br/>Worldwide</div>
+      </div>
+    </div>
+    <div class="card-body">
+      Your product deserves a <strong>presence that converts</strong>, not a cookie-cutter template you'll outgrow in a month.
+    </div>
+    <div class="cta">
+      <div class="cta-label">Get started today</div>
+      <div class="cta-url"><span>swift</span>designz.co.za</div>
+    </div>
+  `;
+  card.classList.add(fromDir === 'right' ? 'card-enter-right' : 'card-enter-left');
+
+  setTimeout(()=>{
+    const divider=card.querySelector('.divider');
+    if(divider)divider.classList.add('divider-in');
+  },400);
+  setTimeout(()=>{
+    const sr=card.querySelector('.stat-row');
+    if(sr)sr.classList.add('show');
+  },700);
+  setTimeout(()=>{
+    const cb=card.querySelector('.card-body');
+    if(cb){ cb.style.transition='opacity 0.7s'; cb.classList.add('show'); }
+  },1100);
+  setTimeout(()=>{
+    const cta=card.querySelector('.cta');
+    if(cta)cta.style.animation='fadeIn 0.7s forwards';
+  },1600);
+
+  SFX.whoosh(true);
+}
+
+// ── CARD 3: Client First story ───────────────────────────
+function showCard3(fromDir) {
+  clearCard();
+  card.innerHTML = `
+    <div class="card-eyebrow">The Way We Work</div>
+    <div class="headline">
+      <span>Finally, someone</span>
+      <em>who gets it.</em>
+    </div>
+    <div class="divider"></div>
+    <div class="card-body">
+      We don't pitch packages at you. We <strong>listen</strong>. We understand tight budgets and <strong>big dreams</strong>.
+      <br/><br/>
+      You tell us your story. We <strong>build the rest</strong> — fast, clean, and exactly what your business needs.
+    </div>
+    <div class="pills" style="margin-top:8px;">
+      <span class="pill">Web Design</span>
+      <span class="pill amber-pill">E-Commerce</span>
+      <span class="pill">Mobile Apps</span>
+      <span class="pill amber-pill">AI Training</span>
+      <span class="pill">PM Training</span>
+    </div>
+    <div class="cta">
+      <div class="cta-label">Let's have a conversation</div>
+      <div class="cta-url"><span>swift</span>designz.co.za</div>
+    </div>
+  `;
+  card.classList.add(fromDir === 'right' ? 'card-enter-right' : 'card-enter-left');
+
+  setTimeout(()=>{
+    const divider=card.querySelector('.divider');
+    if(divider)divider.classList.add('divider-in');
+  },400);
+  setTimeout(()=>{
+    const cb=card.querySelector('.card-body');
+    if(cb){ cb.style.transition='opacity 0.8s'; cb.classList.add('show'); }
+  },700);
+  setTimeout(()=>{
+    const pills=card.querySelectorAll('.pill');
+    pills.forEach((p,i)=>{ setTimeout(()=>{ p.style.animation=`pillIn 0.45s cubic-bezier(0.16,1,0.3,1) forwards`; },i*90); });
+  },1300);
+  setTimeout(()=>{
+    const cta=card.querySelector('.cta');
+    if(cta)cta.style.animation='fadeIn 0.7s forwards';
+  },1900);
+
+  SFX.whoosh(true);
+}
+
+// ── CARD 4: You're Next ────────────────────────────────────
+function showCard4(fromDir) {
+  clearCard();
+  card.innerHTML = `
+    <div class="logo-wrap">
+      <div class="logo-halo"></div>
+      <img class="logo-img" src="images/favicon.png" alt="Swift Designz"/>
+    </div>
+    <div class="headline">
+      <span style="font-size:52px;">Stop settling.</span>
+      <span class="amber">You're next.</span>
+    </div>
+    <div class="card-sub"><span id="sub4"></span></div>
+    <div class="divider"></div>
+    <div class="card-body" style="font-size:28px;">
+      Your online presence can be <strong>so much better</strong> — for a lot less than you expect. No compromises. No jargon. <strong>Just results.</strong>
+    </div>
+    <div class="cta" style="margin-top:16px;">
+      <div class="cta-label">Start your project now</div>
+      <div class="cta-url" style="font-size:24px;"><span>swift</span>designz.co.za</div>
+    </div>
+  `;
+  card.classList.add(fromDir === 'right' ? 'card-enter-right' : 'card-enter-left');
+
+  const subText4 = 'FOUNDED BY KEENAN · BSC SOFTWARE DEVELOPMENT';
+  typeText('sub4', subText4, 600, 40, ()=>{ SFX.ping(); });
+
+  setTimeout(()=>{
+    const divider=card.querySelector('.divider');
+    if(divider)divider.classList.add('divider-in');
+  },300);
+  setTimeout(()=>{
+    const cb=card.querySelector('.card-body');
+    if(cb){ cb.style.transition='opacity 0.8s'; cb.classList.add('show'); }
+  },800);
+  setTimeout(()=>{
+    const cta=card.querySelector('.cta');
+    if(cta)cta.style.animation='fadeIn 0.7s forwards';
+  },1400);
+
+  SFX.whoosh(true);
+}
+
+// ── TRANSITIONS ────────────────────────────────────────────
+function exitCard(dir, cb) {
+  card.className = 'card ' + (dir === 'left' ? 'card-exit-left' : 'card-exit-right');
+  SFX.whoosh(false);
+  setTimeout(cb, 520);
+}
+
+// ── SEQUENCE ORCHESTRATION ────────────────────────────────
+// Timings (from page load):
+//   Card 1 visible : 0.8s  → 6.5s   (~5.7s readable)
+//   Card 2 visible : 7.0s  → 12.5s  (~5.5s readable)
+//   Card 3 visible : 13.0s → 18.5s  (~5.5s readable)
+//   Card 4 visible : 19.0s → 24.0s  (~5s readable)
+//   Outro          : 24.5s → 27.0s
+setTimeout(()=>{
+  showCard1();
+
+  // 1→2 at 6.5s
+  setTimeout(()=>{ exitCard('left', ()=>{ showCard2('right'); }); }, 6500);
+
+  // 2→3 at 12.5s
+  setTimeout(()=>{ exitCard('right', ()=>{ showCard3('left'); }); }, 12500);
+
+  // 3→4 at 18.5s
+  setTimeout(()=>{ exitCard('left', ()=>{ showCard4('right'); }); }, 18500);
+
+  // Outro at 24.0s
+  setTimeout(()=>{
+    card.classList.add('card-exit-right');
+    SFX.whoosh(false);
+    setTimeout(()=>{
+      card.style.display='none';
+      const outro=document.getElementById('logo-outro');
+      const logo =document.getElementById('outro-logo');
+      outro.classList.add('active');
+      logo.style.animation='outroFlyIn 1.1s cubic-bezier(0.16,1,0.3,1) forwards';
+      SFX.warpCharge();
+      setTimeout(()=>{
+        logo.style.animation='outroPulse 1.5s ease-in-out infinite';
+        setTimeout(()=>{
+          logo.style.animation='outroWarp 1.0s cubic-bezier(0.55,0,1,0.45) forwards';
+          SFX.warpJump();
+        }, 1600);
+      },1200);
+    },520);
+  }, 24000);
+
+}, 800);
+
+// ═══════════════════════════════════════════════════════════
+//  SOUND ENGINE
+// ═══════════════════════════════════════════════════════════
+const SFX = (function(){
+  let actx=null, master=null;
+  const sfxHint=document.getElementById('sfx-hint');
+
+  function getCtx(){
+    if(!actx){
+      actx=new(window.AudioContext||window.webkitAudioContext)();
+      master=actx.createGain(); master.gain.value=0.68;
+      master.connect(actx.destination); startAmbient();
+    }
+    return actx;
+  }
+
+  setTimeout(function(){
+    try{
+      const a=new(window.AudioContext||window.webkitAudioContext)();
+      if(a.state==='running'){
+        actx=a; master=actx.createGain(); master.gain.value=0.68;
+        master.connect(actx.destination); startAmbient();
+        sfxHint.classList.add('armed');
+      } else {
+        sfxHint.classList.add('show');
+        const fn=function(){getCtx();if(actx)actx.resume();sfxHint.classList.remove('show');sfxHint.classList.add('armed');};
+        sfxHint.addEventListener('click',fn,{once:true});
+        document.addEventListener('click',fn,{once:true});
+      }
+    }catch(e){}
+  },800);
+
+  function startAmbient(){
+    const o1=actx.createOscillator(),o2=actx.createOscillator(),lfo=actx.createOscillator();
+    const lfoG=actx.createGain(),flt=actx.createBiquadFilter(),g=actx.createGain();
+    o1.type='sine';o1.frequency.value=55;o2.type='sine';o2.frequency.value=59.5;
+    lfo.type='sine';lfo.frequency.value=0.10;lfoG.gain.value=5;
+    flt.type='lowpass';flt.frequency.value=160;
+    g.gain.setValueAtTime(0.001,actx.currentTime);
+    g.gain.linearRampToValueAtTime(0.13,actx.currentTime+2.5);
+    lfo.connect(lfoG);lfoG.connect(o1.frequency);
+    o1.connect(flt);o2.connect(flt);flt.connect(g);g.connect(master);
+    o1.start();o2.start();lfo.start();
+  }
+
+  return {
+    typeClick(){
+      if(!actx||actx.state!=='running')return;
+      const o=actx.createOscillator(),g=actx.createGain();
+      o.type='square';o.frequency.value=1100+Math.random()*500;
+      g.gain.setValueAtTime(0.025,actx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+0.028);
+      o.connect(g);g.connect(master);o.start();o.stop(actx.currentTime+0.03);
+    },
+    ping(){
+      if(!actx||actx.state!=='running')return;
+      const o=actx.createOscillator(),g=actx.createGain();
+      o.type='sine';o.frequency.value=880;
+      g.gain.setValueAtTime(0.12,actx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+0.45);
+      o.connect(g);g.connect(master);o.start();o.stop(actx.currentTime+0.5);
+    },
+    whoosh(incoming){
+      if(!actx||actx.state!=='running')return;
+      const dur=0.48,o=actx.createOscillator(),flt=actx.createBiquadFilter(),g=actx.createGain();
+      o.type='sawtooth';flt.type='bandpass';flt.Q.value=2.5;
+      if(incoming){
+        o.frequency.setValueAtTime(220,actx.currentTime);o.frequency.linearRampToValueAtTime(1600,actx.currentTime+dur);
+        flt.frequency.setValueAtTime(300,actx.currentTime);flt.frequency.linearRampToValueAtTime(2800,actx.currentTime+dur);
+        g.gain.setValueAtTime(0.001,actx.currentTime);g.gain.linearRampToValueAtTime(0.16,actx.currentTime+dur*0.3);
+        g.gain.linearRampToValueAtTime(0.001,actx.currentTime+dur);
+      } else {
+        o.frequency.setValueAtTime(1600,actx.currentTime);o.frequency.linearRampToValueAtTime(220,actx.currentTime+dur);
+        flt.frequency.setValueAtTime(2800,actx.currentTime);flt.frequency.linearRampToValueAtTime(300,actx.currentTime+dur);
+        g.gain.setValueAtTime(0.16,actx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+dur);
+      }
+      o.connect(flt);flt.connect(g);g.connect(master);o.start();o.stop(actx.currentTime+dur+0.05);
+    },
+    warpCharge(){
+      if(!actx||actx.state!=='running')return;
+      const o=actx.createOscillator(),g=actx.createGain();
+      o.type='sawtooth';o.frequency.setValueAtTime(80,actx.currentTime);
+      o.frequency.exponentialRampToValueAtTime(1800,actx.currentTime+1.1);
+      g.gain.setValueAtTime(0.001,actx.currentTime);g.gain.linearRampToValueAtTime(0.22,actx.currentTime+0.6);
+      g.gain.linearRampToValueAtTime(0.001,actx.currentTime+1.1);
+      o.connect(g);g.connect(master);o.start();o.stop(actx.currentTime+1.2);
+    },
+    warpJump(){
+      if(!actx||actx.state!=='running')return;
+      const buf=actx.createBuffer(1,actx.sampleRate*0.6,actx.sampleRate);
+      const d=buf.getChannelData(0);
+      for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+      const src=actx.createBufferSource();src.buffer=buf;
+      const flt=actx.createBiquadFilter();flt.type='bandpass';flt.frequency.value=1200;flt.Q.value=3;
+      const g=actx.createGain();
+      g.gain.setValueAtTime(0.35,actx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+0.6);
+      src.connect(flt);flt.connect(g);g.connect(master);src.start();src.stop(actx.currentTime+0.65);
+    },
+  };
+})();
+</script>
+</body>
+</html>

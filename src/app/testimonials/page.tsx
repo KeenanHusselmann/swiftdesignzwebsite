@@ -3,7 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef, useEffect, useState, startTransition } from "react";
 import Link from "next/link";
-import TestimonialCard from "@/components/sections/TestimonialCard";
+import TestimonialCard from "@/app/components/sections/TestimonialCard";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const testimonials = [

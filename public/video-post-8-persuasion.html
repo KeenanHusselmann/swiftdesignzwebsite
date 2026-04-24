@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080" />
+<title>The Website Effect · Swift Designz 2026</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: #080810;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #fff;
+  }
+
+  /* ── CANVAS ── */
+  #particles {
+    position: absolute;
+    top: 0; left: 0;
+    width: 1080px; height: 1920px;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  /* ── BACKGROUND ── */
+  .bg {
+    position: absolute; inset: 0; z-index: 0;
+    background: #080810;
+  }
+  .bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 90% 55% at 50% 22%, rgba(48,176,176,0.1) 0%, transparent 65%);
+    animation: bgBreathe 7s ease-in-out infinite alternate;
+  }
+  @keyframes bgBreathe {
+    from { opacity: 0.35; }
+    to   { opacity: 1; }
+  }
+
+  /* ── VIGNETTE ── */
+  .vignette {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 90% 75% at 50% 38%, transparent 38%, rgba(0,0,0,0.72) 100%);
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  /* ── SCAN LINES (cinematic) ── */
+  .scan-lines {
+    position: absolute; inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px, transparent 3px,
+      rgba(0,0,0,0.055) 3px, rgba(0,0,0,0.055) 4px
+    );
+  }
+
+  /* ── IMPACT SUNBURST (conic-gradient rays, purely CSS) ── */
+  .impact-rays {
+    position: absolute;
+    top: 155px; left: 50%;
+    width: 900px; height: 900px;
+    margin-left: -450px;
+    border-radius: 50%;
+    background: repeating-conic-gradient(
+      rgba(48,176,176,0.13) 0deg,   rgba(48,176,176,0.13) 1.5deg,
+      transparent           1.5deg, transparent             13deg
+    );
+    z-index: 4;
+    opacity: 0;
+    transform: scale(0) rotate(0deg);
+    animation: raysBurst 1.0s 1.1s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  @keyframes raysBurst {
+    0%   { opacity: 0;   transform: scale(0)   rotate(-10deg); }
+    35%  { opacity: 0.9; transform: scale(1)   rotate(0deg); }
+    100% { opacity: 0;   transform: scale(1.4) rotate(18deg); }
+  }
+
+  /* ── LOGO ── */
+  .logo-wrap {
+    position: absolute;
+    top: 52px; left: 0; right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+    opacity: 0;
+    animation: fadeIn 0.5s 0.25s ease both;
+  }
+  .logo-wrap img {
+    width: 68px; height: 68px;
+    border-radius: 14px;
+  }
+
+  /* ── HOOK SECTION ── */
+  .hook {
+    position: absolute;
+    top: 148px;
+    left: 0; right: 0;
+    text-align: center;
+    padding: 0 70px;
+    z-index: 10;
+  }
+  .hook-pre {
+    font-size: 23px;
+    letter-spacing: 11px;
+    text-transform: uppercase;
+    color: rgba(48,176,176,0.9);
+    opacity: 0;
+    animation: fadeIn 0.5s 0.65s ease both;
+  }
+  /* The headline: slams in from above with motion blur */
+  .hook-main {
+    font-size: 130px;
+    font-weight: 900;
+    line-height: 0.94;
+    text-transform: uppercase;
+    letter-spacing: -3px;
+    margin-top: 18px;
+    /* Gradient fill */
+    background: linear-gradient(155deg, #ffffff 0%, #70d8d8 35%, #ffffff 65%, #F5B000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 280% 280%;
+    /* Start hidden + zoomed-in */
+    opacity: 0;
+    transform: scale(1.4) translateY(-35px);
+    filter: blur(8px);
+    animation:
+      impactSlam  0.6s 1.1s cubic-bezier(0.22,1,0.36,1) both,
+      shimmerFlow 5s  2.2s linear infinite;
+  }
+  @keyframes impactSlam {
+    0%   { opacity: 0;   transform: scale(1.4) translateY(-35px); filter: blur(8px); }
+    55%  { opacity: 1;   transform: scale(0.97) translateY(4px);  filter: blur(0); }
+    78%  { transform: scale(1.01) translateY(-2px); }
+    100% { opacity: 1;   transform: scale(1) translateY(0);       filter: blur(0); }
+  }
+  @keyframes shimmerFlow {
+    0%   { background-position: 0%   50%; }
+    100% { background-position: 280% 50%; }
+  }
+
+  /* Sub-line with glitch word */
+  .hook-accent {
+    font-size: 35px;
+    font-weight: 400;
+    letter-spacing: 0.5px;
+    line-height: 1.45;
+    color: rgba(255,255,255,0.72);
+    margin-top: 24px;
+    opacity: 0;
+    animation: fadeUp 0.6s 1.95s ease both;
+  }
+  .glitch-wrap {
+    position: relative;
+    display: inline;
+    color: #F59E0B;
+    font-weight: 700;
+  }
+  .glitch-wrap::before {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0;
+    color: #F59E0B;
+    clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+    opacity: 0;
+    animation: glitchA 0.14s 2.4s step-end 5;
+  }
+  .glitch-wrap::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0; left: 0;
+    color: #ff6060;
+    clip-path: polygon(0 62%, 100% 62%, 100% 100%, 0 100%);
+    opacity: 0;
+    animation: glitchB 0.14s 2.46s step-end 5;
+  }
+  @keyframes glitchA {
+    0%, 100% { opacity: 0; transform: translateX(0); }
+    33%       { opacity: 1; transform: translateX(-6px); }
+    66%       { opacity: 1; transform: translateX(4px); }
+  }
+  @keyframes glitchB {
+    0%, 100% { opacity: 0; transform: translateX(0); }
+    33%       { opacity: 1; transform: translateX(5px); }
+    66%       { opacity: 1; transform: translateX(-3px); }
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    position: absolute;
+    top: 596px;
+    left: 80px; right: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(48,176,176,0.55), rgba(245,158,11,0.35), transparent);
+    transform: scaleX(0);
+    transform-origin: left;
+    opacity: 0;
+    animation: expandX 0.75s 3.05s ease both;
+  }
+  @keyframes expandX {
+    to { transform: scaleX(1); opacity: 1; }
+  }
+
+  /* ── STATS ── */
+  .stats {
+    position: absolute;
+    top: 622px;
+    left: 58px; right: 58px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .stat-card {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 28px 42px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(48,176,176,0.12);
+    border-left: 5px solid #30B0B0;
+    border-radius: 10px;
+    opacity: 0;
+    backdrop-filter: blur(4px);
+  }
+  .stat-card:nth-child(2) {
+    border-left-color: #F59E0B;
+    border-color: rgba(245,158,11,0.12);
+  }
+  .sc1 { animation: slideIn 0.55s 3.45s cubic-bezier(0.22,1,0.36,1) both; }
+  .sc2 { animation: slideIn 0.55s 4.05s cubic-bezier(0.22,1,0.36,1) both; }
+  .sc3 { animation: slideIn 0.55s 4.65s cubic-bezier(0.22,1,0.36,1) both; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-80px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .stat-num {
+    font-size: 62px;
+    font-weight: 900;
+    color: #30B0B0;
+    min-width: 138px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat-card:nth-child(2) .stat-num { color: #F59E0B; }
+  .stat-label {
+    font-size: 25px;
+    line-height: 1.45;
+    color: rgba(255,255,255,0.75);
+  }
+  .stat-label strong {
+    display: block;
+    font-size: 27px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  /* ── WIPE TRANSITION LINE ── */
+  .wipe-line {
+    position: absolute;
+    top: 1058px; left: 0;
+    height: 3px; width: 0;
+    background: linear-gradient(90deg, #30B0B0, #F59E0B, #30B0B0);
+    box-shadow: 0 0 18px rgba(48,176,176,0.9), 0 0 36px rgba(245,158,11,0.5);
+    z-index: 20;
+    animation: wipeAcross 0.65s 5.35s ease both;
+  }
+  @keyframes wipeAcross {
+    to { width: 1080px; }
+  }
+
+  /* ── SOLUTION SECTION ── */
+  .solution {
+    position: absolute;
+    top: 1086px;
+    left: 58px; right: 58px;
+    z-index: 10;
+  }
+  .sol-label {
+    font-size: 21px;
+    letter-spacing: 10px;
+    text-transform: uppercase;
+    color: #30B0B0;
+    opacity: 0;
+    animation: fadeIn 0.4s 5.85s ease both;
+  }
+  .sol-headline {
+    font-size: 80px;
+    font-weight: 900;
+    line-height: 1.0;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+    margin-top: 10px;
+    opacity: 0;
+    transform: scale(1.12) translateY(14px);
+    filter: blur(4px);
+    animation: impactSlam2 0.6s 6.1s cubic-bezier(0.22,1,0.36,1) both;
+  }
+  @keyframes impactSlam2 {
+    0%   { opacity: 0; transform: scale(1.12) translateY(14px); filter: blur(4px); }
+    60%  { opacity: 1; transform: scale(0.99) translateY(0);    filter: blur(0); }
+    100% { opacity: 1; transform: scale(1) translateY(0);       filter: blur(0); }
+  }
+  .sol-headline .accent { color: #F59E0B; }
+  .sol-sub {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.62);
+    margin-top: 12px;
+    opacity: 0;
+    animation: fadeUp 0.5s 6.85s ease both;
+  }
+
+  /* ── FEATURES ── */
+  .features {
+    margin-top: 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 17px;
+  }
+  .feat {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 27px;
+    color: rgba(255,255,255,0.82);
+    opacity: 0;
+  }
+  .feat-dot {
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: #30B0B0;
+    flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(48,176,176,0.95);
+  }
+  .feat:nth-child(even) .feat-dot {
+    background: #F59E0B;
+    box-shadow: 0 0 10px rgba(245,158,11,0.95);
+  }
+  .f1 { animation: slideIn 0.4s 7.35s cubic-bezier(0.22,1,0.36,1) both; }
+  .f2 { animation: slideIn 0.4s 7.75s cubic-bezier(0.22,1,0.36,1) both; }
+  .f3 { animation: slideIn 0.4s 8.15s cubic-bezier(0.22,1,0.36,1) both; }
+  .f4 { animation: slideIn 0.4s 8.55s cubic-bezier(0.22,1,0.36,1) both; }
+
+  /* ── CTA ── */
+  .cta-wrap {
+    position: absolute;
+    bottom: 105px;
+    left: 0; right: 0;
+    text-align: center;
+    z-index: 10;
+    opacity: 0;
+    animation: fadeUp 0.75s 9.5s ease both;
+  }
+  .cta-rule {
+    width: 64px; height: 3px;
+    background: linear-gradient(90deg, #30B0B0, #F59E0B);
+    border-radius: 2px;
+    margin: 0 auto 20px;
+  }
+  .cta-main {
+    font-size: 48px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #30B0B0, #F59E0B);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .cta-url {
+    font-size: 31px;
+    letter-spacing: 4px;
+    color: rgba(255,255,255,0.52);
+    margin-top: 10px;
+  }
+  .cursor {
+    display: inline-block;
+    width: 2px; height: 30px;
+    background: #30B0B0;
+    vertical-align: middle;
+    margin-left: 3px;
+    box-shadow: 0 0 8px rgba(48,176,176,0.9);
+    animation: blink 0.75s step-end infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 90px;
+    background: rgba(48,176,176,0.055);
+    border-top: 1px solid rgba(48,176,176,0.11);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+  .footer-text {
+    font-size: 18px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.22);
+  }
+
+  /* ── SHARED KEYFRAMES ── */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(26px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg"></div>
+<canvas id="particles"></canvas>
+<div class="vignette"></div>
+<div class="scan-lines"></div>
+
+<!-- CSS sunburst rays — fire on headline slam -->
+<div class="impact-rays"></div>
+
+<!-- Logo -->
+<div class="logo-wrap">
+  <img src="images/favicon.png" alt="Swift Designz" />
+</div>
+
+<!-- Hook -->
+<div class="hook">
+  <div class="hook-pre">The Truth About</div>
+  <div class="hook-main">YOUR<br>WEBSITE</div>
+  <div class="hook-accent">
+    It's either working for you<br>
+    — or <span class="glitch-wrap" data-text="costing you clients">costing you clients</span>
+  </div>
+</div>
+
+<!-- Divider -->
+<div class="divider"></div>
+
+<!-- Stats -->
+<div class="stats">
+  <div class="stat-card sc1">
+    <div class="stat-num" id="stat1">0%</div>
+    <div class="stat-label">
+      <strong>won't come back</strong>
+      after one bad website experience
+    </div>
+  </div>
+  <div class="stat-card sc2">
+    <div class="stat-num" id="stat2">0%</div>
+    <div class="stat-label">
+      <strong>judge your credibility</strong>
+      by website design alone
+    </div>
+  </div>
+  <div class="stat-card sc3">
+    <div class="stat-num">3s</div>
+    <div class="stat-label">
+      <strong>first impression window</strong>
+      that's all you get to hook them
+    </div>
+  </div>
+</div>
+
+<!-- Wipe line -->
+<div class="wipe-line"></div>
+
+<!-- Solution -->
+<div class="solution">
+  <div class="sol-label">The Fix</div>
+  <div class="sol-headline">WE BUILD<br><span class="accent">WEBSITES</span><br>THAT WORK</div>
+  <div class="sol-sub">Designed to convert. Built to impress.</div>
+  <div class="features">
+    <div class="feat f1"><div class="feat-dot"></div>Loads fast. Looks premium. Converts visitors.</div>
+    <div class="feat f2"><div class="feat-dot"></div>Mobile-perfect on every device</div>
+    <div class="feat f3"><div class="feat-dot"></div>SEO-ready — get found on Google</div>
+    <div class="feat f4"><div class="feat-dot"></div>Starting from R2,500 · No compromises</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta-rule"></div>
+  <div class="cta-main">Ready to Grow?</div>
+  <div class="cta-url">swiftdesignz.co.za<span class="cursor"></span></div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="footer-text">Swift Designz · Built Different</div>
+</div>
+
+<script>
+/* ── CANVAS PARTICLE BURST + SHOCKWAVE RINGS ─────────────────────────────── */
+const canvas = document.getElementById('particles');
+canvas.width  = 1080;
+canvas.height = 1920;
+const ctx = canvas.getContext('2d');
+
+const TEAL  = ['#30B0B0','#50D0D0','#70E0E0','#a0f0f0','#ffffff'];
+const AMBER = ['#F59E0B','#FFB83F','#FFCC70','#ffffff'];
+const MIX   = [...TEAL, ...AMBER];
+
+let particles = [];
+let rings     = [];
+
+/* Spawn particles from a point */
+function spawn(x, y, n, minR, maxR, minSpd, maxSpd, colors) {
+  for (let i = 0; i < n; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const spd   = minSpd + Math.random() * (maxSpd - minSpd);
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * spd,
+      vy: Math.sin(angle) * spd,
+      r:  minR + Math.random() * (maxR - minR),
+      a:  0.85 + Math.random() * 0.15,
+      c:  colors[Math.floor(Math.random() * colors.length)],
+      dk: 0.009 + Math.random() * 0.015,
+      g:  0.03  + Math.random() * 0.05,
+      fr: 0.968 + Math.random() * 0.018,
+    });
+  }
+}
+
+/* Spawn expanding shockwave ring */
+function spawnRing(x, y, color) {
+  rings.push({ x, y, r: 8, a: 0.85, w: 5, c: color, dr: 14, da: 0.022 });
+}
+
+function tick() {
+  ctx.clearRect(0, 0, 1080, 1920);
+
+  /* Draw rings */
+  rings = rings.filter(ring => ring.a > 0.02);
+  for (const ring of rings) {
+    ctx.save();
+    ctx.globalAlpha   = ring.a;
+    ctx.beginPath();
+    ctx.arc(ring.x, ring.y, ring.r, 0, Math.PI * 2);
+    ctx.strokeStyle   = ring.c;
+    ctx.lineWidth     = ring.w;
+    ctx.shadowColor   = ring.c;
+    ctx.shadowBlur    = 28;
+    ctx.stroke();
+    ctx.restore();
+    ring.r  += ring.dr;
+    ring.w  *= 0.955;
+    ring.dr *= 0.96;
+    ring.a  -= ring.da;
+  }
+
+  /* Draw particles */
+  particles = particles.filter(p => p.a > 0.02);
+  for (const p of particles) {
+    ctx.save();
+    ctx.globalAlpha = p.a;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle   = p.c;
+    ctx.shadowColor = p.c;
+    ctx.shadowBlur  = p.r * 3;
+    ctx.fill();
+    ctx.restore();
+    p.x  += p.vx;
+    p.y  += p.vy;
+    p.vy += p.g;
+    p.vx *= p.fr;
+    p.vy *= p.fr;
+    p.a  -= p.dk;
+  }
+
+  requestAnimationFrame(tick);
+}
+requestAnimationFrame(tick);
+
+/* ── Burst 1: headline impact (1.1s) ── */
+setTimeout(() => {
+  spawn(540, 370, 150, 2, 9, 3, 22, MIX);
+  spawnRing(540, 370, '#30B0B0');
+  setTimeout(() => spawnRing(540, 370, '#F59E0B'), 130);
+  setTimeout(() => spawnRing(540, 370, '#ffffff'), 280);
+}, 1100);
+
+/* ── Ring burst along divider line (3.05s) ── */
+setTimeout(() => {
+  for (let x = 0; x <= 1080; x += 22) {
+    spawn(x, 596, 2, 1, 3, 0.3, 3.5, TEAL);
+  }
+}, 3050);
+
+/* ── Burst 2: wipe line (5.35s) ── */
+setTimeout(() => {
+  spawn(540, 1058, 90, 1.5, 6.5, 2, 14, MIX);
+  spawnRing(540, 1058, '#30B0B0');
+  setTimeout(() => spawnRing(540, 1058, '#F59E0B'), 100);
+}, 5350);
+
+/* ── STAT COUNTERS ─────────────────────────────────────────────────────────── */
+function countUp(id, target, suffix, duration, delay) {
+  setTimeout(() => {
+    const el    = document.getElementById(id);
+    const steps = 45;
+    const inc   = target / steps;
+    let   cur   = 0;
+    const t = setInterval(() => {
+      cur = Math.min(cur + inc, target);
+      el.textContent = Math.round(cur) + suffix;
+      if (cur >= target) { el.textContent = target + suffix; clearInterval(t); }
+    }, duration / steps);
+  }, delay);
+}
+
+countUp('stat1', 88, '%', 900, 3550);
+countUp('stat2', 75, '%', 900, 4150);
+</script>
+
+</body>
+</html>

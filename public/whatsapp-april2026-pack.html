@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<title>Swift Designz — April 2026 Pack</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Inter:wght@300;400;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --teal: #30B0B0; --teal-dim: #509090; --teal-deep: #307070; }
+
+  html {
+    width: 100vw; height: 100vh;
+    overflow: hidden; background: #04090D;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  body {
+    width: 1080px; height: 1080px; flex-shrink: 0;
+    overflow: hidden; background: #04090D;
+    font-family: 'Inter', sans-serif;
+    position: relative;
+  }
+
+  canvas { position: absolute; inset: 0; z-index: 0; }
+
+  .vignette {
+    position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background: radial-gradient(ellipse 90% 90% at 50% 50%,
+      transparent 45%, rgba(2,6,8,0.28) 100%);
+  }
+
+  .corner {
+    position: absolute; width: 40px; height: 40px;
+    z-index: 25; pointer-events: none;
+    animation: cPulse 3.5s ease-in-out infinite alternate;
+  }
+  @keyframes cPulse {
+    from { opacity: 0.22; }
+    to   { opacity: 0.9; filter: drop-shadow(0 0 5px var(--teal)); }
+  }
+  .corner.tl { top:22px; left:22px;   border-top:2px solid var(--teal); border-left:2px solid var(--teal); }
+  .corner.tr { top:22px; right:22px;  border-top:2px solid var(--teal); border-right:2px solid var(--teal); }
+  .corner.bl { bottom:22px; left:22px;  border-bottom:2px solid var(--teal); border-left:2px solid var(--teal); }
+  .corner.br { bottom:22px; right:22px; border-bottom:2px solid var(--teal); border-right:2px solid var(--teal); }
+
+  .status {
+    position: absolute; top: 34px; right: 68px; z-index: 26;
+    display: flex; align-items: center; gap: 8px;
+    opacity: 0; animation: fadeIn 0.5s 3s forwards;
+  }
+  .status-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--teal); box-shadow: 0 0 10px var(--teal);
+    animation: blink 1.8s ease-in-out infinite;
+  }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+  .status-txt {
+    font-family: 'Share Tech Mono', monospace; font-size: 10px;
+    letter-spacing: 3px; text-transform: uppercase; color: var(--teal-dim);
+  }
+
+  .data-left, .data-right {
+    position: absolute; top: 50%; z-index: 22;
+    font-family: 'Share Tech Mono', monospace; font-size: 9px;
+    letter-spacing: 1.5px; color: rgba(48,176,176,0.25); pointer-events: none;
+  }
+  .data-left  { left:28px;  transform:translateY(-50%) rotate(180deg); writing-mode:vertical-lr; opacity:0; animation:fadeIn 0.8s 3s forwards; }
+  .data-right { right:28px; transform:translateY(-50%); writing-mode:vertical-rl; opacity:0; animation:fadeIn 0.8s 3.2s forwards; }
+  @keyframes fadeIn { to { opacity: 1; } }
+
+  /* ── OVERLAY & CARD ─────────────────────────────────────── */
+  .overlay {
+    position: absolute; inset: 0; z-index: 20;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    pointer-events: none; overflow: hidden;
+  }
+
+  .card {
+    position: relative;
+    width: 720px;
+    background: rgba(4,15,22,0.18);
+    border: 1px solid rgba(48,176,176,0.28);
+    border-radius: 18px;
+    padding: 38px 56px 34px;
+    text-align: center;
+    box-shadow: 0 0 60px rgba(48,176,176,0.12), inset 0 0 80px rgba(48,176,176,0.04), 0 0 0 1px rgba(48,176,176,0.06);
+    opacity: 0;
+  }
+  .card::before { content:''; position:absolute; top:-1px; left:14%; right:14%; height:1px; background:linear-gradient(90deg,transparent,var(--teal),transparent); }
+  .card::after  { content:''; position:absolute; bottom:-1px; left:28%; right:28%; height:1px; background:linear-gradient(90deg,transparent,var(--teal-deep),transparent); }
+
+  /* ── BADGE ── */
+  .svc-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(48,176,176,0.10);
+    border: 1px solid rgba(48,176,176,0.28);
+    border-radius: 999px; padding: 5px 16px; margin-bottom: 16px;
+    transition: opacity 0.4s ease;
+  }
+  .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 6px var(--teal); }
+  .badge-txt { font-family: 'Share Tech Mono', monospace; font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--teal-dim); }
+
+  /* ── LOGO ── */
+  .logo-wrap { position: relative; display: block; width: 70px; height: 70px; margin: 0 auto 20px; }
+  .logo-halo {
+    position: absolute; inset: -28px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(48,176,176,0.26) 0%, transparent 65%);
+    animation: halo 3s ease-in-out infinite alternate;
+  }
+  @keyframes halo {
+    from { opacity: 0.45; transform: scale(0.86); }
+    to   { opacity: 1;   transform: scale(1.14); }
+  }
+  .logo-img {
+    height: 70px; width: 70px; position: relative;
+    filter: drop-shadow(0 0 14px rgba(48,176,176,0.85));
+    mix-blend-mode: multiply;
+    animation: logoSpin 8s linear infinite;
+  }
+  @keyframes logoSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+
+  /* ── PROMO TAG ── */
+  .promo-tag {
+    display: inline-block;
+    font-family: 'Orbitron', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: #0a1a1a; background: var(--teal);
+    padding: 6px 18px; border-radius: 999px;
+    margin-bottom: 18px;
+    opacity: 0; transform: scale(0.7);
+    box-shadow: 0 0 20px rgba(48,176,176,0.6), 0 0 40px rgba(48,176,176,0.25);
+  }
+  @keyframes tagIn { to { opacity: 1; transform: scale(1); } }
+
+  /* ── HEADLINE ── */
+  .headline {
+    font-family: 'Orbitron', sans-serif; font-size: 50px; font-weight: 900;
+    color: #fff; line-height: 1.08; letter-spacing: -0.5px;
+    text-shadow: 0 0 40px rgba(48,176,176,0.3);
+    margin-bottom: 12px;
+  }
+  .headline em {
+    font-style: normal; color: var(--teal); display: block;
+    text-shadow: 0 0 20px rgba(48,176,176,0.9),0 0 50px rgba(48,176,176,0.4),0 0 90px rgba(48,176,176,0.15);
+    animation: glowBreath 4s ease-in-out infinite alternate;
+  }
+  @keyframes glowBreath {
+    from { text-shadow: 0 0 18px rgba(48,176,176,0.65),0 0 40px rgba(48,176,176,0.25); }
+    to   { text-shadow: 0 0 30px rgba(48,176,176,1),0 0 70px rgba(48,176,176,0.55),0 0 120px rgba(48,176,176,0.18); }
+  }
+
+  .sub {
+    font-size: 11px; font-weight: 700; letter-spacing: 4.5px;
+    text-transform: uppercase; color: var(--teal-dim); margin-bottom: 24px;
+  }
+
+  .divider { height: 1px; width: 0; margin: 0 auto 22px; background: linear-gradient(90deg,transparent,var(--teal),transparent); }
+  .divider.divider-in { animation: expandW 0.7s cubic-bezier(0.16,1,0.3,1) forwards; }
+  @keyframes expandW { to { width: 180px; } }
+
+  /* ── PRICING TIERS ── */
+  .pricing { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+  .tier-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 20px;
+    border: 1px solid rgba(48,176,176,0.18);
+    border-radius: 8px;
+    background: rgba(48,176,176,0.05);
+    opacity: 0; transform: translateX(-18px);
+  }
+  @keyframes tierIn { to { opacity: 1; transform: translateX(0); } }
+  .tier-name {
+    font-family: 'Share Tech Mono', monospace; font-size: 10px;
+    letter-spacing: 2.5px; text-transform: uppercase; color: rgba(80,144,144,0.85);
+  }
+  .tier-price {
+    font-family: 'Orbitron', sans-serif; font-size: 13px; font-weight: 700;
+    color: var(--teal); text-shadow: 0 0 10px rgba(48,176,176,0.5);
+  }
+
+  /* ── BEFORE / AFTER ── */
+  .ba-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
+  .ba-row {
+    display: flex; align-items: center; gap: 10px; justify-content: center;
+    opacity: 0; transform: translateY(10px);
+  }
+  @keyframes baRowIn { to { opacity: 1; transform: translateY(0); } }
+  .ba-before {
+    font-family: 'Share Tech Mono', monospace; font-size: 9px;
+    letter-spacing: 2px; padding: 7px 12px; border-radius: 7px;
+    text-transform: uppercase;
+    color: rgba(80,144,144,0.55); border: 1px solid rgba(80,144,144,0.18);
+    background: rgba(80,144,144,0.04);
+    text-decoration: line-through;
+    text-decoration-color: rgba(80,144,144,0.4);
+  }
+  .ba-arrow {
+    color: var(--teal); font-family: 'Orbitron', sans-serif;
+    font-size: 13px; font-weight: 700;
+    text-shadow: 0 0 8px rgba(48,176,176,0.5);
+    flex-shrink: 0;
+  }
+  .ba-after {
+    font-family: 'Share Tech Mono', monospace; font-size: 9px;
+    letter-spacing: 2px; padding: 7px 12px; border-radius: 7px;
+    text-transform: uppercase;
+    color: var(--teal); border: 1px solid rgba(48,176,176,0.35);
+    background: rgba(48,176,176,0.08);
+    text-shadow: 0 0 8px rgba(48,176,176,0.5);
+  }
+
+  /* ── PILLS ── */
+  .pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-bottom: 22px; }
+  .pill {
+    border: 1px solid rgba(48,176,176,0.3); background: rgba(48,176,176,0.07);
+    color: var(--teal); font-size: 9px; font-weight: 700; letter-spacing: 2.5px;
+    text-transform: uppercase; padding: 7px 15px; border-radius: 999px;
+    opacity: 0; transform: scale(0.7) translateY(10px);
+  }
+  @keyframes pillIn { to { opacity: 1; transform: scale(1) translateY(0); } }
+
+  /* ── CTA ── */
+  .cta { transition: opacity 0.6s ease; }
+  .cta-label { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: rgba(80,144,144,0.5); margin-bottom: 8px; }
+  .cta-url { font-family: 'Orbitron', sans-serif; font-size: 17px; font-weight: 700; color: #dff0f0; letter-spacing: 1.5px; text-shadow: 0 0 16px rgba(48,176,176,0.4); }
+  .cta-url span { color: var(--teal); }
+
+  .handle {
+    position: absolute; bottom: 34px; left: 50%; transform: translate(-50%, 16px);
+    z-index: 26; font-family: 'Share Tech Mono', monospace; font-size: 11px;
+    letter-spacing: 4px; text-transform: uppercase; color: rgba(80,144,144,0.45);
+    white-space: nowrap; opacity: 0;
+    animation: handle 0.7s 4s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  @keyframes handle { to { opacity: 1; transform: translate(-50%, 0); } }
+
+  .type-cursor {
+    display: inline-block; color: var(--teal); font-weight: 300;
+    font-family: 'Share Tech Mono', monospace; font-size: 13px;
+    margin-left: 3px; opacity: 0;
+  }
+  @keyframes cursorBlink { 0%,100%{opacity:1} 50%{opacity:0} }
+
+  /* ── CARD TRANSITIONS ── */
+  @keyframes cardZoomIn {
+    from { opacity:0; transform:scale(0.06) translateY(20px); filter:blur(20px); }
+    to   { opacity:1; transform:scale(1)    translateY(0);    filter:blur(0); }
+  }
+  @keyframes cardExitLeft {
+    from { opacity:1; transform:translateX(0)     scale(1);    filter:blur(0); }
+    to   { opacity:0; transform:translateX(-165%) scale(0.55); filter:blur(6px); }
+  }
+  @keyframes cardExitRight {
+    from { opacity:1; transform:translateX(0)    scale(1);    filter:blur(0); }
+    to   { opacity:0; transform:translateX(165%) scale(0.55); filter:blur(6px); }
+  }
+  @keyframes cardEnterRight {
+    from { opacity:0; transform:translateX(165%) scale(0.55); filter:blur(8px); }
+    to   { opacity:1; transform:translateX(0)    scale(1);    filter:blur(0); }
+  }
+  @keyframes cardEnterLeft {
+    from { opacity:0; transform:translateX(-165%) scale(0.55); filter:blur(8px); }
+    to   { opacity:1; transform:translateX(0)     scale(1);    filter:blur(0); }
+  }
+  .card.card-zoom-in     { animation: cardZoomIn     1.0s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .card.card-exit-left   { animation: cardExitLeft   0.52s cubic-bezier(0.55,0,1,0.45) forwards; }
+  .card.card-exit-right  { animation: cardExitRight  0.52s cubic-bezier(0.55,0,1,0.45) forwards; }
+  .card.card-enter-right { animation: cardEnterRight 0.62s cubic-bezier(0.16,1,0.3,1) forwards; }
+  .card.card-enter-left  { animation: cardEnterLeft  0.62s cubic-bezier(0.16,1,0.3,1) forwards; }
+
+  /* ── LOGO OUTRO ── */
+  #logo-outro {
+    position: absolute; inset: 0; z-index: 30;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none; opacity: 0;
+  }
+  #logo-outro.active { opacity: 1; }
+  #outro-logo {
+    width: 140px; height: 140px;
+    filter: drop-shadow(0 0 28px rgba(48,176,176,1)) drop-shadow(0 0 60px rgba(48,176,176,0.6));
+    mix-blend-mode: multiply;
+    transform-origin: center center;
+  }
+  @keyframes outroFlyIn {
+    0%   { opacity:0; transform:translate(-520px,420px) scale(0.18) rotate(0deg); }
+    30%  { opacity:1; }
+    100% { opacity:1; transform:translate(0px,0px) scale(1.0) rotate(540deg); }
+  }
+  @keyframes outroPulse {
+    0%,100% { filter:drop-shadow(0 0 28px rgba(48,176,176,1)) drop-shadow(0 0 60px rgba(48,176,176,0.6)); transform:scale(1) rotate(0deg); }
+    50%     { filter:drop-shadow(0 0 55px rgba(48,176,176,1)) drop-shadow(0 0 110px rgba(48,176,176,0.9)); transform:scale(1.12) rotate(180deg); }
+  }
+  @keyframes outroWarp {
+    0%   { opacity:1; transform:scale(1)    rotate(0deg)   translate(0,0); filter:drop-shadow(0 0 28px rgba(48,176,176,1)); }
+    40%  { opacity:1; transform:scale(1.22) rotate(200deg) translate(0,0); filter:drop-shadow(0 0 80px rgba(180,255,255,1)); }
+    100% { opacity:0; transform:scale(0.02) rotate(900deg) translate(0,0); filter:drop-shadow(0 0 4px rgba(48,176,176,0.3)); }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="c"></canvas>
+<div class="vignette"></div>
+
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<div class="status">
+  <div class="status-dot"></div>
+  <div class="status-txt" id="status-txt">Swift Online</div>
+</div>
+
+<div class="data-left">SWIFT_DESIGNZ · WEB · ECOMMERCE · APPS · PM_TRAINING · AI_TRAINING</div>
+<div class="data-right">QUALITY · SPEED · RESULTS · REMOTE · WORLDWIDE · BILLED_ZAR</div>
+
+<div class="overlay">
+  <div class="card" id="main-card">
+    <div class="svc-badge" id="badge-wrap">
+      <div class="badge-dot"></div>
+      <div class="badge-txt" id="badge-txt">Swift Designz</div>
+    </div>
+    <div class="logo-wrap">
+      <div class="logo-halo"></div>
+      <img class="logo-img" src="images/favicon.png" alt="Swift Designz"/>
+    </div>
+    <div id="promo-tag-wrap"></div>
+    <div class="headline"><span id="hl1"></span><br/><em><span id="hl2"></span></em></div>
+    <div class="sub"><span id="sub-txt"></span><span id="cursor" class="type-cursor">|</span></div>
+    <div class="divider" id="divider-el"></div>
+    <div class="pricing" id="pricing-wrap"></div>
+    <div class="ba-rows" id="ba-wrap"></div>
+    <div class="pills" id="pills-wrap"></div>
+    <div class="cta" id="cta-el" style="opacity:0;">
+      <div class="cta-label">Start your project today</div>
+      <div class="cta-url"><span>swift</span>designz.co.za</div>
+    </div>
+  </div>
+</div>
+
+<div id="logo-outro">
+  <img id="outro-logo" src="images/favicon.png" alt="Swift Designz"/>
+</div>
+
+<div class="handle">@swiftdesignz101</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  SPACE WARP BACKGROUND
+// ═══════════════════════════════════════════════════════
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+const W = canvas.width  = 1080;
+const H = canvas.height = 1080;
+const cx = W/2, cy = H/2;
+const TR=48, TG=176, TB=176;
+
+const N_STARS = 700;
+const MAX_Z   = 950;
+
+function mkStar(initial) {
+  const z = initial ? Math.random() * MAX_Z : MAX_Z;
+  return { x:(Math.random()-0.5)*W*1.9, y:(Math.random()-0.5)*H*1.9, z, pz:z, size:0.3+Math.random()*1.8, col:Math.random() };
+}
+let stars = Array.from({length:N_STARS}, ()=>mkStar(true));
+let warpRings=[], lastRing=0;
+const HUD=[
+  {r:400,rot:0,  rotSpd:0.0030,segs:4,gapFrac:0.28,lw:0.7,a:0.07},
+  {r:300,rot:2.1,rotSpd:-0.0048,segs:3,gapFrac:0.35,lw:0.6,a:0.055},
+  {r:490,rot:4.5,rotSpd:0.0018,segs:5,gapFrac:0.18,lw:0.5,a:0.045},
+];
+const PKTS=Array.from({length:24},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-0.5)*0.55,vy:(Math.random()-0.5)*0.55,w:16+Math.random()*44,h:5+Math.random()*8,op:0.04+Math.random()*0.07,ph:Math.random()*Math.PI*2,freq:0.018+Math.random()*0.032}));
+let streaks=[],lastStreak=0,warpSpd=0.6,frame=0,scanY=0,comets=[],blasts=[],lastComet=0;
+const TARGET_SPD=5.5;
+
+function mkComet(){
+  const side=Math.floor(Math.random()*4);
+  let sx,sy;
+  if(side===0){sx=Math.random()*W;sy=-20;}else if(side===1){sx=W+20;sy=Math.random()*H;}else if(side===2){sx=Math.random()*W;sy=H+20;}else{sx=-20;sy=Math.random()*H;}
+  const tx=cx+(Math.random()-.5)*700,ty=cy+(Math.random()-.5)*700,dx=tx-sx,dy=ty-sy,d=Math.sqrt(dx*dx+dy*dy)||1,spd=5+Math.random()*7;
+  return{x:sx,y:sy,vx:(dx/d)*spd,vy:(dy/d)*spd,px:-(dy/d),py:(dx/d),zAmp:18+Math.random()*52,zFreq:0.055+Math.random()*0.095,zPhase:Math.random()*Math.PI*2,trail:[],t:0,ttl:65+Math.floor(Math.random()*80)};
+}
+function boom(x,y){
+  const n=14+Math.floor(Math.random()*24);
+  for(let i=0;i<n;i++){const a=(i/n)*Math.PI*2+Math.random()*.6,spd=1+Math.random()*8;blasts.push({x,y,vx:Math.cos(a)*spd,vy:Math.sin(a)*spd,life:1,decay:.016+Math.random()*.028,size:.5+Math.random()*3,flash:Math.random()>.62});}
+}
+
+function render(ts) {
+  frame++;
+  if(warpSpd<TARGET_SPD) warpSpd+=0.018;
+  ctx.fillStyle='rgba(3,7,10,0.88)'; ctx.fillRect(0,0,W,H);
+  const breathe=0.5+0.5*Math.sin(frame*0.018);
+  const cg=ctx.createRadialGradient(cx,cy,0,cx,cy,220+breathe*55);
+  cg.addColorStop(0,`rgba(${TR},${TG},${TB},${0.055+breathe*0.04})`);cg.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.fillStyle=cg;ctx.fillRect(0,0,W,H);
+  for(const s of stars){
+    s.pz=s.z;s.z-=warpSpd;
+    if(s.z<=1){s.x=(Math.random()-0.5)*W*1.9;s.y=(Math.random()-0.5)*H*1.9;s.z=MAX_Z;s.pz=MAX_Z;continue;}
+    const sx=(s.x/s.z)*cx+cx,sy=(s.y/s.z)*cy+cy,px=(s.x/s.pz)*cx+cx,py=(s.y/s.pz)*cy+cy;
+    if(sx<-20||sx>W+20||sy<-20||sy>H+20){s.z=1;continue;}
+    const t=1-s.z/MAX_Z,rr=Math.floor(TR+(220-TR)*t*s.col),gg=Math.floor(TG+(225-TG)*t*(0.7+s.col*0.3)),bb=Math.floor(TB+(215-TB)*t*0.55);
+    const alpha=Math.min(1,t*1.7+0.04),lw=s.size*(0.4+t*1.8);
+    ctx.save();ctx.strokeStyle=`rgba(${rr},${gg},${bb},${alpha})`;ctx.lineWidth=lw;
+    if(t>0.65){ctx.shadowBlur=lw*5;ctx.shadowColor=`rgba(${TR},${TG},${TB},0.55)`;}
+    ctx.beginPath();ctx.moveTo(px,py);ctx.lineTo(sx,sy);ctx.stroke();ctx.restore();
+  }
+  if(warpSpd>7&&ts-lastRing>1050){warpRings.push({r:5,op:0.6,spd:7+Math.random()*7});lastRing=ts;}
+  warpRings=warpRings.filter(function(ring){
+    ring.r+=ring.spd;ring.op-=0.014;if(ring.op<=0)return false;
+    ctx.save();ctx.globalAlpha=ring.op;ctx.strokeStyle=`rgba(${TR},${TG},${TB},1)`;ctx.lineWidth=1.3;ctx.shadowBlur=10;ctx.shadowColor=`rgba(${TR},${TG},${TB},0.8)`;
+    ctx.beginPath();ctx.arc(cx,cy,ring.r,0,Math.PI*2);ctx.stroke();ctx.restore();return true;
+  });
+  for(const h of HUD){
+    h.rot+=h.rotSpd;ctx.save();ctx.globalAlpha=h.a*(0.55+0.45*breathe);ctx.strokeStyle=`rgba(${TR},${TG},${TB},1)`;ctx.lineWidth=h.lw;
+    const span=(Math.PI*2/h.segs)*(1-h.gapFrac);
+    for(let i=0;i<h.segs;i++){const start=h.rot+i*(Math.PI*2/h.segs);ctx.beginPath();ctx.arc(cx,cy,h.r,start,start+span);ctx.stroke();}
+    ctx.restore();
+  }
+  if(ts-lastStreak>600+Math.random()*800){
+    const ang=Math.random()*Math.PI*2,fromR=50+Math.random()*80,toR=fromR+60+Math.random()*140;
+    streaks.push({x1:cx+Math.cos(ang)*fromR,y1:cy+Math.sin(ang)*fromR,x2:cx+Math.cos(ang)*toR,y2:cy+Math.sin(ang)*toR,life:1,lw:0.8+Math.random()*1.4});
+    lastStreak=ts;
+  }
+  streaks=streaks.filter(function(s){
+    s.life-=0.055;if(s.life<=0)return false;
+    ctx.save();ctx.globalAlpha=s.life*0.8;ctx.strokeStyle=`rgba(${TR},${TG},${TB},1)`;ctx.lineWidth=s.lw;ctx.shadowBlur=8;ctx.shadowColor=`rgba(${TR},${TG},${TB},0.9)`;
+    ctx.beginPath();ctx.moveTo(s.x1,s.y1);ctx.lineTo(s.x2,s.y2);ctx.stroke();ctx.restore();return true;
+  });
+  if(ts-lastComet>2000+Math.random()*3000){comets.push(mkComet());lastComet=ts;}
+  for(let i=comets.length-1;i>=0;i--){
+    const c=comets[i];c.t++;
+    const zOff=c.zAmp*Math.sin(c.zFreq*c.t+c.zPhase),hx=c.x+c.px*zOff,hy=c.y+c.py*zOff;
+    c.trail.push({x:hx,y:hy});if(c.trail.length>28)c.trail.shift();
+    c.x+=c.vx;c.y+=c.vy;
+    const alive=c.t<c.ttl&&hx>-80&&hx<W+80&&hy>-80&&hy<H+80;
+    if(!alive){boom(hx,hy);comets.splice(i,1);continue;}
+    const fade=1-c.t/c.ttl;
+    for(let j=1;j<c.trail.length;j++){
+      const tf=j/c.trail.length;
+      ctx.save();ctx.globalAlpha=tf*0.80*fade;ctx.strokeStyle=`rgba(${TR},${TG},${TB},1)`;ctx.lineWidth=tf*2.4;ctx.shadowBlur=tf*14;ctx.shadowColor=`rgba(${TR},${TG},${TB},0.85)`;
+      ctx.beginPath();ctx.moveTo(c.trail[j-1].x,c.trail[j-1].y);ctx.lineTo(c.trail[j].x,c.trail[j].y);ctx.stroke();ctx.restore();
+    }
+    ctx.save();ctx.globalAlpha=fade*0.95;ctx.fillStyle='rgba(195,250,250,1)';ctx.shadowBlur=22;ctx.shadowColor=`rgba(${TR},${TG},${TB},1)`;
+    ctx.beginPath();ctx.arc(hx,hy,2.8,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+  for(let i=blasts.length-1;i>=0;i--){
+    const p=blasts[i];p.x+=p.vx;p.y+=p.vy;p.vx*=0.92;p.vy*=0.92;p.life-=p.decay;
+    if(p.life<=0){blasts.splice(i,1);continue;}
+    ctx.save();ctx.globalAlpha=p.life*(p.flash?.90:.52);ctx.fillStyle=p.flash?'rgba(200,252,252,1)':`rgba(${TR},${TG},${TB},1)`;
+    if(p.flash){ctx.shadowBlur=12;ctx.shadowColor=`rgba(${TR},${TG},${TB},1)`;}
+    ctx.beginPath();ctx.arc(p.x,p.y,p.size*p.life,0,Math.PI*2);ctx.fill();ctx.restore();
+  }
+  for(const p of PKTS){
+    p.x+=p.vx;p.y+=p.vy;p.ph+=p.freq;
+    if(p.x<-70)p.x=W+50;if(p.x>W+70)p.x=-50;if(p.y<-70)p.y=H+50;if(p.y>H+70)p.y=-50;
+    const alpha=p.op*(0.35+0.65*Math.abs(Math.sin(p.ph)));
+    ctx.save();ctx.globalAlpha=alpha;ctx.strokeStyle=`rgba(${TR},${TG},${TB},1)`;ctx.lineWidth=0.7;
+    ctx.strokeRect(p.x,p.y,p.w,p.h);ctx.fillStyle=`rgba(${TR},${TG},${TB},0.12)`;ctx.fillRect(p.x+1,p.y+1,p.w-2,p.h-2);ctx.restore();
+  }
+  scanY=(scanY+1.5)%H;
+  ctx.save();ctx.globalAlpha=0.05;ctx.strokeStyle=`rgba(${TR},${TG},${TB},1)`;ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,scanY);ctx.lineTo(W,scanY);ctx.stroke();ctx.restore();
+  const dp=0.5+0.5*Math.sin(frame*0.045);
+  ctx.save();ctx.globalAlpha=0.55+0.45*dp;ctx.beginPath();ctx.arc(cx,cy,3.5,0,Math.PI*2);ctx.fillStyle=`rgba(${TR},${TG},${TB},1)`;ctx.shadowBlur=28;ctx.shadowColor=`rgba(${TR},${TG},${TB},1)`;ctx.fill();ctx.restore();
+  requestAnimationFrame(render);
+}
+requestAnimationFrame(render);
+
+// ═══════════════════════════════════════════════════════
+//  SFX — Web Audio synthesized
+// ═══════════════════════════════════════════════════════
+const SFX = (function() {
+  let actx=null,master=null;
+  function getCtx(){
+    if(!actx){actx=new(window.AudioContext||window.webkitAudioContext)();master=actx.createGain();master.gain.value=0.72;master.connect(actx.destination);startAmbient();}
+    return actx;
+  }
+  setTimeout(function(){
+    try{const a=new(window.AudioContext||window.webkitAudioContext)();if(a.state==='running'){actx=a;master=actx.createGain();master.gain.value=0.72;master.connect(actx.destination);startAmbient();}}catch(e){}
+  },800);
+  function startAmbient(){
+    const o1=actx.createOscillator(),o2=actx.createOscillator(),lfo=actx.createOscillator(),lfoG=actx.createGain(),flt=actx.createBiquadFilter(),g=actx.createGain();
+    o1.type='sine';o1.frequency.value=58;o2.type='sine';o2.frequency.value=62.4;lfo.type='sine';lfo.frequency.value=0.12;lfoG.gain.value=6;flt.type='lowpass';flt.frequency.value=180;
+    g.gain.setValueAtTime(0.001,actx.currentTime);g.gain.linearRampToValueAtTime(0.14,actx.currentTime+2.5);
+    lfo.connect(lfoG);lfoG.connect(o1.frequency);o1.connect(flt);o2.connect(flt);flt.connect(g);g.connect(master);o1.start();o2.start();lfo.start();
+  }
+  function mkNoise(dur,bandFreq,q,gainVal){
+    const a=getCtx(),buf=a.createBuffer(1,a.sampleRate*dur,a.sampleRate),d=buf.getChannelData(0);
+    for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;
+    const src=a.createBufferSource();src.buffer=buf;const flt=a.createBiquadFilter();flt.type='bandpass';flt.frequency.value=bandFreq;flt.Q.value=q||1.5;
+    const g=a.createGain();g.gain.setValueAtTime(gainVal,a.currentTime);g.gain.exponentialRampToValueAtTime(0.001,a.currentTime+dur);
+    src.connect(flt);flt.connect(g);g.connect(master);src.start();src.stop(a.currentTime+dur);
+  }
+  return {
+    typeClick:function(){if(!actx||actx.state!=='running')return;const o=actx.createOscillator(),g=actx.createGain();o.type='square';o.frequency.value=1100+Math.random()*500;g.gain.setValueAtTime(0.028,actx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+0.028);o.connect(g);g.connect(master);o.start();o.stop(actx.currentTime+0.03);},
+    whoosh:function(incoming){if(!actx||actx.state!=='running')return;const dur=0.48,o=actx.createOscillator(),flt=actx.createBiquadFilter(),g=actx.createGain();o.type='sawtooth';flt.type='bandpass';flt.Q.value=2.5;if(incoming){o.frequency.setValueAtTime(220,actx.currentTime);o.frequency.linearRampToValueAtTime(1600,actx.currentTime+dur);flt.frequency.setValueAtTime(300,actx.currentTime);flt.frequency.linearRampToValueAtTime(2800,actx.currentTime+dur);g.gain.setValueAtTime(0.001,actx.currentTime);g.gain.linearRampToValueAtTime(0.18,actx.currentTime+dur*0.3);g.gain.linearRampToValueAtTime(0.001,actx.currentTime+dur);}else{o.frequency.setValueAtTime(1600,actx.currentTime);o.frequency.linearRampToValueAtTime(220,actx.currentTime+dur);flt.frequency.setValueAtTime(2800,actx.currentTime);flt.frequency.linearRampToValueAtTime(300,actx.currentTime+dur);g.gain.setValueAtTime(0.18,actx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+dur);}o.connect(flt);flt.connect(g);g.connect(master);o.start();o.stop(actx.currentTime+dur);},
+    pillPop:function(i){if(!actx||actx.state!=='running')return;const freq=480+i*95,o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.setValueAtTime(freq*1.6,actx.currentTime);o.frequency.exponentialRampToValueAtTime(freq,actx.currentTime+0.07);g.gain.setValueAtTime(0.1,actx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+0.16);o.connect(g);g.connect(master);o.start();o.stop(actx.currentTime+0.18);},
+    explosion:function(){if(!actx||actx.state!=='running')return;const o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.setValueAtTime(180,actx.currentTime);o.frequency.exponentialRampToValueAtTime(28,actx.currentTime+0.42);g.gain.setValueAtTime(0.55,actx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+0.42);o.connect(g);g.connect(master);o.start();o.stop(actx.currentTime+0.45);mkNoise(0.22,380,1.2,0.28);},
+    logoPulse:function(){if(!actx||actx.state!=='running')return;const o=actx.createOscillator(),g=actx.createGain();o.type='sine';o.frequency.setValueAtTime(200,actx.currentTime);o.frequency.linearRampToValueAtTime(420,actx.currentTime+0.5);o.frequency.linearRampToValueAtTime(200,actx.currentTime+1.0);g.gain.setValueAtTime(0.001,actx.currentTime);g.gain.linearRampToValueAtTime(0.18,actx.currentTime+0.25);g.gain.linearRampToValueAtTime(0.001,actx.currentTime+1.0);o.connect(g);g.connect(master);o.start();o.stop(actx.currentTime+1.05);},
+    warpOut:function(){if(!actx||actx.state!=='running')return;const dur=0.9,o=actx.createOscillator(),flt=actx.createBiquadFilter(),g=actx.createGain();o.type='sawtooth';o.frequency.setValueAtTime(280,actx.currentTime);o.frequency.exponentialRampToValueAtTime(3800,actx.currentTime+dur*0.55);o.frequency.exponentialRampToValueAtTime(80,actx.currentTime+dur);flt.type='bandpass';flt.Q.value=4;flt.frequency.setValueAtTime(600,actx.currentTime);flt.frequency.exponentialRampToValueAtTime(7000,actx.currentTime+dur*0.5);g.gain.setValueAtTime(0.22,actx.currentTime);g.gain.linearRampToValueAtTime(0.38,actx.currentTime+dur*0.4);g.gain.exponentialRampToValueAtTime(0.001,actx.currentTime+dur);o.connect(flt);flt.connect(g);g.connect(master);o.start();o.stop(actx.currentTime+dur+0.05);},
+  };
+})();
+
+// ═══════════════════════════════════════════════════════
+//  CARD DATA — 5 posts
+// ═══════════════════════════════════════════════════════
+const CARD_DATA = [
+  // ── Post 1: Services Showcase ──────────────────────────
+  {
+    status: 'Services Online',
+    badge:  'What We Build',
+    hl1:    'BUILD YOUR',
+    hl2:    'DIGITAL FUTURE.',
+    sub:    'Web. Mobile. E-Commerce. AI.',
+    type:   'pills',
+    pills:  ['Web Apps', 'E-Commerce Stores', 'Mobile Apps', 'SaaS Platforms', 'AI Training', 'PM Training'],
+    tiers:  null, ba: null, cta: false, promo: null,
+  },
+  // ── Post 2: Pricing ────────────────────────────────────
+  {
+    status: 'Packages Live',
+    badge:  'Transparent Pricing',
+    hl1:    'QUALITY AT',
+    hl2:    'ANY BUDGET.',
+    sub:    'No surprises. Just results.',
+    type:   'tiers',
+    tiers:  [
+      { name: 'Websites From',     price: 'R2,500' },
+      { name: 'Online Stores From', price: 'R4,000' },
+      { name: 'Mobile Apps From',  price: 'R5,000' },
+      { name: 'Training From',     price: 'R1,500' },
+    ],
+    pills: null, ba: null, cta: false, promo: null,
+  },
+  // ── Post 3: Before & After ─────────────────────────────
+  {
+    status: 'Results Delivered',
+    badge:  'Client Transformations',
+    hl1:    'FROM ZERO',
+    hl2:    'TO LAUNCHED.',
+    sub:    'Real results. Real clients.',
+    type:   'ba',
+    ba: [
+      { before: 'No Website',      after: 'Live in 2 Weeks' },
+      { before: 'Manual Process',  after: 'Custom App Built' },
+      { before: 'Losing Clients',  after: 'Pro Online Presence' },
+      { before: 'No Online Store', after: 'Selling 24/7' },
+    ],
+    tiers: null, pills: null, cta: false, promo: null,
+  },
+  // ── Post 4: Brand Personality ──────────────────────────
+  {
+    status: 'Swift Online',
+    badge:  'Why Swift Hits Different',
+    hl1:    'REMOTE.',
+    hl2:    'LEGENDARY.',
+    sub:    'Degree-level quality. Startup speed.',
+    type:   'pills',
+    pills:  ['BSc Soft. Eng.', '2+ Yrs Web Dev', '1+ Yr App Dev', '7 Happy Clients', '2 Countries', 'Always On Time'],
+    tiers: null, ba: null, cta: false, promo: null,
+  },
+  // ── Post 5: Promo / Announcement ──────────────────────
+  {
+    status: 'Limited Offer',
+    badge:  'April 2026',
+    hl1:    'FREE 3-MONTH',
+    hl2:    'HOSTING.',
+    sub:    'New website clients — this month only.',
+    type:   'cta',
+    promo:  'LIMITED — APRIL 2026',
+    tiers: null, pills: null, ba: null, cta: true,
+  },
+];
+
+// ═══════════════════════════════════════════════════════
+//  DOM REFS
+// ═══════════════════════════════════════════════════════
+const cardEl      = document.getElementById('main-card');
+const badgeWrap   = document.getElementById('badge-wrap');
+const badgeEl     = document.getElementById('badge-txt');
+const hl1El       = document.getElementById('hl1');
+const hl2El       = document.getElementById('hl2');
+const subEl       = document.getElementById('sub-txt');
+const cursorEl    = document.getElementById('cursor');
+const dividerEl   = document.getElementById('divider-el');
+const pricingWrap = document.getElementById('pricing-wrap');
+const baWrap      = document.getElementById('ba-wrap');
+const pillsWrap   = document.getElementById('pills-wrap');
+const ctaEl       = document.getElementById('cta-el');
+const promoWrap   = document.getElementById('promo-tag-wrap');
+const statusTxt   = document.getElementById('status-txt');
+
+// ═══════════════════════════════════════════════════════
+//  HELPERS
+// ═══════════════════════════════════════════════════════
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function typeLines(lines) {
+  return new Promise(function(resolve) {
+    let li = 0;
+    function nextLine() {
+      if (li >= lines.length) { resolve(); return; }
+      const ln = lines[li++];
+      ln.el.textContent = '';
+      if (ln.cursor) { cursorEl.style.opacity = '1'; cursorEl.style.animation = 'cursorBlink 0.7s ease-in-out infinite'; }
+      let ci = 0;
+      (function tick() {
+        ln.el.textContent = ln.text.slice(0, ++ci);
+        SFX.typeClick();
+        if (ci < ln.text.length) setTimeout(tick, ln.spd);
+        else setTimeout(nextLine, li <= lines.length ? 340 : 0);
+      })();
+    }
+    nextLine();
+  });
+}
+
+function showTiers(tiers) {
+  return new Promise(function(resolve) {
+    pricingWrap.innerHTML = '';
+    if (!tiers || !tiers.length) { resolve(); return; }
+    tiers.forEach(function(t, i) {
+      const row = document.createElement('div');
+      row.className = 'tier-row';
+      row.innerHTML = '<span class="tier-name">' + t.name + '</span><span class="tier-price">' + t.price + '</span>';
+      pricingWrap.appendChild(row);
+      setTimeout(function() { row.style.animation = 'tierIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards'; SFX.pillPop(i); }, 80 + i * 200);
+    });
+    setTimeout(resolve, 80 + tiers.length * 200 + 400);
+  });
+}
+
+function showPills(pills) {
+  return new Promise(function(resolve) {
+    pillsWrap.innerHTML = '';
+    if (!pills || !pills.length) { resolve(); return; }
+    pills.forEach(function(txt, i) {
+      const d = document.createElement('div');
+      d.className = 'pill';
+      d.textContent = txt;
+      pillsWrap.appendChild(d);
+      setTimeout(function() { d.style.animation = 'pillIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards'; SFX.pillPop(i); }, 60 + i * 150);
+    });
+    setTimeout(resolve, 60 + pills.length * 150 + 400);
+  });
+}
+
+function showBA(ba) {
+  return new Promise(function(resolve) {
+    baWrap.innerHTML = '';
+    if (!ba || !ba.length) { resolve(); return; }
+    ba.forEach(function(item, i) {
+      const row = document.createElement('div');
+      row.className = 'ba-row';
+      row.innerHTML =
+        '<span class="ba-before">' + item.before + '</span>' +
+        '<span class="ba-arrow">&#8594;</span>' +
+        '<span class="ba-after">' + item.after + '</span>';
+      baWrap.appendChild(row);
+      setTimeout(function() { row.style.animation = 'baRowIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards'; SFX.pillPop(i); }, 80 + i * 220);
+    });
+    setTimeout(resolve, 80 + ba.length * 220 + 400);
+  });
+}
+
+// ═══════════════════════════════════════════════════════
+//  SEQUENCER
+// ═══════════════════════════════════════════════════════
+async function runCard(data, enterAnim) {
+  // ── Reset ──
+  badgeWrap.style.opacity = '0';
+  badgeWrap.style.transition = 'none';
+  pricingWrap.innerHTML = '';
+  baWrap.innerHTML = '';
+  pillsWrap.innerHTML = '';
+  promoWrap.innerHTML = '';
+  ctaEl.style.opacity = '0';
+  dividerEl.className = 'divider';
+  hl1El.textContent = '';
+  hl2El.textContent = '';
+  subEl.textContent = '';
+  cursorEl.style.opacity = '0';
+  cursorEl.style.animation = 'none';
+  if (statusTxt) statusTxt.textContent = data.status || 'Swift Online';
+
+  // ── Card enter ──
+  cardEl.className = 'card';
+  void cardEl.offsetWidth;
+  cardEl.classList.add(enterAnim);
+  SFX.whoosh(true);
+  await delay(enterAnim === 'card-zoom-in' ? 1000 : 650);
+
+  // ── Badge ──
+  badgeEl.textContent = data.badge;
+  void badgeWrap.offsetWidth;
+  badgeWrap.style.transition = 'opacity 0.4s ease';
+  badgeWrap.style.opacity = '1';
+  await delay(500);
+
+  // ── Promo tag (optional) ──
+  if (data.promo) {
+    const tag = document.createElement('div');
+    tag.className = 'promo-tag';
+    tag.textContent = data.promo;
+    promoWrap.appendChild(tag);
+    setTimeout(function() { tag.style.animation = 'tagIn 0.5s cubic-bezier(0.16,1,0.3,1) forwards'; SFX.explosion(); }, 50);
+    await delay(650);
+  }
+
+  // ── Headline ──
+  await typeLines([
+    { el: hl1El, text: data.hl1, spd: 55, cursor: false },
+    { el: hl2El, text: data.hl2, spd: 50, cursor: true },
+  ]);
+  await delay(200);
+
+  // ── Sub ──
+  await typeLines([{ el: subEl, text: data.sub, spd: 30, cursor: true }]);
+  cursorEl.style.opacity = '0';
+  cursorEl.style.animation = 'none';
+  await delay(300);
+
+  // ── Divider ──
+  dividerEl.classList.add('divider-in');
+  await delay(800);
+
+  // ── Content ──
+  if (data.type === 'tiers')      { await showTiers(data.tiers); }
+  else if (data.type === 'pills') { await showPills(data.pills); }
+  else if (data.type === 'ba')    { await showBA(data.ba); }
+
+  // ── CTA (promo card only) ──
+  if (data.cta) {
+    void ctaEl.offsetWidth;
+    ctaEl.style.transition = 'opacity 0.6s ease';
+    ctaEl.style.opacity = '1';
+    await delay(700);
+  }
+
+  // ── Hold ──
+  await delay(3800);
+}
+
+function exitCard(dir) {
+  return new Promise(function(resolve) {
+    const cls = dir === 'left' ? 'card-exit-left' : 'card-exit-right';
+    cardEl.classList.remove('card-zoom-in', 'card-enter-right', 'card-enter-left');
+    void cardEl.offsetWidth;
+    cardEl.classList.add(cls);
+    SFX.whoosh(false);
+    setTimeout(resolve, 520);
+  });
+}
+
+async function runLogoOutro() {
+  const outro = document.getElementById('logo-outro');
+  const logo  = document.getElementById('outro-logo');
+  outro.classList.add('active');
+  logo.style.animation = 'outroFlyIn 1.4s cubic-bezier(0.16,1,0.3,1) forwards';
+  SFX.logoPulse();
+  await delay(1500);
+  logo.style.animation = 'outroPulse 1.2s ease-in-out 2';
+  await delay(2400);
+  logo.style.animation = 'outroWarp 0.9s ease-in-out forwards';
+  SFX.warpOut();
+  await delay(1000);
+}
+
+async function sequence() {
+  await delay(1400); // let canvas + CSS initialise
+
+  // ── Card 1 — Services Showcase (zoom in) ──
+  await runCard(CARD_DATA[0], 'card-zoom-in');
+  await exitCard('left');
+
+  // ── Card 2 — Pricing ──
+  await runCard(CARD_DATA[1], 'card-enter-right');
+  await exitCard('left');
+
+  // ── Card 3 — Before & After ──
+  await runCard(CARD_DATA[2], 'card-enter-right');
+  await exitCard('left');
+
+  // ── Card 4 — Brand Personality ──
+  await runCard(CARD_DATA[3], 'card-enter-right');
+  await exitCard('left');
+
+  // ── Card 5 — Promo / CTA ──
+  await runCard(CARD_DATA[4], 'card-enter-right');
+  await exitCard('right');
+
+  // ── Logo Outro ──
+  await runLogoOutro();
+}
+
+sequence();
+</script>
+</body>
+</html>

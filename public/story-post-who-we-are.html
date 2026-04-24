@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=1080" />
+<title>Swift Designz — Who We Are</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 1080px;
+    height: 1920px;
+    overflow: hidden;
+    background: #0d0d0d;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    color: #fff;
+    position: relative;
+  }
+
+  /* ═══════════════════ KEYFRAMES ═══════════════════ */
+
+  @keyframes spin-cw  { to { transform: rotate(360deg);  } }
+  @keyframes spin-ccw { to { transform: rotate(-360deg); } }
+
+  @keyframes shimmer {
+    0%   { background-position: -300% center; }
+    100% { background-position:  300% center; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scale-in {
+    from { opacity: 0; transform: scale(0.85); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes fav-pulse {
+    0%, 100% {
+      transform: translate(-50%, -50%) scale(1);
+      filter: drop-shadow(0 0 28px rgba(48,176,176,.7));
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.10);
+      filter: drop-shadow(0 0 56px rgba(48,176,176,1)) drop-shadow(0 0 90px rgba(245,158,11,.5));
+    }
+  }
+
+  @keyframes neon-pulse {
+    0%, 100% { box-shadow: 0 0 14px rgba(48,176,176,.3),  0 0 32px rgba(48,176,176,.15); }
+    50%       { box-shadow: 0 0 32px rgba(48,176,176,.8),  0 0 70px rgba(48,176,176,.4);  }
+  }
+
+  @keyframes amber-glow {
+    0%, 100% { box-shadow: 0 0 14px rgba(245,158,11,.35), 0 0 30px rgba(245,158,11,.18); }
+    50%       { box-shadow: 0 0 32px rgba(245,158,11,.85), 0 0 68px rgba(245,158,11,.4);  }
+  }
+
+  @keyframes divider-grow {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+  }
+
+  @keyframes line-in {
+    from { width: 0; opacity: 0; }
+    to   { width: 60px; opacity: 1; }
+  }
+
+  /* ═══════════════════ BACKGROUND ═══════════════════ */
+
+  .bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 75% 48% at 50% 10%,  rgba(48,176,176,0.14) 0%, transparent 58%),
+      radial-gradient(ellipse 55% 38% at 88% 72%,  rgba(245,158,11,0.10) 0%, transparent 55%),
+      radial-gradient(ellipse 45% 28% at 12% 55%,  rgba(48,176,176,0.07) 0%, transparent 50%),
+      #0d0d0d;
+  }
+
+  .bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      repeating-linear-gradient(60deg,  rgba(48,176,176,0.03) 0, rgba(48,176,176,0.03) 1px, transparent 1px, transparent 44px),
+      repeating-linear-gradient(120deg, rgba(48,176,176,0.03) 0, rgba(48,176,176,0.03) 1px, transparent 1px, transparent 44px);
+  }
+
+  /* ═══════════════════ LOGO WATERMARK ═══════════════════ */
+
+  .logo-mark {
+    position: absolute;
+    top: 70px; right: 60px;
+    height: 32px;
+    opacity: 0.76;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+
+  /* ═══════════════════ ANIMATED BADGE ═══════════════════ */
+
+  .badge-wrap {
+    position: absolute;
+    top: 100px; left: 0; right: 0;
+    margin: 0 auto;
+    width: 190px; height: 190px;
+    animation: fadeUp 0.7s 0.15s ease both;
+  }
+
+  .ring-a {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 170px; height: 170px;
+    margin-top: -85px; margin-left: -85px;
+    border-radius: 50%;
+    border: 2px solid rgba(48,176,176,.48);
+    animation: spin-cw 7s linear infinite;
+  }
+
+  .ring-b {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 190px; height: 190px;
+    margin-top: -95px; margin-left: -95px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(245,158,11,.32);
+    animation: spin-ccw 11s linear infinite;
+  }
+
+  .badge-fav {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 116px; height: 116px;
+    object-fit: cover;
+    border-radius: 28px;
+    transform: translate(-50%, -50%);
+    animation: fav-pulse 3s ease-in-out infinite;
+  }
+
+  /* ═══════════════════ BRAND NAME ═══════════════════ */
+
+  .brand-name {
+    position: absolute;
+    top: 348px; left: 0; right: 0;
+    text-align: center;
+    font-size: 54px;
+    font-weight: 900;
+    letter-spacing: 7px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #F59E0B 0%, #FBBF24 28%, #30B0B0 58%, #F59E0B 100%);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 5s linear infinite, fadeUp 0.75s 0.28s ease both;
+  }
+
+  /* ═══════════════════ AMBER RULE ═══════════════════ */
+
+  .amber-rule {
+    position: absolute;
+    top: 430px;
+    left: 0; right: 0;
+    width: 210px; height: 3px;
+    margin: 0 auto;
+    background: linear-gradient(90deg, transparent, #F59E0B 35%, #30B0B0 65%, transparent);
+    transform-origin: center;
+    animation: divider-grow 1.2s 0.45s ease backwards;
+  }
+
+  /* ═══════════════════ EYEBROW ═══════════════════ */
+
+  .eyebrow {
+    position: absolute;
+    top: 462px; left: 0; right: 0;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+    letter-spacing: 7px;
+    text-transform: uppercase;
+    color: rgba(245,158,11,0.62);
+    animation: fadeUp 0.65s 0.55s ease both;
+  }
+
+  /* ═══════════════════ MAIN HEADLINE ═══════════════════ */
+
+  .headline {
+    position: absolute;
+    top: 508px; left: 0; right: 0;
+    padding: 0 64px;
+    text-align: center;
+    animation: fadeUp 0.8s 0.65s ease both;
+  }
+
+  .hl-line1 {
+    display: block;
+    font-size: 100px;
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -3px;
+    text-transform: uppercase;
+    color: #fff;
+  }
+
+  .hl-line2 {
+    display: block;
+    font-size: 100px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -3px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, #30B0B0 20%, #FBBF24 80%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: shimmer 6s linear infinite;
+    background-size: 200% auto;
+  }
+
+  /* ═══════════════════ QUOTE STRIP ═══════════════════ */
+
+  .quote-strip {
+    position: absolute;
+    top: 772px; left: 60px; right: 60px;
+    background: rgba(48,176,176,0.07);
+    border: 1px solid rgba(48,176,176,0.26);
+    border-left: 4px solid #30B0B0;
+    border-radius: 22px;
+    padding: 44px 54px;
+    animation: fadeUp 0.75s 0.85s ease both;
+  }
+
+  .quote-text {
+    font-size: 37px;
+    font-weight: 400;
+    line-height: 1.52;
+    color: rgba(255,255,255,0.80);
+    font-style: italic;
+  }
+
+  .quote-text strong {
+    font-style: normal;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* ═══════════════════ STORY CARDS ═══════════════════ */
+
+  .story-cards {
+    position: absolute;
+    top: 1022px; left: 60px; right: 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+
+  .s-card {
+    background: rgba(255,255,255,0.04);
+    border-radius: 26px;
+    padding: 40px 52px 40px 64px;
+    display: flex;
+    flex-direction: column;
+    gap: 13px;
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+    animation: scale-in 0.6s ease backwards;
+  }
+
+  /* Left accent bar */
+  .s-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    border-radius: 4px 0 0 4px;
+  }
+
+  .s-card:nth-child(1) {
+    border: 1px solid rgba(48,176,176,.28);
+    animation-delay: 1.0s;
+  }
+  .s-card:nth-child(1)::before { background: #30B0B0; }
+
+  .s-card:nth-child(2) {
+    border: 1px solid rgba(245,158,11,.24);
+    animation-delay: 1.2s;
+  }
+  .s-card:nth-child(2)::before { background: #F59E0B; }
+
+  .s-card:nth-child(3) {
+    border: 1px solid rgba(48,176,176,.22);
+    animation: scale-in 0.6s 1.4s ease backwards, neon-pulse 3s ease-in-out infinite 2.0s;
+  }
+  .s-card:nth-child(3)::before {
+    background: linear-gradient(180deg, #30B0B0, #F59E0B);
+  }
+
+  .s-label {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #30B0B0;
+  }
+
+  .s-card:nth-child(2) .s-label { color: #F59E0B; }
+
+  .s-text {
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1.52;
+    color: rgba(255,255,255,0.72);
+  }
+
+  .s-text strong {
+    color: #fff;
+    font-weight: 700;
+  }
+
+  /* ═══════════════════ FOOTER ═══════════════════ */
+
+  .footer {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 210px;
+    background: linear-gradient(transparent, rgba(0,0,0,.96) 40%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 52px;
+    gap: 14px;
+  }
+
+  .footer-founder {
+    font-size: 26px;
+    font-weight: 500;
+    color: rgba(255,255,255,.38);
+    letter-spacing: 2px;
+  }
+
+  .footer-founder span {
+    color: rgba(48,176,176,.7);
+    font-weight: 600;
+  }
+
+  .footer-links {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+  }
+
+  .footer-links .url    { font-size: 31px; font-weight: 700; color: #30B0B0; letter-spacing: 2px; }
+  .footer-links .sep    { font-size: 26px; color: rgba(255,255,255,.25); }
+  .footer-links .handle { font-size: 27px; color: rgba(255,255,255,.44); }
+
+</style>
+</head>
+<body>
+
+<!-- Background -->
+<div class="bg"></div>
+
+<!-- Logo watermark (top-right) -->
+<img class="logo-mark" src="images/logo.png" alt="Swift Designz" />
+
+<!-- Animated badge -->
+<div class="badge-wrap">
+  <div class="ring-a"></div>
+  <div class="ring-b"></div>
+  <img class="badge-fav" src="images/favicon.png" alt="Swift Designz" />
+</div>
+
+<!-- Brand name -->
+<div class="brand-name">Swift Designz</div>
+
+<!-- Amber rule divider -->
+<div class="amber-rule"></div>
+
+<!-- Eyebrow -->
+<div class="eyebrow">More Than a Studio</div>
+
+<!-- Main headline -->
+<div class="headline">
+  <span class="hl-line1">People Over</span>
+  <span class="hl-line2">Price Tags.</span>
+</div>
+
+<!-- Quote — Keenan's words, refined -->
+<div class="quote-strip">
+  <div class="quote-text">"Your online presence can be <strong>so much better</strong> — and it <strong>shouldn't cost a fortune</strong> to get there."</div>
+</div>
+
+<!-- Story cards -->
+<div class="story-cards">
+
+  <div class="s-card">
+    <div class="s-label">Client First. Always.</div>
+    <div class="s-text">We don't pitch packages — we <strong>listen to your story</strong> and build exactly what your business needs.</div>
+  </div>
+
+  <div class="s-card">
+    <div class="s-label">No Compromises</div>
+    <div class="s-text"><strong>Fast. Professional. Affordable.</strong> You should never have to sacrifice quality for a price that actually works.</div>
+  </div>
+
+  <div class="s-card">
+    <div class="s-label">Tech for Everyone</div>
+    <div class="s-text">From first-time founders to growing businesses — we use tech to help you <strong>work smarter and grow faster.</strong></div>
+  </div>
+
+</div>
+
+<!-- Footer with founder line -->
+<div class="footer">
+  <div class="footer-founder">Founded by <span>Keenan</span> · BSc Software Dev · Creator at heart</div>
+  <div class="footer-links">
+    <span class="url">swiftdesignz.co.za</span>
+    <span class="sep">·</span>
+    <span class="handle">@swiftdesignz101</span>
+  </div>
+</div>
+
+</body>
+</html>

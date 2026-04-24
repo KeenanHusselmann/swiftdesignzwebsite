@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Investment Agreement (Simple) — Swift Designz</title>
+<link rel="stylesheet" href="shared.css"/>
+<style>
+  .simple-section { margin-bottom:22px; }
+  .simple-heading { font-size:13px; font-weight:700; color:var(--teal); margin-bottom:8px; border-bottom:1px solid var(--border); padding-bottom:6px; }
+  .simple-text { font-size:12px; color:var(--ink-mid); line-height:1.8; }
+  .simple-text strong { color:var(--ink); }
+  .simple-list { padding-left:18px; margin:6px 0 0; }
+  .simple-list li { margin-bottom:5px; }
+  .deal-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:14px 0 18px; }
+  .deal-item { background:var(--bg-alt); border:1px solid var(--border); border-radius:8px; padding:14px 18px; }
+  .deal-label { font-size:8px; letter-spacing:2px; text-transform:uppercase; color:var(--teal-dim); margin-bottom:4px; }
+  .deal-value { font-family:'Orbitron',sans-serif; font-size:16px; font-weight:700; color:var(--teal); }
+  .deal-note { font-size:10px; color:var(--ink-dim); margin-top:3px; }
+  .highlight-box { background:var(--head-bg); border:2px solid var(--teal); border-radius:10px; padding:18px 22px; margin:16px 0; }
+  .highlight-title { font-family:'Orbitron',sans-serif; font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--teal); margin-bottom:10px; }
+  .form-input {
+    background:var(--field-bg); border:1.5px solid var(--border); border-radius:5px;
+    padding:5px 10px; font-family:'Inter',sans-serif; font-size:12px; color:var(--ink);
+    outline:none; transition:border-color 0.2s;
+  }
+  .form-input:focus { border-color:var(--teal); background:#d8f4f4; }
+  .form-input::placeholder { color:var(--ink-dim); font-style:italic; }
+  @media print { .no-print { display:none !important; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <img class="doc-logo" src="../images/logo.png" alt="Swift Designz"/>
+    <div class="doc-type-block">
+      <div class="doc-type">Investment</div>
+      <div class="doc-subtype">Simple Agreement</div>
+    </div>
+    <div class="doc-meta">
+      <div class="doc-ref">SD-INV-AGR-2026-001</div>
+      <div class="doc-date-line">Date: <input class="form-input" id="docDate" type="date" value="2026-03-30" style="width:140px; font-size:11px; background:rgba(48,176,176,0.12); border-color:var(--teal-dim); color:#e8fafa;" /></div>
+    </div>
+  </div>
+
+  <div class="doc-body">
+
+    <!-- INTRO -->
+    <div class="info-box">
+      A simple, mutual agreement between <strong>Leon Lourens Husselmann</strong> (Investor) and <strong>Keenan Husselmann</strong> (Business Owner, trading as Swift Designz) for an investment in exchange for a <strong>15% profit-sharing stake</strong>.
+    </div>
+
+    <!-- PARTIES -->
+    <div class="parties">
+      <div class="party">
+        <div class="party-label">Investor</div>
+        <div class="party-name">Leon Lourens Husselmann</div>
+        <div class="party-line">ID: <input class="form-input" placeholder="ID Number" style="width:170px;" /></div>
+        <div class="party-line">Phone: <input class="form-input" placeholder="+264 81 ..." style="width:170px;" /></div>
+      </div>
+      <div class="party">
+        <div class="party-label">Business Owner</div>
+        <div class="party-name">Keenan Husselmann</div>
+        <div class="party-trade">Trading as Swift Designz</div>
+        <div class="party-line">Phone: +264 81 853 6789</div>
+      </div>
+    </div>
+
+    <!-- THE DEAL -->
+    <div class="simple-section">
+      <div class="simple-heading">The Deal</div>
+      <div class="deal-grid">
+        <div class="deal-item">
+          <div class="deal-label">Initial Payment</div>
+          <div class="deal-value">N$3,000</div>
+          <div class="deal-note">Once-off, on signing</div>
+        </div>
+        <div class="deal-item">
+          <div class="deal-label">Monthly Payment</div>
+          <div class="deal-value">N$2,000</div>
+          <div class="deal-note">Every month for 5 years</div>
+        </div>
+        <div class="deal-item">
+          <div class="deal-label">Total Investment</div>
+          <div class="deal-value">N$123,000</div>
+          <div class="deal-note">N$3,000 + (N$2,000 &times; 60 months)</div>
+        </div>
+        <div class="deal-item">
+          <div class="deal-label">Investor's Stake</div>
+          <div class="deal-value">15%</div>
+          <div class="deal-note">Maximum, capped — Keenan keeps 85%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WHAT THE INVESTOR GETS -->
+    <div class="simple-section">
+      <div class="simple-heading">What Leon Gets</div>
+      <div class="simple-text">
+        <ul class="simple-list">
+          <li><strong>15% of annual profits</strong> — paid once a year (by end of February), based on the previous year's net profit. Dividends start from <strong>Year 1</strong> — the 5-year lock-in only restricts selling the stake, not receiving dividends.</li>
+          <li><strong>Right to sell the 15% stake</strong> — after the 5-year lock-in period. Keenan gets first right to buy it back.</li>
+          <li><strong>Annual financial summary</strong> — showing revenue, expenses, profit, and how the dividend was calculated.</li>
+          <li>If Swift Designz registers as a company, the 15% stake converts to <strong>real shares</strong>.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- WHAT KEENAN KEEPS -->
+    <div class="simple-section">
+      <div class="simple-heading">What Keenan Keeps</div>
+      <div class="simple-text">
+        <ul class="simple-list">
+          <li><strong>85% ownership</strong> and <strong>full control</strong> of all business decisions.</li>
+          <li>Leon is a <strong>silent investor</strong> — no say in how the business is run.</li>
+          <li>Leon cannot represent himself as a partner or make decisions for Swift Designz.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- KEY RULES -->
+    <div class="simple-section">
+      <div class="simple-heading">Key Rules</div>
+      <div class="simple-text">
+        <ul class="simple-list">
+          <li><strong>Payments:</strong> Monthly EFT by the 5th of each month. Reference: <strong>SD-INV-AGR-2026-001</strong>.</li>
+          <li><strong>Missed payments:</strong> If 3+ months are missed in a row, the stake freezes until payments resume.</li>
+          <li><strong>Lock-in:</strong> The stake cannot be sold or transferred for 5 years.</li>
+          <li><strong>Early stop:</strong> Leon can stop paying with 60 days' notice — his stake freezes at 15% and he keeps getting dividends, but can't restart payments.</li>
+          <li><strong>Buyback:</strong> Keenan can buy back the 15% at any time. Minimum price = total contributions minus dividends already paid.</li>
+          <li><strong>If profit is zero or negative:</strong> No dividend is owed. Losses don't carry over.</li>
+          <li><strong>This is not a loan.</strong> The investment carries risk. Returns depend on business performance.</li>
+          <li><strong>Confidential:</strong> Both parties keep all financial details private.</li>
+          <li><strong>Disputes:</strong> Talk it out first. If unresolved after 30 days, use a mediator. Governed by Namibian law.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- BANKING -->
+    <div class="simple-section">
+      <div class="simple-heading">Payment Details</div>
+      <div class="banking-block">
+        <div class="banking-head">EFT Payment Details</div>
+        <div class="banking-grid">
+          <div class="banking-item"><div class="banking-label">Account Name</div><div class="banking-value">Keenan Husselmann</div></div>
+          <div class="banking-item"><div class="banking-label">Bank</div><div class="banking-value">Bank Windhoek Ltd.</div></div>
+          <div class="banking-item"><div class="banking-label">Account Type</div><div class="banking-value">Cheque (CHK)</div></div>
+          <div class="banking-item"><div class="banking-label">Account Number</div><div class="banking-value">8025331126</div></div>
+          <div class="banking-item"><div class="banking-label">Branch</div><div class="banking-value">Windhoek (WHK)</div></div>
+          <div class="banking-item"><div class="banking-label">Branch Code</div><div class="banking-value">481-972</div></div>
+          <div class="banking-item"><div class="banking-label">Swift Code</div><div class="banking-value">BWLINANX</div></div>
+          <div class="banking-item"><div class="banking-label">Currency</div><div class="banking-value">NAD / ZAR (R)</div></div>
+        </div>
+        <div class="banking-ref">Reference: <strong>SD-INV-AGR-2026-001</strong></div>
+      </div>
+    </div>
+
+    <!-- AGREEMENT -->
+    <div class="highlight-box">
+      <div class="highlight-title">Agreement</div>
+      <div style="font-size:11px; color:#90c0c0; line-height:1.7;">
+        By signing below, both parties confirm they have read and agree to everything above. This is the <strong style="color:#e8fafa;">entire agreement</strong> — any changes must be in writing and signed by both parties.
+      </div>
+    </div>
+
+    <!-- SIGNATURES -->
+    <div class="sig-row">
+      <div>
+        <div class="sig-label">Investor</div>
+        <div class="sig-line"></div>
+        <div class="sig-name"><strong>Leon Lourens Husselmann</strong></div>
+        <div class="sig-name" style="margin-top:8px;">Date: <input class="form-input" type="date" style="width:140px; font-size:11px;" /></div>
+      </div>
+      <div>
+        <div class="sig-label">Business Owner</div>
+        <div class="sig-line"></div>
+        <div class="sig-name"><strong>Keenan Husselmann</strong></div>
+        <div class="sig-name" style="color:var(--teal-dim);">Trading as Swift Designz</div>
+        <div class="sig-name" style="margin-top:8px;">Date: <input class="form-input" type="date" style="width:140px; font-size:11px;" /></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="doc-footer">
+    <div class="doc-footer-left">Swift Designz &middot; Investment Agreement (Simple)</div>
+    <div class="doc-footer-right">SD-INV-AGR-2026-001</div>
+  </div>
+
+</div>
+
+<div class="export-btn no-print" onclick="window.print()">Export PDF</div>
+<div class="no-print" style="text-align:center; margin-top:8px;">
+  <a href="investor-agreement.html" style="font-size:11px; color:#70b0b0; text-decoration:none;">&larr; View Full Detailed Version</a>
+</div>
+
+</body>
+</html>
