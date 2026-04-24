@@ -34,12 +34,12 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useState } from "react";
 
-const WebDevCodeSim = dynamic(() => import("@/components/ui/WebDevCodeSim"), { ssr: false });
-const EcommerceCheckoutSim = dynamic(() => import("@/components/ui/EcommerceCheckoutSim"), { ssr: false });
-const BudgetingAppSim = dynamic(() => import("@/components/ui/BudgetingAppSim"), { ssr: false });
-const ProjectTrackingSheetSim = dynamic(() => import("@/components/ui/ProjectTrackingSheetSim"), { ssr: false });
-const AiChatSim = dynamic(() => import("@/components/ui/AiChatSim"), { ssr: false });
-const SupportVoiceSim = dynamic(() => import("@/components/ui/SupportVoiceSim"), { ssr: false });
+const WebDevCodeSim = dynamic(() => import("@/app/components/ui/WebDevCodeSim"), { ssr: false });
+const EcommerceCheckoutSim = dynamic(() => import("@/app/components/ui/EcommerceCheckoutSim"), { ssr: false });
+const BudgetingAppSim = dynamic(() => import("@/app/components/ui/BudgetingAppSim"), { ssr: false });
+const ProjectTrackingSheetSim = dynamic(() => import("@/app/components/ui/ProjectTrackingSheetSim"), { ssr: false });
+const AiChatSim = dynamic(() => import("@/app/components/ui/AiChatSim"), { ssr: false });
+const SupportVoiceSim = dynamic(() => import("@/app/components/ui/SupportVoiceSim"), { ssr: false });
 import { useI18n } from "@/i18n/I18nProvider";
 
 function SimWrapper({ children }: { children: React.ReactNode }) {
