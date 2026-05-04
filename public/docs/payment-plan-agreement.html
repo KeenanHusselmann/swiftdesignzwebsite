@@ -1,9 +1,9 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Payment Plan Agreement â€” Swift Designz</title>
+<title>Payment Plan Agreement — Swift Designz</title>
 <link rel="stylesheet" href="shared.css"/>
 <style>
   .plan-selector { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:20px; }
@@ -22,7 +22,7 @@
 <body>
 <div class="page">
 
-  <!-- â”€â”€ HEADER â”€â”€ -->
+  <!-- -- HEADER -- -->
   <div class="doc-header">
     <img class="doc-logo" src="../images/logo.png" alt="Swift Designz"/>
     <div class="doc-type-block">
@@ -36,7 +36,7 @@
     </div>
   </div>
 
-  <!-- â”€â”€ BODY â”€â”€ -->
+  <!-- -- BODY -- -->
   <div class="doc-body">
 
     <div class="info-box">This agreement outlines the selected payment plan for the project detailed below. All payments must be made via <strong>EFT only</strong>. The deposit is non-refundable and project commencement is conditional on its receipt.</div>
@@ -53,7 +53,7 @@
         <div class="party-label">Service Provider</div>
         <div class="party-name">Keenan Husselmann</div>
         <div class="party-trade">Trading as Swift Designz</div>
-        <div class="party-line">keenan@swiftdesignz.co.za Â· +264 81 853 6789</div>
+        <div class="party-line">keenan@swiftdesignz.co.za · +264 81 388 1111</div>
       </div>
     </div>
 
@@ -111,7 +111,7 @@
         <span>Payment</span><span>Due Date</span><span>Amount</span><span>% of Total</span>
       </div>
       <div class="schedule-row payment-row">
-        <span>1st â€” Deposit</span>
+        <span>1st — Deposit</span>
         <span>On signing (today)</span>
         <span class="schedule-num field" contenteditable="true">R</span>
         <span id="p1pct" style="color:var(--teal-dim);">50%</span>
@@ -125,8 +125,8 @@
       <div class="schedule-row payment-row" id="p3row">
         <span>3rd Payment</span>
         <span class="field" contenteditable="true" id="p3date">N/A (Standard plan)</span>
-        <span class="schedule-num field" contenteditable="true">â€”</span>
-        <span id="p3pct" style="color:var(--teal-dim);">â€”</span>
+        <span class="schedule-num field" contenteditable="true">—</span>
+        <span id="p3pct" style="color:var(--teal-dim);">—</span>
       </div>
     </div>
 
@@ -170,7 +170,7 @@
         <div class="sig-name">Date: <span class="field" contenteditable="true">________________________________</span></div>
       </div>
       <div>
-        <div class="sig-label">Swift Designz â€” Keenan Husselmann</div>
+        <div class="sig-label">Swift Designz — Keenan Husselmann</div>
         <div class="sig-line"></div>
         <div class="sig-name">Keenan Husselmann (Swift Designz)</div>
         <div class="sig-name">Date: ________________________________</div>
@@ -180,15 +180,15 @@
   </div><!-- /.doc-body -->
 
   <div class="doc-footer">
-    <div class="doc-footer-left">Swift Designz Â· Payment Plan Agreement Â· SD-PP-2026</div>
-    <div class="doc-footer-right">keenan@swiftdesignz.co.za Â· swiftdesignz.co.za</div>
+    <div class="doc-footer-left">Swift Designz · Payment Plan Agreement · SD-PP-2026</div>
+    <div class="doc-footer-right">keenan@swiftdesignz.co.za · swiftdesignz.co.za</div>
   </div>
 </div>
 <script>
   const plans = {
-    standard: { label:'Standard (50% + 50%)', title:'Standard Payment Plan', desc:'Deposit of 50% due on signing. Remaining 50% due on launch / final delivery. Most popular option.', p1pct:'50%', p2:'On launch / delivery', p2pct:'50%', p3:'N/A', p3pct:'â€”' },
-    fullpay:  { label:'Full Pay (100% upfront)', title:'Full Pay Plan â€” Best Value', desc:'100% of the total project value due on signing. Bonus: Client receives 2 months of free post-launch support instead of the standard 1 month.', p1pct:'100%', p2:'N/A â€” fully paid', p2pct:'â€”', p3:'â€”', p3pct:'â€”' },
-    twomon:   { label:'2-Month Flex (50% + 50%)', title:'2-Month Flex Plan', desc:'Deposit of 50% due on signing. Remaining 50% due in Month 2 (on a date agreed with Swift Designz). Final delivery only after Month 2 payment.', p1pct:'50%', p2:'Month 2 (agreed date)', p2pct:'50%', p3:'â€”', p3pct:'â€”' },
+    standard: { label:'Standard (50% + 50%)', title:'Standard Payment Plan', desc:'Deposit of 50% due on signing. Remaining 50% due on launch / final delivery. Most popular option.', p1pct:'50%', p2:'On launch / delivery', p2pct:'50%', p3:'N/A', p3pct:'—' },
+    fullpay:  { label:'Full Pay (100% upfront)', title:'Full Pay Plan — Best Value', desc:'100% of the total project value due on signing. Bonus: Client receives 2 months of free post-launch support instead of the standard 1 month.', p1pct:'100%', p2:'N/A — fully paid', p2pct:'—', p3:'—', p3pct:'—' },
+    twomon:   { label:'2-Month Flex (50% + 50%)', title:'2-Month Flex Plan', desc:'Deposit of 50% due on signing. Remaining 50% due in Month 2 (on a date agreed with Swift Designz). Final delivery only after Month 2 payment.', p1pct:'50%', p2:'Month 2 (agreed date)', p2pct:'50%', p3:'—', p3pct:'—' },
     threemon: { label:'3-Month Ease (50% + 25% + 25%)', title:'3-Month Ease Plan', desc:'Deposit of 50% due on signing. 25% due in Month 2. Final 25% due in Month 3 before/on launch. Maximum spread of 3 calendar months.', p1pct:'50%', p2:'Month 2 (agreed date)', p2pct:'25%', p3:'Month 3 (before launch)', p3pct:'25%' },
   };
   function selPlan(el, key) {

@@ -1,9 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Invoice — Swift Designz</title>
+<title>Invoice � Swift Designz</title>
 <link rel="stylesheet" href="shared.css"/>
 <style>
   .status-badge { display:inline-block; padding:4px 14px; border-radius:999px; font-size:9px; font-weight:700; letter-spacing:2px; text-transform:uppercase; }
@@ -13,17 +13,17 @@
   /* Header field sizing */
   .doc-ref .field { min-width: 48px; width: auto; text-align: right; font-family: 'Orbitron', sans-serif; }
   .doc-date-line .field { min-width: 90px; }
-  /* Invoice number — plain text, no field styling */
+  /* Invoice number � plain text, no field styling */
   .inv-num { background: transparent !important; border-bottom: none !important; padding: 0 !important; font-style: normal !important; min-width: 0 !important; }
   /* Auto-calculated cells */
   .inv-line-amt { color: var(--ink) !important; font-weight: 600; }
   #tot-subtotal { font-weight: 700; color: var(--ink); }
   #tot-balance { font-weight: 700; color: #e0fafa; }
-  /* Grand total row — lighter teal bg so text is readable */
+  /* Grand total row � lighter teal bg so text is readable */
   .totals-row.grand { background: #1e4848 !important; }
   .totals-row.grand .totals-label { color: #a0d8d8; }
   .totals-row.grand .totals-value { color: #e0fafa; }
-  /* Banking block — lighter teal bg for readability */
+  /* Banking block � lighter teal bg for readability */
   .banking-block { background: #1e4848 !important; }
   /* New invoice button */
   #new-inv-btn { position:fixed; bottom:60px; right:20px; background:#1e3a3a; border:1px solid var(--teal); color:var(--teal); font-family:'Orbitron',sans-serif; font-size:9px; letter-spacing:2px; padding:8px 16px; cursor:pointer; border-radius:4px; text-transform:uppercase; z-index:100; }
@@ -33,7 +33,7 @@
 <body>
 <div class="page">
 
-  <!-- ── HEADER ── -->
+  <!-- -- HEADER -- -->
   <div class="doc-header">
     <img class="doc-logo" src="../images/logo.png" alt="Swift Designz"/>
     <div class="doc-type-block">
@@ -48,7 +48,7 @@
     </div>
   </div>
 
-  <!-- ── BODY ── -->
+  <!-- -- BODY -- -->
   <div class="doc-body">
 
     <!-- PAYMENT STATUS -->
@@ -84,9 +84,9 @@
         <div class="party-name">Keenan Husselmann</div>
         <div class="party-trade">Trading as Swift Designz</div>
         <div class="party-line">Email: <a href="mailto:keenan@swiftdesignz.co.za">keenan@swiftdesignz.co.za</a></div>
-        <div class="party-line">Phone: +264 81 853 6789</div>
+        <div class="party-line">Phone: +264 81 388 1111</div>
         <div class="party-line">Web: swiftdesignz.co.za</div>
-        <div class="party-line" style="margin-top:6px;font-size:10px;color:var(--ink-dim);">Not VAT Registered · Individual Freelancer</div>
+        <div class="party-line" style="margin-top:6px;font-size:10px;color:var(--ink-dim);">Not VAT Registered � Individual Freelancer</div>
       </div>
     </div>
 
@@ -105,31 +105,31 @@
       <tbody id="services-tbody">
         <tr>
           <td>1</td>
-          <td contenteditable="true" class="field">e.g. Professional Website — 7-page custom build</td>
+          <td contenteditable="true" class="field">e.g. Professional Website � 7-page custom build</td>
           <td contenteditable="true" class="field inv-qty" style="text-align:center;">1</td>
           <td class="col-amount field inv-price" contenteditable="true">0</td>
-          <td class="col-amount inv-line-amt">—</td>
+          <td class="col-amount inv-line-amt">�</td>
         </tr>
         <tr>
           <td>2</td>
           <td contenteditable="true" class="field">e.g. Custom logo / asset creation</td>
           <td contenteditable="true" class="field inv-qty" style="text-align:center;">1</td>
           <td class="col-amount field inv-price" contenteditable="true">0</td>
-          <td class="col-amount inv-line-amt">—</td>
+          <td class="col-amount inv-line-amt">�</td>
         </tr>
         <tr>
           <td>3</td>
-          <td contenteditable="true" class="field">—</td>
-          <td contenteditable="true" class="field inv-qty" style="text-align:center;">—</td>
+          <td contenteditable="true" class="field">�</td>
+          <td contenteditable="true" class="field inv-qty" style="text-align:center;">�</td>
           <td class="col-amount field inv-price" contenteditable="true">0</td>
-          <td class="col-amount inv-line-amt">—</td>
+          <td class="col-amount inv-line-amt">�</td>
         </tr>
         <tr>
           <td>4</td>
-          <td contenteditable="true" class="field">—</td>
-          <td contenteditable="true" class="field inv-qty" style="text-align:center;">—</td>
+          <td contenteditable="true" class="field">�</td>
+          <td contenteditable="true" class="field inv-qty" style="text-align:center;">�</td>
           <td class="col-amount field inv-price" contenteditable="true">0</td>
-          <td class="col-amount inv-line-amt">—</td>
+          <td class="col-amount inv-line-amt">�</td>
         </tr>
       </tbody>
     </table>
@@ -145,10 +145,10 @@
     <!-- PAYMENT INSTRUCTIONS -->
     <div class="section-head">Payment Instructions</div>
     <div class="info-box" style="margin-bottom:10px;">
-      Please use your <strong>Invoice Number (SD-INV-<span class="doc-year">2026</span>-<span contenteditable="true" class="field inv-num">001</span>)</strong> as the payment reference. Payment is due by the date stated above. EFT only — no cash accepted.
+      Please use your <strong>Invoice Number (SD-INV-<span class="doc-year">2026</span>-<span contenteditable="true" class="field inv-num">001</span>)</strong> as the payment reference. Payment is due by the date stated above. EFT only � no cash accepted.
     </div>
     <div class="banking-block">
-      <div class="banking-head">Banking Details — Keenan Husselmann</div>
+      <div class="banking-head">Banking Details � Keenan Husselmann</div>
       <div class="banking-grid">
         <div class="banking-item" style="grid-column:1/-1;"><div class="banking-lbl">Address</div><div class="banking-val" style="font-size:12px;">55 Kenneth McArthur Street, Olympia, Windhoek, Namibia</div></div>
         <div class="banking-item"><div class="banking-lbl">Account Name</div><div class="banking-val">Keenan Husselmann</div></div>
@@ -160,7 +160,7 @@
         <div class="banking-item"><div class="banking-lbl">Swift Code</div><div class="banking-val">BWLINANX</div></div>
         <div class="banking-item"><div class="banking-lbl">Currency</div><div class="banking-val">NAD / ZAR (R)</div></div>
       </div>
-      <div class="banking-ref"><strong>Reference:</strong> SD-INV-<span class="doc-year">2026</span>-<span contenteditable="true" class="field inv-num">001</span> · Always include your invoice number as the payment reference.</div>
+      <div class="banking-ref"><strong>Reference:</strong> SD-INV-<span class="doc-year">2026</span>-<span contenteditable="true" class="field inv-num">001</span> � Always include your invoice number as the payment reference.</div>
     </div>
 
     <!-- PAYMENT HISTORY (if applicable) -->
@@ -175,10 +175,10 @@
           <td class="col-amount field" contenteditable="true">R</td>
         </tr>
         <tr>
-          <td class="field" contenteditable="true">—</td>
-          <td class="field" contenteditable="true">—</td>
-          <td class="col-amount">—</td>
-          <td class="col-amount">—</td>
+          <td class="field" contenteditable="true">�</td>
+          <td class="field" contenteditable="true">�</td>
+          <td class="col-amount">�</td>
+          <td class="col-amount">�</td>
         </tr>
       </tbody>
     </table>
@@ -195,7 +195,7 @@
 
     <!-- NOTES FIELD -->
     <div class="section-head">Additional Notes</div>
-    <div class="field-block" contenteditable="true" style="min-height:50px;">Any additional project notes, delivery details, or special instructions…</div>
+    <div class="field-block" contenteditable="true" style="min-height:50px;">Any additional project notes, delivery details, or special instructions�</div>
 
     <!-- SIGNATURE -->
     <div class="section-head">Acknowledgement (Optional)</div>
@@ -208,19 +208,19 @@
         <div class="sig-name">Date: <span class="field" contenteditable="true">________________________________</span></div>
       </div>
       <div>
-        <div class="sig-label">Issued By — Swift Designz</div>
+        <div class="sig-label">Issued By � Swift Designz</div>
         <div class="sig-line"></div>
         <div class="sig-name">Keenan Husselmann (Swift Designz)</div>
-        <div class="sig-name">+264 81 853 6789 · keenan@swiftdesignz.co.za</div>
+        <div class="sig-name">+264 81 388 1111 � keenan@swiftdesignz.co.za</div>
       </div>
     </div>
 
   </div><!-- /.doc-body -->
 
-  <!-- ── FOOTER ── -->
+  <!-- -- FOOTER -- -->
   <div class="doc-footer">
-    <div class="doc-footer-left">Swift Designz · Invoice SD-INV-<span class="doc-year">2026</span>-<span contenteditable="true" class="field inv-num" style="font-size:9px;border:none;background:transparent;color:var(--teal-dim);">001</span></div>
-    <div class="doc-footer-right">keenan@swiftdesignz.co.za · swiftdesignz.co.za<br/>Thank you for choosing Swift Designz.</div>
+    <div class="doc-footer-left">Swift Designz � Invoice SD-INV-<span class="doc-year">2026</span>-<span contenteditable="true" class="field inv-num" style="font-size:9px;border:none;background:transparent;color:var(--teal-dim);">001</span></div>
+    <div class="doc-footer-right">keenan@swiftdesignz.co.za � swiftdesignz.co.za<br/>Thank you for choosing Swift Designz.</div>
   </div>
 
 </div>
@@ -247,13 +247,13 @@
   var VER      = 'v3'; // bump this to bust stale sessionStorage on template updates
   var verKey   = 'sd_ver_'      + location.pathname;
 
-  // ── Bust stale cached field data when template version changes ──
+  // -- Bust stale cached field data when template version changes --
   if (sessionStorage.getItem(verKey) !== VER) {
     sessionStorage.removeItem(fieldsKey);
     sessionStorage.setItem(verKey, VER);
   }
 
-  // ── Invoice number: increment once per session ──
+  // -- Invoice number: increment once per session --
   var curNum = sessionStorage.getItem(ssKey);
   if (!curNum) {
     curNum = parseInt(localStorage.getItem(lsKey) || '1', 10);
@@ -264,14 +264,14 @@
   }
   var numStr = String(curNum).padStart(3, '0');
 
-  // ── Date helpers ──
+  // -- Date helpers --
   function fmtDate(d) {
     return String(d.getDate()).padStart(2,'0') + ' / ' + String(d.getMonth()+1).padStart(2,'0') + ' / ' + d.getFullYear();
   }
   var today = new Date();
   var due   = new Date(today); due.setDate(due.getDate() + 14);
 
-  // ── Apply year, invoice number, dates as defaults ──
+  // -- Apply year, invoice number, dates as defaults --
   document.querySelectorAll('.doc-year').forEach(function(el) { el.textContent = YEAR; });
   document.querySelectorAll('.inv-num').forEach(function(el)  { el.textContent = numStr; });
   var invDateEl = document.getElementById('inv-date');
@@ -279,10 +279,10 @@
   if (invDateEl) invDateEl.textContent = fmtDate(today);
   if (dueDateEl) dueDateEl.textContent = fmtDate(due);
 
-  // ── Update page title ──
+  // -- Update page title --
   document.title = 'Invoice SD-INV-' + YEAR + '-' + numStr + ' \u2014 Swift Designz';
 
-  // ── Restore saved field values (user edits from this session) ──
+  // -- Restore saved field values (user edits from this session) --
   var saved = sessionStorage.getItem(fieldsKey);
   if (saved) {
     try {
@@ -293,14 +293,14 @@
     } catch(e) {}
   }
 
-  // ── Always force-correct dates after restore (never show placeholder) ──
+  // -- Always force-correct dates after restore (never show placeholder) --
   if (invDateEl && invDateEl.textContent.indexOf('_') !== -1) invDateEl.textContent = fmtDate(today);
   if (dueDateEl && dueDateEl.textContent.indexOf('_') !== -1) dueDateEl.textContent = fmtDate(due);
 
-  // ── Initial calculation (runs after restore so saved prices are used) ──
+  // -- Initial calculation (runs after restore so saved prices are used) --
   calcAll();
 
-  // ── Auto-save on any edit + recalculate ──
+  // -- Auto-save on any edit + recalculate --
   document.addEventListener('input', function() {
     calcAll();
     var d = {};
@@ -308,13 +308,13 @@
     sessionStorage.setItem(fieldsKey, JSON.stringify(d));
   });
 
-  // ── Sync all inv-num spans when one is edited ──
+  // -- Sync all inv-num spans when one is edited --
   document.querySelectorAll('.inv-num').forEach(function(el) {
     el.addEventListener('input', function() {
       var v = this.textContent;
       document.querySelectorAll('.inv-num').forEach(function(o) { if (o !== el) o.textContent = v; });
       // Also update page title
-      document.title = 'Invoice SD-INV-' + YEAR + '-' + v.trim() + ' — Swift Designz';
+      document.title = 'Invoice SD-INV-' + YEAR + '-' + v.trim() + ' � Swift Designz';
     });
   });
 })();
