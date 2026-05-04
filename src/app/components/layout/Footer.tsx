@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, MapPin, ArrowUpRight, Phone } from "lucide-react";
+import { Mail, MapPin, ArrowUpRight, Phone, Facebook, Instagram } from "lucide-react";
 import { useI18n } from "@/i18n/I18nProvider";
 
 const footerLinks = [
@@ -98,6 +98,26 @@ export default function Footer() {
                 <Phone size={14} />
                 SA: +27 76 255 7783
               </a>
+              <div className="flex items-center gap-3 pt-1">
+                <a
+                  href="https://www.facebook.com/profile.php?id=61589116923728"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-500 hover:text-[var(--swift-teal)] transition-colors"
+                  aria-label="Facebook"
+                >
+                  <Facebook size={16} />
+                </a>
+                <a
+                  href="https://www.instagram.com/swiftdesignz101"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-500 hover:text-[var(--swift-teal)] transition-colors"
+                  aria-label="Instagram"
+                >
+                  <Instagram size={16} />
+                </a>
+              </div>
             </div>
           </div>
 
