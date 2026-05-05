@@ -161,6 +161,11 @@ export default function SplashScreen() {
       setMounted(true);
       setWindowWidth(window.innerWidth);
     });
+    // Skip splash in Facebook/Instagram in-app browsers — they block storage and cause looping
+    const ua = navigator.userAgent || "";
+    const isInAppBrowser = /FBAN|FBAV|Instagram|FB_IAB/.test(ua);
+    if (isInAppBrowser) return;
+
     const seenCookie = Cookies.get("swift-splash-seen");
     const seenLocal = typeof window !== "undefined" && localStorage.getItem("swift-splash-seen");
     if (!seenCookie && !seenLocal) {
