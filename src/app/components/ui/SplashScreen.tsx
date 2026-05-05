@@ -161,8 +161,9 @@ export default function SplashScreen() {
       setMounted(true);
       setWindowWidth(window.innerWidth);
     });
-    const seen = Cookies.get("swift-splash-seen");
-    if (!seen) {
+    const seenCookie = Cookies.get("swift-splash-seen");
+    const seenLocal = typeof window !== "undefined" && localStorage.getItem("swift-splash-seen");
+    if (!seenCookie && !seenLocal) {
       startTransition(() => setShow(true));
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = "hidden";
@@ -183,6 +184,7 @@ export default function SplashScreen() {
     if (x.get() >= maxDrag * 0.85) {
       setPhase("unlocked");
       Cookies.set("swift-splash-seen", "true", { expires: 1 });
+      localStorage.setItem("swift-splash-seen", "true");
       setTimeout(() => {
         setShow(false);
         document.body.style.overflow = "";
