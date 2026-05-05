@@ -166,6 +166,11 @@ export default function SplashScreen() {
     const isInAppBrowser = /FBAN|FBAV|Instagram|FB_IAB/.test(ua);
     if (isInAppBrowser) return;
 
+    // Skip splash for social/ad referral traffic (fbclid, utm params, etc.)
+    const params = new URLSearchParams(window.location.search);
+    const isAdTraffic = params.has("fbclid") || params.has("utm_source") || params.has("utm_medium") || params.has("gclid");
+    if (isAdTraffic) return;
+
     const seenCookie = Cookies.get("swift-splash-seen");
     const seenLocal = typeof window !== "undefined" && localStorage.getItem("swift-splash-seen");
     if (!seenCookie && !seenLocal) {
