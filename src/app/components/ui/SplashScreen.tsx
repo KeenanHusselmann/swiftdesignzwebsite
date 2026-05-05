@@ -157,24 +157,21 @@ export default function SplashScreen() {
   const textOpacity = useTransform(x, [0, maxDrag * 0.5], [1, 0]);
 
   useEffect(() => {
+    const ua = navigator.userAgent || "";
+    const isInAppBrowser = /FBAN|FBAV|Instagram|FB_IAB/.test(ua);
+    const params = new URLSearchParams(window.location.search);
+    const isAdTraffic = params.has("fbclid") || params.has("utm_source") || params.has("utm_medium") || params.has("gclid");
+    const seenCookie = Cookies.get("swift-splash-seen");
+    const seenLocal = localStorage.getItem("swift-splash-seen");
+    const shouldShow = !isInAppBrowser && !isAdTraffic && !seenCookie && !seenLocal;
+
     startTransition(() => {
       setMounted(true);
       setWindowWidth(window.innerWidth);
+      if (shouldShow) setShow(true);
     });
-    // Skip splash in Facebook/Instagram in-app browsers — they block storage and cause looping
-    const ua = navigator.userAgent || "";
-    const isInAppBrowser = /FBAN|FBAV|Instagram|FB_IAB/.test(ua);
-    if (isInAppBrowser) return;
 
-    // Skip splash for social/ad referral traffic (fbclid, utm params, etc.)
-    const params = new URLSearchParams(window.location.search);
-    const isAdTraffic = params.has("fbclid") || params.has("utm_source") || params.has("utm_medium") || params.has("gclid");
-    if (isAdTraffic) return;
-
-    const seenCookie = Cookies.get("swift-splash-seen");
-    const seenLocal = typeof window !== "undefined" && localStorage.getItem("swift-splash-seen");
-    if (!seenCookie && !seenLocal) {
-      startTransition(() => setShow(true));
+    if (shouldShow) {
       const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
       document.body.style.overflow = "hidden";
       document.body.style.paddingRight = `${scrollbarWidth}px`;
