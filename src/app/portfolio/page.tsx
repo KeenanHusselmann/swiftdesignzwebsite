@@ -119,6 +119,18 @@ const projects: Project[] = [
 const testimonials = [
   {
     quote:
+      "Yoh! the website is looking fire 🔥 😍 yoh yoh yoh ! Thats mad and so convenient 👌🏼😍 wow",
+    name: "Anonymous",
+    role: "Client",
+  },
+  {
+    quote:
+      "I can only thank God for putting this young man on our path. He immediately understood the assignment. A huge thank you to Keenan and Ambrose for executing everything in excellence. We are so grateful. Thank you, Keenan.",
+    name: "Grateful Client",
+    role: "Client",
+  },
+  {
+    quote:
       "The banner, overall look and feel, font and clean flowing state of the site is STUNNING. User Experience pleasant, calm and inviting. I love it.",
     name: "Satisfied Client",
     role: "Business Owner",
@@ -373,7 +385,7 @@ export default function PortfolioPage() {
             <div className="section-divider mx-auto" />
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
             {testimonials.map((testimonial, i) => (
               <TestimonialCard
                 key={i}
