@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Swift Designz — FB Portfolio Carousel Preview</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0a0a0a;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+    }
+    h1 {
+      color: #30B0B0;
+      font-size: 18px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    p.hint {
+      color: #666;
+      font-size: 13px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    /* Each slide is exactly 1080x1080 scaled down for preview */
+    .slide-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+    .slide-label {
+      color: #555;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* The actual slide — designed at 1080x1080, scaled to 540x540 for preview */
+    .slide {
+      width: 540px;
+      height: 540px;
+      position: relative;
+      overflow: hidden;
+      background: #101010;
+      border: 1px solid rgba(48,176,176,0.15);
+      flex-shrink: 0;
+    }
+
+    /* ── Intro slide ── */
+    .slide.intro {
+      background: linear-gradient(145deg, #0d1f1f 0%, #101010 50%, #1a0d00 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      padding: 48px;
+    }
+    .intro .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 36px;
+    }
+    .intro .logo-row img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+    }
+    .intro .logo-text {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.5px;
+    }
+    .intro .logo-text span { color: #30B0B0; }
+    .intro .eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #b45309;
+      margin-bottom: 16px;
+    }
+    .intro h2 {
+      font-size: 38px;
+      font-weight: 800;
+      color: #fff;
+      text-align: center;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .intro h2 span { color: #30B0B0; }
+    .intro .sub {
+      font-size: 15px;
+      color: #888;
+      text-align: center;
+      line-height: 1.6;
+      max-width: 340px;
+      margin-bottom: 36px;
+    }
+    .intro .stat-row {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+    }
+    .intro .stat { text-align: center; }
+    .intro .stat-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: #30B0B0;
+    }
+    .intro .stat-lbl {
+      font-size: 11px;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .intro .divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #30B0B0, transparent);
+      margin: 28px auto;
+    }
+    .intro .swipe-hint {
+      position: absolute;
+      bottom: 20px;
+      right: 24px;
+      font-size: 11px;
+      color: #444;
+      letter-spacing: 1px;
+    }
+
+    /* ── Project slide ── */
+    .slide.project .thumb {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 310px;
+      overflow: hidden;
+    }
+    .slide.project .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+    }
+    .slide.project .thumb-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(16,16,16,0.95) 100%);
+    }
+    .slide.project .content {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 24px 28px 28px;
+    }
+    .slide.project .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 10px;
+    }
+    .badge.website  { background: rgba(48,176,176,0.15); color: #30B0B0; border: 1px solid rgba(48,176,176,0.3); }
+    .badge.ecommerce { background: rgba(217,119,6,0.15); color: #d97706; border: 1px solid rgba(217,119,6,0.3); }
+    .badge.app      { background: rgba(180,83,9,0.15); color: #b45309; border: 1px solid rgba(180,83,9,0.3); }
+
+    .slide.project .proj-title {
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .slide.project .proj-desc {
+      font-size: 12px;
+      color: #aaa;
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+    .slide.project .proj-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .slide.project .proj-url {
+      font-size: 11px;
+      color: #30B0B0;
+      letter-spacing: 0.5px;
+    }
+    .slide.project .brand-mini {
+      font-size: 11px;
+      color: #444;
+      letter-spacing: 1px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .slide.project .brand-mini span { color: #30B0B0; }
+
+    /* ── CTA slide ── */
+    .slide.cta {
+      background: linear-gradient(145deg, #0d1f1f 0%, #101010 50%, #1a0d00 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 48px;
+      text-align: center;
+    }
+    .cta .eyebrow {
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: #b45309;
+      margin-bottom: 20px;
+    }
+    .cta h2 {
+      font-size: 34px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.2;
+      margin-bottom: 16px;
+    }
+    .cta h2 span { color: #30B0B0; }
+    .cta p {
+      font-size: 14px;
+      color: #888;
+      line-height: 1.6;
+      max-width: 320px;
+      margin-bottom: 32px;
+    }
+    .cta .cta-btn {
+      display: inline-block;
+      padding: 14px 32px;
+      border: 1.5px solid #30B0B0;
+      color: #30B0B0;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      border-radius: 6px;
+      margin-bottom: 32px;
+    }
+    .cta .url {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+    .cta .url span { color: #30B0B0; }
+    .cta .divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #30B0B0, transparent);
+      margin: 24px auto;
+    }
+    .cta .contact-row {
+      display: flex;
+      gap: 24px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cta .contact-item {
+      font-size: 11px;
+      color: #555;
+      letter-spacing: 0.5px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Swift Designz — Portfolio Carousel</h1>
+  <p class="hint">12 slides total · Screenshot each at 1080×1080 or run the export script</p>
+
+  <!-- SLIDE 1: Intro -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 1 — Intro</div>
+    <div class="slide intro" id="slide-1">
+      <div class="logo-row">
+        <img src="/images/favicon.png" alt="Swift Designz" />
+        <div class="logo-text">Swift <span>Designz</span></div>
+      </div>
+      <div class="eyebrow">Our Portfolio</div>
+      <h2>Real Projects.<br/><span>Real Results.</span></h2>
+      <p class="sub">From websites to e-commerce stores and mobile apps — here's what we've built for clients across Namibia & South Africa.</p>
+      <div class="divider"></div>
+      <div class="stat-row">
+        <div class="stat"><div class="stat-num">10</div><div class="stat-lbl">Projects</div></div>
+        <div class="stat"><div class="stat-num">3</div><div class="stat-lbl">Countries</div></div>
+        <div class="stat"><div class="stat-num">5+</div><div class="stat-lbl">Industries</div></div>
+      </div>
+      <div class="swipe-hint">Swipe to explore →</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: TB Free Foundation -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 2 — TB Free Foundation</div>
+    <div class="slide project" id="slide-2">
+      <div class="thumb">
+        <img src="/potfolio/tbfree-portfolio-thumbnail.png" alt="TB Free Foundation" />
+        <div class="thumb-overlay"></div>
+      </div>
+      <div class="content">
+        <div class="badge website">Website</div>
+        <div class="proj-title">TB Free Foundation</div>
+        <div class="proj-desc">A clean, professional website for a non-profit raising awareness for TB prevention across Namibia.</div>
+        <div class="proj-footer">
+          <div class="proj-url">tb-free.org</div>
+          <div class="brand-mini">Swift <span>Designz</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: DUNMORE -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 3 — DUNMORE Training</div>
+    <div class="slide project" id="slide-3">
+      <div class="thumb">
+        <img src="/potfolio/dunmoretraining-portfolio-thumbnail.png" alt="DUNMORE Training" />
+        <div class="thumb-overlay"></div>
+      </div>
+      <div class="content">
+        <div class="badge website">Website</div>
+        <div class="proj-title">DUNMORE Training & Skills</div>
+        <div class="proj-desc">SETA-accredited training provider — First Aid, Fire Fighting, Health & Safety, and Forestry programmes.</div>
+        <div class="proj-footer">
+          <div class="proj-url">dunmore.co.za</div>
+          <div class="brand-mini">Swift <span>Designz</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: IA Academy -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 4 — IA Academy</div>
+    <div class="slide project" id="slide-4">
+      <div class="thumb">
+        <img src="/potfolio/iaacademy-portfolio-thumbnail.png" alt="IA Academy" />
+        <div class="thumb-overlay"></div>
+      </div>
+      <div class="content">
+        <div class="badge website">Website</div>
+        <div class="proj-title">IA Academy</div>
+        <div class="proj-desc">A warm, welcoming site for a neurodivergent-friendly Cambridge school in Windhoek, Namibia.</div>
+        <div class="proj-footer">
+          <div class="proj-url">ia-academy.org</div>
+          <div class="brand-mini">Swift <span>Designz</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: IT-Guru -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 5 — IT-Guru Online</div>
+    <div class="slide project" id="slide-5">
+      <div class="thumb">
+        <img src="/potfolio/it-guru-portfolio-thumbnail.png" alt="IT-Guru Online" />
+        <div class="thumb-overlay"></div>
+      </div>
+      <div class="content">
+        <div class="badge website">Website</div>
+        <div class="proj-title">IT-Guru Online</div>
+        <div class="proj-desc">Web hosting, domain registration, remote support & network solutions for a Cape Town IT business.</div>
+        <div class="proj-footer">
+          <div class="proj-url">Coming soon</div>
+          <div class="brand-mini">Swift <span>Designz</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Rehoboth -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 6 — Rehoboth Community Trust</div>
+    <div class="slide project" id="slide-6">
+      <div class="thumb">
+        <img src="/potfolio/rhb-community-trust-portfolio-thumbnail.png" alt="Rehoboth Community Trust" />
+        <div class="thumb-overlay"></div>
+      </div>
+      <div class="content">
+        <div class="badge website">Website</div>
+        <div class="proj-title">Rehoboth Community Trust</div>
+        <div class="proj-desc">Purpose-driven non-profit website empowering the Rehoboth community through sustainable development.</div>
+        <div class="proj-footer">
+          <div class="proj-url">rehotrust.netlify.app</div>
+          <div class="brand-mini">Swift <span>Designz</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Ruby's Faith -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 7 — Ruby's Faith Jewellery</div>
+    <div class="slide project" id="slide-7">
+      <div class="thumb">
+        <img src="/potfolio/rubys-faith-portfolio-thumbnail.png" alt="Ruby's Faith" />
+        <div class="thumb-overlay"></div>
+      </div>
+      <div class="content">
+        <div class="badge ecommerce">E-Commerce</div>
+        <div class="proj-title">Ruby's Faith Jewellery</div>
+        <div class="proj-desc">An elegant online store for a handmade jewellery brand — rich product catalogue and seamless checkout.</div>
+        <div class="proj-footer">
+          <div class="proj-url">rubysfaith.co.za</div>
+          <div class="brand-mini">Swift <span>Designz</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Fryse -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 8 — Fryse</div>
+    <div class="slide project" id="slide-8">
+      <div class="thumb">
+        <img src="/potfolio/fryse-portfolio-thumbnail.png" alt="Fryse" />
+        <div class="thumb-overlay"></div>
+      </div>
+      <div class="content">
+        <div class="badge ecommerce">E-Commerce</div>
+        <div class="proj-title">Fryse — Freeze Dried Products</div>
+        <div class="proj-desc">Premium freeze-dried snack store with rich visuals, easy navigation, and a seamless shopping experience.</div>
+        <div class="proj-footer">
+          <div class="proj-url">fryse.com.na</div>
+          <div class="brand-mini">Swift <span>Designz</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Essential 420 -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 9 — Essential 420</div>
+    <div class="slide project" id="slide-9">
+      <div class="thumb">
+        <img src="/potfolio/essential420-portfolio-thumbnail.png" alt="Essential 420" />
+        <div class="thumb-overlay"></div>
+      </div>
+      <div class="content">
+        <div class="badge ecommerce">E-Commerce</div>
+        <div class="proj-title">Essential 420</div>
+        <div class="proj-desc">Luxury cannabis dispensary platform — premium products, sleek design, and an immersive shopping experience.</div>
+        <div class="proj-footer">
+          <div class="proj-url">Coming soon</div>
+          <div class="brand-mini">Swift <span>Designz</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: BasketBuddy -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 10 — BasketBuddy</div>
+    <div class="slide project" id="slide-10">
+      <div class="thumb">
+        <img src="/potfolio/basket-buddy-portfolio-thumbnail1.png" alt="BasketBuddy" />
+        <div class="thumb-overlay"></div>
+      </div>
+      <div class="content">
+        <div class="badge app">App</div>
+        <div class="proj-title">BasketBuddy</div>
+        <div class="proj-desc">A budgeting app that helps users track expenses, set financial goals, and visualize spending habits.</div>
+        <div class="proj-footer">
+          <div class="proj-url">Mobile · Native · Cloud</div>
+          <div class="brand-mini">Swift <span>Designz</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: HireMeBuddy -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 11 — HireMeBuddy</div>
+    <div class="slide project" id="slide-11">
+      <div class="thumb">
+        <img src="/potfolio/hiremebuddy-portfolio-thumbnail.png" alt="HireMeBuddy" />
+        <div class="thumb-overlay"></div>
+      </div>
+      <div class="content">
+        <div class="badge app">App</div>
+        <div class="proj-title">HireMeBuddy</div>
+        <div class="proj-desc">A job search app connecting seekers with employers — advanced filters, resume management, real-time alerts.</div>
+        <div class="proj-footer">
+          <div class="proj-url">Mobile · SaaS</div>
+          <div class="brand-mini">Swift <span>Designz</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 12: CTA -->
+  <div class="slide-wrap">
+    <div class="slide-label">Slide 12 — CTA</div>
+    <div class="slide cta" id="slide-12">
+      <div class="eyebrow">Let's Build Together</div>
+      <h2>Your Business Deserves<br/><span>a Website That Works.</span></h2>
+      <p>Websites, e-commerce stores, and mobile apps — built with care, delivered with excellence.</p>
+      <div class="cta-btn">Get a Free Quote</div>
+      <div class="divider"></div>
+      <div class="url">swift<span>designz</span>.co.za</div>
+      <div class="divider"></div>
+      <div class="contact-row">
+        <div class="contact-item">NAM +264 81 388 1111</div>
+        <div class="contact-item">SA +27 76 255 7783</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
