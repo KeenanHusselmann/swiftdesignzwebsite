@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const outputDir = path.join(__dirname, "..", "public", "marketing");
 const CHROME = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-const SLIDE_COUNT = 6;
+const SLIDE_COUNT = 9;
 
 const browser = await puppeteer.launch({
   executablePath: CHROME,
