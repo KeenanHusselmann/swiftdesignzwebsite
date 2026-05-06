@@ -143,7 +143,13 @@ export default function SplashScreen() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!mounted || !show) return null;
+  // Before useEffect resolves we don't yet know if splash is needed.
+  // Render a blocking dark overlay so the home page never flashes through.
+  if (!mounted) {
+    return <div className="fixed inset-0 z-[9999]" style={{ background: "#060a10" }} />;
+  }
+
+  if (!show) return null;
 
   return (
     <AnimatePresence>
