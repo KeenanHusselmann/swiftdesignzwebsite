@@ -32,6 +32,7 @@ const projects: Project[] = [
     description:
       "A stunning, clean-flowing website with an inviting user experience. Custom design with carefully chosen typography and a calm, professional aesthetic.",
     image: "/potfolio/tbfree-portfolio-thumbnail.png",
+    link: "https://tb-fre.org",
     tags: ["Custom Design", "Responsive", "SEO"],
   },
   {
