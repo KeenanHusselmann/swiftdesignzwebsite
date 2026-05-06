@@ -25,6 +25,7 @@ const BLUR_PLACEHOLDER = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAI
 
 // Template projects - replace with actual projects
 const projects: Project[] = [
+  // --- Websites ---
   {
     title: "TB Free Foundation Website",
     category: "websites",
@@ -34,38 +35,6 @@ const projects: Project[] = [
     tags: ["Custom Design", "Responsive", "SEO"],
   },
   {
-    title: "Ruby's Faith Jewellery Store",
-    category: "ecommerce",
-    description:
-      "An elegant online store for a jewellery brand, featuring a visually rich product catalogue, seamless shopping experience, and a design that reflects the brand's unique style.",
-    image: "/potfolio/rubys-faith-portfolio-thumbnail.png",
-    tags: ["E-Commerce", "Product Catalogue", "Custom Design"],
-  },
-  {
-    title: "BasketBuddy - Budgeting App",
-    category: "apps",
-    description:
-      "A sleek, user-friendly budgeting app that helps users track expenses, set financial goals, and visualize spending habits with elegant charts and a calming interface.",
-    image: "/potfolio/basket-buddy-portfolio-thumbnail1.png",
-    tags: ["Mobile App", " Native", "Cloud"],
-  },
-  {
-    title: "Fryse - Freeze Dried Products",
-    category: "ecommerce",
-    description:
-      "An elegant online store for a freeze-dried food company, showcasing their range of products with rich visuals, easy navigation, and a seamless shopping experience.  ",
-    image: "/potfolio/fryse-portfolio-thumbnail.png",
-    tags: ["Fashion", "E-Commerce", "Filter System"],
-  },
-  {
-    title: "HireMeBuddy - Job Search App",
-    category: "apps",
-    description:
-      "A job search application designed to connect job seekers with potential employers, featuring advanced search filters, resume management, and real-time notifications.",
-    image: "/potfolio/hiremebuddy-portfolio-thumbnail.png",
-    tags: ["Job Search", "Mobile App", "SaaS"],
-  },
-  {
     title: "DUNMORE Training & Skills Development",
     category: "websites",
     description:
@@ -73,15 +42,6 @@ const projects: Project[] = [
     image: "/potfolio/dunmoretraining-portfolio-thumbnail.png",
     link: "https://dunmore.co.za",
     tags: ["Custom Design", "Responsive", "Training"],
-  },
-  {
-    title: "Essential 420 - Cannabis Dispensary",
-    category: "ecommerce",
-    description:
-      "A luxury cannabis dispensary platform for a Cape Town brand offering premium flowers, edibles, vapes, and CBD wellness products with a sleek, immersive shopping experience.",
-    image: "/potfolio/essential420-portfolio-thumbnail.png",
-    link: "https://essential420-website.vercel.app",
-    tags: ["E-Commerce", "Product Catalogue", "Custom Design"],
   },
   {
     title: "IA Academy - Neurodivergent School",
@@ -109,6 +69,49 @@ const projects: Project[] = [
     image: "/potfolio/rhb-community-trust-portfolio-thumbnail.png",
     link: "https://rehotrust.netlify.app",
     tags: ["Non-Profit", "Custom Design", "Responsive"],
+  },
+  // --- E-Commerce ---
+  {
+    title: "Ruby's Faith Jewellery Store",
+    category: "ecommerce",
+    description:
+      "An elegant online store for a jewellery brand, featuring a visually rich product catalogue, seamless shopping experience, and a design that reflects the brand's unique style.",
+    image: "/potfolio/rubys-faith-portfolio-thumbnail.png",
+    tags: ["E-Commerce", "Product Catalogue", "Custom Design"],
+  },
+  {
+    title: "Fryse - Freeze Dried Products",
+    category: "ecommerce",
+    description:
+      "An elegant online store for a freeze-dried food company, showcasing their range of products with rich visuals, easy navigation, and a seamless shopping experience.",
+    image: "/potfolio/fryse-portfolio-thumbnail.png",
+    tags: ["Fashion", "E-Commerce", "Filter System"],
+  },
+  {
+    title: "Essential 420 - Cannabis Dispensary",
+    category: "ecommerce",
+    description:
+      "A luxury cannabis dispensary platform for a Cape Town brand offering premium flowers, edibles, vapes, and CBD wellness products with a sleek, immersive shopping experience.",
+    image: "/potfolio/essential420-portfolio-thumbnail.png",
+    link: "https://essential420-website.vercel.app",
+    tags: ["E-Commerce", "Product Catalogue", "Custom Design"],
+  },
+  // --- Apps ---
+  {
+    title: "BasketBuddy - Budgeting App",
+    category: "apps",
+    description:
+      "A sleek, user-friendly budgeting app that helps users track expenses, set financial goals, and visualize spending habits with elegant charts and a calming interface.",
+    image: "/potfolio/basket-buddy-portfolio-thumbnail1.png",
+    tags: ["Mobile App", "Native", "Cloud"],
+  },
+  {
+    title: "HireMeBuddy - Job Search App",
+    category: "apps",
+    description:
+      "A job search application designed to connect job seekers with potential employers, featuring advanced search filters, resume management, and real-time notifications.",
+    image: "/potfolio/hiremebuddy-portfolio-thumbnail.png",
+    tags: ["Job Search", "Mobile App", "SaaS"],
   },
 ];
 
