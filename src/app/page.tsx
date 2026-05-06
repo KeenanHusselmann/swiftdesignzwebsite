@@ -957,42 +957,60 @@ export default function HomePage() {
             <div className="section-divider mx-auto" />
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
             <TestimonialCard
-              quote="The banner, overall look and feel, font and clean flowing state of the site is STUNNING. User Experience pleasant, calm and inviting. The way I see it you've done a lot of research than what was probably provided. I am very proud of what you've produced."
-              name="Satisfied Client"
-              role="Business Owner"
+              quote="Yoh! the website is looking fire 🔥 😍 yoh yoh yoh ! Thats mad and so convenient 👌🏼😍 wow"
+              name="Anonymous"
+              role="Client"
               delay={0}
               isActive={activeTIdx === 0}
               isPending={activeTIdx >= 0 && activeTIdx < 1}
               onDone={() => setActiveTIdx(1)}
             />
             <TestimonialCard
-              quote="From my experience working with many developers across various projects, you should be proud of yourself. You take ownership, and your work ethic truly stands out. Your work clearly reflects your passion, dedication, and skill."
-              name="Industry Professional"
-              role="Project Manager - Ambrose Isaacs"
+              quote="I can only thank God for putting this young man on our path. He immediately understood the assignment. A huge thank you to Keenan and Ambrose for executing everything in excellence. We are so grateful. Thank you, Keenan."
+              name="Grateful Client"
+              role="Client"
               delay={0.1}
               isActive={activeTIdx === 1}
               isPending={activeTIdx >= 0 && activeTIdx < 2}
               onDone={() => setActiveTIdx(2)}
             />
             <TestimonialCard
-              quote="This is soooo beautiful. I am speechless. The colours, the feel — you got it all. I love this now... it speaks of hope, new mercies in the morning. You are truly blessed with a great gift."
-              name="Ruth Gwasira"
-              role="Client — Ruby's Faith Jewellery"
+              quote="The banner, overall look and feel, font and clean flowing state of the site is STUNNING. User Experience pleasant, calm and inviting. The way I see it you've done a lot of research than what was probably provided. I am very proud of what you've produced."
+              name="Satisfied Client"
+              role="Business Owner"
               delay={0.2}
               isActive={activeTIdx === 2}
               isPending={activeTIdx >= 0 && activeTIdx < 3}
               onDone={() => setActiveTIdx(3)}
             />
             <TestimonialCard
-              quote="Ek kan nie glo dis my shop nie. Alles is baie smart. Dis 'n great 'shoppers' website! Baie dankie vir die goeie navorsing wat jy gedoen het by die beskrywings. Ek is oorweldig!"
-              name="Yvonne Steenkamp"
-              role="Client — Fryse"
+              quote="From my experience working with many developers across various projects, you should be proud of yourself. You take ownership, and your work ethic truly stands out. Your work clearly reflects your passion, dedication, and skill."
+              name="Industry Professional"
+              role="Project Manager - Ambrose Isaacs"
               delay={0.3}
               isActive={activeTIdx === 3}
               isPending={activeTIdx >= 0 && activeTIdx < 4}
               onDone={() => setActiveTIdx(4)}
+            />
+            <TestimonialCard
+              quote="This is soooo beautiful. I am speechless. The colours, the feel — you got it all. I love this now... it speaks of hope, new mercies in the morning. You are truly blessed with a great gift."
+              name="Ruth Gwasira"
+              role="Client — Ruby's Faith Jewellery"
+              delay={0.4}
+              isActive={activeTIdx === 4}
+              isPending={activeTIdx >= 0 && activeTIdx < 5}
+              onDone={() => setActiveTIdx(5)}
+            />
+            <TestimonialCard
+              quote="Ek kan nie glo dis my shop nie. Alles is baie smart. Dis 'n great 'shoppers' website! Baie dankie vir die goeie navorsing wat jy gedoen het by die beskrywings. Ek is oorweldig!"
+              name="Yvonne Steenkamp"
+              role="Client — Fryse"
+              delay={0.5}
+              isActive={activeTIdx === 5}
+              isPending={activeTIdx >= 0 && activeTIdx < 6}
+              onDone={() => setActiveTIdx(6)}
             />
           </div>
         </div>
