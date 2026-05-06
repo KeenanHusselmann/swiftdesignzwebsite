@@ -94,11 +94,17 @@
 
 ## Scripts & Tools
 - `scripts/screenshot-portfolio.mjs` — Puppeteer script to auto-screenshot live portfolio sites into `public/potfolio/`
-- `scripts/generate-signature-keenan.mjs` — Generates email signature PNG
+- `scripts/generate-signature-keenan.mjs` — Generates email signature PNG (`public/images/signature-keenan.png`)
 
-## Email Signature
-- `public/email-signature-keenan.html` — Copy-to-clipboard HTML email signature for keenan@swiftdesignz.co.za
-- `public/images/signature-keenan.png` — Signature image asset
+## Assets
+- `public/images/` — App images (logo, favicon, headshot, signatures) used by Next.js
+- `public/potfolio/` — Portfolio project thumbnails (referenced in portfolio page)
+- `public/marketing/` — All social/marketing images + videos (FB, IG, WhatsApp, video posts) — not served by app
+- `public/images/signature-keenan.png` — Email signature image asset
+
+## Admin Site
+- Business documents (NDA, invoices, onboarding, quotes, etc.) are hosted at the admin site: `C:\Users\keena\Projects\swift-designz-admin`
+- Do not add doc templates or HTML documents to this repo
 
 ## Build Progress
 - Phase 1: Project setup, configs, design system ✅
@@ -112,7 +118,6 @@
   - Google Sheets lead delivery
   - Social links in footer
   - Phone numbers sitewide
-  - Doc templates updated (old number replaced)
   - Splash screen fixed for FB/ad traffic
 - Phase 6: Portfolio expansion + UX polish ✅
   - 5 new real-world portfolio projects added (DUNMORE, Essential 420, IA Academy, IT-Guru, RHB Trust)
@@ -123,5 +128,10 @@
   - Get a Quote button added to Navbar (desktop + mobile)
   - TetrisButton (bouncing "?") added to global shell
   - ClickTracker added to global shell
-  - Email signature HTML + PNG created for keenan@
+  - Email signature PNG created for keenan@
+- Phase 7: Project cleanup ✅
+  - Removed public/docs/ (moved to admin site)
+  - Removed ~31 marketing HTML files from public root
+  - Consolidated all marketing images + videos into public/marketing/
+  - Removed 38 one-off scripts; scripts/ now contains only 2 active tools
 
