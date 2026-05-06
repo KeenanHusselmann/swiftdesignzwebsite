@@ -490,7 +490,7 @@ function CounterStat({
 
 export default function HomePage() {
   const heroRef = useRef<HTMLDivElement>(null);
-  const [revealStep, setRevealStep] = useState(0);
+
   const testimonialSectionRef = useRef<HTMLDivElement>(null);
   const testimonialSectionInView = useInView(testimonialSectionRef, { once: true });
   const [activeTIdx, setActiveTIdx] = useState(-1);
@@ -508,8 +508,6 @@ export default function HomePage() {
 
   const line1 = t("hero.line1");
   const line2 = t("hero.line2");
-  const totalLetters = line1.length + line2.length;
-
   const excellenceFonts = [
     "var(--font-playfair), serif",
     "var(--font-cinzel), serif",
@@ -525,20 +523,9 @@ export default function HomePage() {
   const [excellenceRevealed, setExcellenceRevealed] = useState(false);
 
   useEffect(() => {
-    let i = 0;
-    const interval = setInterval(() => {
-      i++;
-      setRevealStep(i);
-      if (i >= totalLetters + 2) clearInterval(interval);
-    }, 10);
-    return () => clearInterval(interval);
-  }, [totalLetters]);
-
-  useEffect(() => {
-    if (revealStep > totalLetters) {
-      setExcellenceRevealed(true);
-    }
-  }, [revealStep, totalLetters]);
+    // "Crafting Digital" is now static; just trigger Excellence reveal immediately
+    setExcellenceRevealed(true);
+  }, []);
 
   useEffect(() => {
     if (!excellenceRevealed) return;
@@ -584,67 +571,18 @@ export default function HomePage() {
           </motion.div>
 
           <div className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-[1.15] md:leading-[1.2]">
-            {/* Line 1: "Crafting" — Tetris blocks building up */}
-            <span className="inline-block">
-              {line1.split("").map((char, i) => {
-                const isVisible = revealStep > i;
-                return (
-                  <motion.span
-                    key={`l1-${i}`}
-                    initial={{ opacity: 0, y: 60, clipPath: "inset(100% 0 0 0)" }}
-                    animate={
-                      isVisible
-                        ? { opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)" }
-                        : { opacity: 0, y: 60, clipPath: "inset(100% 0 0 0)" }
-                    }
-                    transition={{
-                      duration: 0.45,
-                      ease: [0.0, 0.0, 0.2, 1],
-                      clipPath: { duration: 0.45, ease: [0.0, 0.0, 0.2, 1] },
-                    }}
-                    className="inline-block origin-bottom"
-                    style={{ minWidth: char === " " ? "0.3em" : undefined }}
-                  >
-                    {char}
-                  </motion.span>
-                );
-              })}
-            </span>
+            {/* Line 1: "Crafting" — static */}
+            <span className="inline-block">{line1}</span>
             {" "}
-            {/* Line 2: "Digital" — Tetris blocks building up */}
-            <span className="inline-block">
-              {line2.split("").map((char, i) => {
-                const globalIndex = line1.length + i;
-                const isVisible = revealStep > globalIndex;
-                return (
-                  <motion.span
-                    key={`l2-${i}`}
-                    initial={{ opacity: 0, y: 60, clipPath: "inset(100% 0 0 0)" }}
-                    animate={
-                      isVisible
-                        ? { opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)" }
-                        : { opacity: 0, y: 60, clipPath: "inset(100% 0 0 0)" }
-                    }
-                    transition={{
-                      duration: 0.45,
-                      ease: [0.0, 0.0, 0.2, 1],
-                      clipPath: { duration: 0.45, ease: [0.0, 0.0, 0.2, 1] },
-                    }}
-                    className="inline-block origin-bottom"
-                    style={{ minWidth: char === " " ? "0.3em" : undefined }}
-                  >
-                    {char}
-                  </motion.span>
-                );
-              })}
-            </span>
+            {/* Line 2: "Digital" — static */}
+            <span className="inline-block">{line2}</span>
             <br />
             {/* "Excellence" — reserve height immediately to avoid layout shift */}
             <span className="inline-block min-h-[1.5em] md:min-h-[1.6em]">
             <motion.span
               initial={{ opacity: 0, y: 30, scale: 0.9 }}
               animate={
-                revealStep > totalLetters
+                excellenceRevealed
                   ? { opacity: 1, y: 0, scale: 1 }
                   : { opacity: 0, y: 30, scale: 0.9 }
               }

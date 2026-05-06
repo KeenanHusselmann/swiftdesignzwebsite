@@ -31,26 +31,47 @@
 - **Google Sheets:** "Swift Designz - Leads" — auto lead delivery from Meta forms
 
 ## Pages
-- [x] Home - Hero, services overview, CTA
+- [x] Home - Hero, 6 services overview, highlights, testimonials, CTA
 - [x] About - Story, qualifications, 2yr web exp, 1yr app exp, Software Dev degree
-- [x] Services - Web dev, E-commerce, Apps/Software, PM Training, AI Training
+- [x] Services - Web dev, E-commerce, Apps/Software, PM Training, AI Training, Support & Maintenance
 - [x] Packages - 3 tiers per service (Websites from R2500, Stores from R4000, Apps from R5000)
-- [x] Portfolio - Template for showcasing projects
+- [x] Portfolio - 10 real projects with live links + testimonials section
 - [x] Testimonials - Multiple testimonials section
 - [x] Contact - Form with Resend integration + phone numbers sidebar card
+- [x] Quote - Multi-step quote request form with Resend + proposed project plan in email
+- [x] Links - Standalone page (no nav/footer) for social/link-in-bio
 - [x] Privacy Policy
 - [x] Terms & Conditions
 - [x] Cookie Policy
+
+## Portfolio Projects (10 total)
+### Websites
+- TB Free Foundation Website (custom design, responsive, SEO)
+- DUNMORE Training & Skills Development → https://dunmore.co.za
+- IA Academy - Neurodivergent School → https://ia-academy.org
+- IT-Guru Online → https://it-guru.online
+- Rehoboth Community Trust → https://rehotrust.netlify.app
+
+### E-Commerce
+- Ruby's Faith Jewellery Store (custom design, product catalogue)
+- Fryse - Freeze Dried Products (fashion, filter system)
+- Essential 420 - Cannabis Dispensary → https://essential420-website.vercel.app
+
+### Apps
+- BasketBuddy - Budgeting App (mobile, native, cloud)
+- HireMeBuddy - Job Search App (mobile, SaaS)
 
 ## Special Features
 - Drag-to-unlock splash screen (first visit / once per session)
   - Skipped for Facebook/Instagram in-app browsers (UA detection)
   - Skipped for ad/social traffic (fbclid, utm_source, utm_medium, gclid params)
   - localStorage + cookie dual check to prevent repeat shows
-- Fun interactive elements (jokes, random animations, did-you-know)
-- Mascot character (GitHub Octocat-inspired)
+- Fun interactive elements: FunButton (smiley face, jokes/facts/mascot popup with CTA link)
+- Bouncing "?" TetrisButton: navigates through key pages on odd clicks, shows "hire us" modal on even clicks
+- ClickTracker component (global interaction tracking)
+- Mascot character "Swifty" (Swift Designz logo-based)
 - Cookie consent banner
-- "Get a Quote" buttons on packages
+- "Get a Quote" CTA button in Navbar (desktop + mobile)
 - Bilingual: EN + AF
 - Facebook + Instagram social icons in footer
 - Phone numbers (NAM + SA) in footer and contact page sidebar
@@ -71,6 +92,14 @@
 - Standard: From R12,000 (full features, 2 platforms)
 - Full-Scale: From R25,000+ (enterprise-grade, cross-platform)
 
+## Scripts & Tools
+- `scripts/screenshot-portfolio.mjs` — Puppeteer script to auto-screenshot live portfolio sites into `public/potfolio/`
+- `scripts/generate-signature-keenan.mjs` — Generates email signature PNG
+
+## Email Signature
+- `public/email-signature-keenan.html` — Copy-to-clipboard HTML email signature for keenan@swiftdesignz.co.za
+- `public/images/signature-keenan.png` — Signature image asset
+
 ## Build Progress
 - Phase 1: Project setup, configs, design system ✅
 - Phase 2: Layout, navigation, splash screen ✅
@@ -85,4 +114,14 @@
   - Phone numbers sitewide
   - Doc templates updated (old number replaced)
   - Splash screen fixed for FB/ad traffic
+- Phase 6: Portfolio expansion + UX polish ✅
+  - 5 new real-world portfolio projects added (DUNMORE, Essential 420, IA Academy, IT-Guru, RHB Trust)
+  - Ruby's Faith thumbnail replaced (JPG → PNG)
+  - Removed placeholder thumbnails (highly-medicated, swift_designs_logo)
+  - Puppeteer screenshot script for auto-generating thumbnails
+  - Support & Maintenance added as 6th service on home page
+  - Get a Quote button added to Navbar (desktop + mobile)
+  - TetrisButton (bouncing "?") added to global shell
+  - ClickTracker added to global shell
+  - Email signature HTML + PNG created for keenan@
 

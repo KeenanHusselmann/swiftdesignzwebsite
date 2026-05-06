@@ -40,11 +40,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Send notification to Swift Designz
-    const notifyEmail = process.env.CONTACT_NOTIFY_EMAIL ?? "info@swiftdesignz.co.za";
+    // Send notification to Swift Designz (supports comma-separated list of addresses)
+    const notifyEmails = (process.env.CONTACT_NOTIFY_EMAIL ?? "info@swiftdesignz.co.za")
+      .split(",").map((e) => e.trim()).filter(Boolean);
     const { error: notifyError } = await resend.emails.send({
       from: `${fromName} via Swift Designz <noreply@swiftdesignz.co.za>`,
-      to: [notifyEmail],
+      to: notifyEmails,
       replyTo: email,
       subject: `New Project Enquiry from ${name}`,
       html: `

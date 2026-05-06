@@ -26,8 +26,8 @@ export default function SiteShell({
   if (isStandalone) {
     return (
       <>
-        <main>{children}</main>
-        <CookieConsent />
+        <main className="relative">{children}</main>
+      <CookieConsent />
       </>
     );
   }
@@ -37,7 +37,7 @@ export default function SiteShell({
       <SplashScreen />
       <BackgroundEffects />
       <Navbar />
-      <main>{children}</main>
+      <main className="relative">{children}</main>
       <Footer />
       <CookieConsent />
       <FunButton />

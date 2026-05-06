@@ -124,8 +124,9 @@ export async function POST(req: NextRequest) {
       `;
     }
 
-    // Dedicated quote notification address — falls back to contact address, then info@
-    const notifyTo = process.env.QUOTE_NOTIFY_EMAIL ?? process.env.CONTACT_NOTIFY_EMAIL ?? "info@swiftdesignz.co.za";
+    // Dedicated quote notification addresses — supports comma-separated list; falls back to contact address, then info@
+    const notifyTo = (process.env.QUOTE_NOTIFY_EMAIL ?? process.env.CONTACT_NOTIFY_EMAIL ?? "info@swiftdesignz.co.za")
+      .split(",").map((e) => e.trim()).filter(Boolean);
 
     const notifyHtml = `
         <div style="font-family:'Segoe UI',Arial,sans-serif;max-width:660px;margin:0 auto;background:#101010;color:#e0e0e0;padding:40px;border-radius:16px;border:1px solid rgba(48,176,176,0.2);">
@@ -194,10 +195,10 @@ export async function POST(req: NextRequest) {
         </div>
       `;
 
-    // Single send — same destination as the working contact form
+    // Send to all configured notification addresses
     const { error: notifyError } = await resend.emails.send({
       from: "Swift Designz Quote System <noreply@swiftdesignz.co.za>",
-      to: [notifyTo],
+      to: notifyTo,
       replyTo: email,
       subject: `New Quote Request — ${serviceLabel} — ${escapeHtml(name)}`,
       html: notifyHtml,

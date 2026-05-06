@@ -47,7 +47,10 @@ export default function Navbar() {
             : "py-5"
         }`}
         style={{
-          borderBottom: scrolled ? "1px solid rgba(48, 176, 176, 0.1)" : "none",
+          borderTop: "1px solid transparent",
+          borderLeft: "1px solid transparent",
+          borderRight: "1px solid transparent",
+          borderBottom: scrolled ? "1px solid rgba(48, 176, 176, 0.1)" : "1px solid transparent",
         }}
       >
         <div className="container flex items-center justify-between">

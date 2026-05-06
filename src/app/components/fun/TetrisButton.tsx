@@ -64,20 +64,12 @@ export default function TetrisButton() {
     };
   }, []);
 
-  // Hide after 3s, peek for 3s every 30s
+  // ? button toggles visibility every 10s
   useEffect(() => {
-    const hideTimer = setTimeout(() => setVisible(false), 3000);
-    const peekInterval = setInterval(() => {
-      setVisible((cur) => {
-        if (cur) return cur;
-        setTimeout(() => setVisible(false), 3000);
-        return true;
-      });
-    }, 30000);
-    return () => {
-      clearTimeout(hideTimer);
-      clearInterval(peekInterval);
-    };
+    const interval = setInterval(() => {
+      setVisible((v) => !v);
+    }, 10000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleClick = () => {

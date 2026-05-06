@@ -56,7 +56,6 @@ type PopupContent = {
 export default function FunButton() {
   const [popup, setPopup] = useState<PopupContent | null>(null);
   const [isWinking, setIsWinking] = useState(false);
-  const [visible, setVisible] = useState(true);
   const pathname = usePathname();
 
   // Close popup whenever the user navigates to a new page
@@ -65,38 +64,7 @@ export default function FunButton() {
     setPopup(null);
   }, [pathname]);
 
-  // Hide after 3s, then peek for 3s every 30s
-  useEffect(() => {
-    // Initial hide after 3s
-    const hideTimer = setTimeout(() => setVisible(false), 3000);
-
-    // Peek every 30s: show for 3s then hide again (only when popup is closed)
-    const peekInterval = setInterval(() => {
-      setVisible((currentlyVisible) => {
-        // Don't interrupt if already visible (popup open keeps it visible)
-        if (currentlyVisible) return currentlyVisible;
-        // Show the peek
-        setTimeout(() => setVisible((v) => (v ? false : v)), 3000);
-        return true;
-      });
-    }, 30000);
-
-    return () => {
-      clearTimeout(hideTimer);
-      clearInterval(peekInterval);
-    };
-  }, []);
-
-  // While popup is open, keep button visible; when closed, hide after 3s
-  useEffect(() => {
-    if (popup) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setVisible(true);
-    } else {
-      const t = setTimeout(() => setVisible(false), 3000);
-      return () => clearTimeout(t);
-    }
-  }, [popup]);
+  // Smiley face is always persistent — no hide logic
 
   const pickRandom = useCallback((items: string[], exclude?: string) => {
     if (items.length === 0) return "";
@@ -149,15 +117,12 @@ export default function FunButton() {
 
   return (
     <>
-      {/* Fun trigger button */}
-      <AnimatePresence>
-        {visible && (
-          <motion.button
+      {/* Fun trigger button — always visible */}
+      <motion.button
             key="fun-btn"
             onClick={triggerFun}
             initial={{ opacity: 0, scale: 0.7, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.7, y: 10 }}
             transition={{ type: "spring", damping: 18, stiffness: 260 }}
             className="fun-btn-pulse fixed bottom-6 left-4 sm:left-6 z-[150] p-2.5 rounded-full cursor-pointer"
             style={{
@@ -195,8 +160,6 @@ export default function FunButton() {
           <path d="M8 14.5 Q12 18 16 14.5" stroke="#1c0a00" strokeWidth="1.5" strokeLinecap="round" fill="none" />
         </svg>
           </motion.button>
-        )}
-      </AnimatePresence>
 
       {/* Popup */}
       <AnimatePresence>

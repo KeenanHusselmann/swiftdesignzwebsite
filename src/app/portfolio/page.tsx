@@ -34,19 +34,11 @@ const projects: Project[] = [
     tags: ["Custom Design", "Responsive", "SEO"],
   },
   {
-    title: "Highly Medicated Website",
-    category: "ecommerce",
-    description:
-      "A beautiful product catalogue showcasing medicinal products with rich imagery and intuitive navigation. Built for engagement and conversions.",
-    image: "/potfolio/highly-medicated-portfolio-thumbnail.png",
-    tags: ["E-Commerce", "Product Catalogue", "Custom Design"],
-  },
-   {
     title: "Ruby's Faith Jewellery Store",
     category: "ecommerce",
     description:
       "An elegant online store for a jewellery brand, featuring a visually rich product catalogue, seamless shopping experience, and a design that reflects the brand's unique style.",
-    image: "/potfolio/rubys-faith-portfolio-thumbnail.jpg",
+    image: "/potfolio/rubys-faith-portfolio-thumbnail.png",
     tags: ["E-Commerce", "Product Catalogue", "Custom Design"],
   },
   {
@@ -72,6 +64,51 @@ const projects: Project[] = [
       "A job search application designed to connect job seekers with potential employers, featuring advanced search filters, resume management, and real-time notifications.",
     image: "/potfolio/hiremebuddy-portfolio-thumbnail.png",
     tags: ["Job Search", "Mobile App", "SaaS"],
+  },
+  {
+    title: "DUNMORE Training & Skills Development",
+    category: "websites",
+    description:
+      "A professional website for a SETA-accredited training provider offering accredited programmes in First Aid, Fire Fighting, Health & Safety, and Forestry across the Western Cape.",
+    image: "/potfolio/dunmoretraining-portfolio-thumbnail.png",
+    link: "https://dunmore.co.za",
+    tags: ["Custom Design", "Responsive", "Training"],
+  },
+  {
+    title: "Essential 420 - Cannabis Dispensary",
+    category: "ecommerce",
+    description:
+      "A luxury cannabis dispensary platform for a Cape Town brand offering premium flowers, edibles, vapes, and CBD wellness products with a sleek, immersive shopping experience.",
+    image: "/potfolio/essential420-portfolio-thumbnail.png",
+    link: "https://essential420-website.vercel.app",
+    tags: ["E-Commerce", "Product Catalogue", "Custom Design"],
+  },
+  {
+    title: "IA Academy - Neurodivergent School",
+    category: "websites",
+    description:
+      "A warm, welcoming website for a neurodivergent-friendly Cambridge school in Windhoek, Namibia. Specialising in ADHD, ADD, and Dyslexia support from Grade R to Grade 12.",
+    image: "/potfolio/iaacademy-portfolio-thumbnail.png",
+    link: "https://ia-academy.org",
+    tags: ["Custom Design", "Education", "Responsive"],
+  },
+  {
+    title: "IT-Guru Online",
+    category: "websites",
+    description:
+      "A clean, professional website for a Cape Town IT support business offering web hosting, domain registration, remote support, and network solutions.",
+    image: "/potfolio/it-guru-portfolio-thumbnail.png",
+    link: "https://it-guru.online",
+    tags: ["Custom Design", "IT Services", "Responsive"],
+  },
+  {
+    title: "Rehoboth Community Trust",
+    category: "websites",
+    description:
+      "A purpose-driven website for a Namibian non-profit focused on sustainable community development, empowering the people of Rehoboth through impactful programmes since 2003.",
+    image: "/potfolio/rhb-community-trust-portfolio-thumbnail.png",
+    link: "https://rehotrust.netlify.app",
+    tags: ["Non-Profit", "Custom Design", "Responsive"],
   },
 ];
 
