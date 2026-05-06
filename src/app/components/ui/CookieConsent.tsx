@@ -11,10 +11,22 @@ export default function CookieConsent() {
 
   useEffect(() => {
     const consent = Cookies.get("swift-cookie-consent");
-    if (!consent) {
-      const timer = setTimeout(() => setShow(true), 4000);
-      return () => clearTimeout(timer);
-    }
+    if (consent) return;
+
+    // Show 5 seconds after the splash screen finishes (or immediately fires if no splash).
+    let timer: ReturnType<typeof setTimeout>;
+
+    const onSplashDone = () => {
+      window.removeEventListener("swift-splash-done", onSplashDone);
+      timer = setTimeout(() => setShow(true), 5000);
+    };
+
+    window.addEventListener("swift-splash-done", onSplashDone);
+
+    return () => {
+      window.removeEventListener("swift-splash-done", onSplashDone);
+      clearTimeout(timer);
+    };
   }, []);
 
   const accept = () => {
