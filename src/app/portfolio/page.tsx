@@ -78,6 +78,7 @@ const projects: Project[] = [
     description:
       "An elegant online store for a jewellery brand, featuring a visually rich product catalogue, seamless shopping experience, and a design that reflects the brand's unique style.",
     image: "/potfolio/rubys-faith-portfolio-thumbnail.png",
+    link: "https://rubysfaith.co.za",
     tags: ["E-Commerce", "Product Catalogue", "Custom Design"],
   },
   {
@@ -86,6 +87,7 @@ const projects: Project[] = [
     description:
       "An elegant online store for a freeze-dried food company, showcasing their range of products with rich visuals, easy navigation, and a seamless shopping experience.",
     image: "/potfolio/fryse-portfolio-thumbnail.png",
+    link: "https://fryse.com.na",
     tags: ["Fashion", "E-Commerce", "Filter System"],
   },
   {
