@@ -59,7 +59,6 @@ const projects: Project[] = [
     description:
       "A clean, professional website for a Cape Town IT support business offering web hosting, domain registration, remote support, and network solutions.",
     image: "/potfolio/it-guru-portfolio-thumbnail.png",
-    link: "https://it-guru.online",
     tags: ["Custom Design", "IT Services", "Responsive"],
   },
   {
@@ -96,7 +95,6 @@ const projects: Project[] = [
     description:
       "A luxury cannabis dispensary platform for a Cape Town brand offering premium flowers, edibles, vapes, and CBD wellness products with a sleek, immersive shopping experience.",
     image: "/potfolio/essential420-portfolio-thumbnail.png",
-    link: "https://essential420-website.vercel.app",
     tags: ["E-Commerce", "Product Catalogue", "Custom Design"],
   },
   // --- Apps ---
