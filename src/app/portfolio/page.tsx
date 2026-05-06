@@ -316,10 +316,10 @@ export default function PortfolioPage() {
                         : "group-hover:text-[var(--swift-teal)]"
                     }`}
                   >
-                    {t(`portfolioPage.p${projects.indexOf(project) + 1}Title`)}
+                    {project.title}
                   </h3>
                   <p className="text-sm text-gray-500 mb-4 leading-relaxed">
-                    {t(`portfolioPage.p${projects.indexOf(project) + 1}Desc`)}
+                    {project.description}
                   </p>
                   <div className="flex flex-wrap gap-2">
                     {project.tags.map((tag, ti) => (
